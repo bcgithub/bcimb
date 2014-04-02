@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:utils="http://java.sun.com/jsf/composite/utils"
+                template="template/page-template.xhtml">
+
+    <ui:define name="browser-title">
+        ACL - Test page
+    </ui:define>
+
+    <ui:define name="page-title">
+        Test page
+    </ui:define>
+
+    <ui:define name="main-content">
+        <!-- insert body here -->
+
+
+
+       <span class="messages"></span> <br /><br />
+
+       <utils:dialogComponent id="dialog-1" text="Perfom action Foo?" onConfirm="#{dialogTestBean.someAction()}" />
+       <utils:dialogComponent id="dialog-2" text="Perfom action Bar?" onConfirm="#{dialogTestBean.someOtherAction()}" />
+
+       <button onclick="$('#dialog-1').dialog('open');" >Foo</button>
+       <button onclick="$('#dialog-2').dialog('open');" >Bar</button>
+
+    </ui:define>
+
+</ui:composition>

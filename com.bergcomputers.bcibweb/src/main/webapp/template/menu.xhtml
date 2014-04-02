@@ -1,0 +1,15 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:panelGroup  layout="block" class="page-menu">
+        <ul class="dropdown-menu">
+
+            <h:form id="menu-form" prependId="false">
+            <li><h:commandLink id="accounts" action="accounts" title="#{msg.accountsText}" >#{msg.accountsText}
+                <f:ajax ></f:ajax>
+            </h:commandLink></li>
+            </h:form>
+        </ul>
+    </h:panelGroup>
+</ui:composition>

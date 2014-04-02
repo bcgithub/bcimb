@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template/page-template.xhtml">
+
+    <ui:define name="browser-title">
+        Berg Computers Internet Banking App
+    </ui:define>
+
+    <ui:define name="page-id"></ui:define>
+
+    <ui:define name="page-title">
+        #{msg.appWelcomeText}
+    </ui:define>
+
+    <ui:define name="main-content">
+        <img src="./resources/images/db.png" />
+        <br /><br />
+        <h3>#{msg.appDescText}</h3>
+    </ui:define>
+
+</ui:composition>

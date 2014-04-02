@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <account id="1" iban="RO01BC1234" amount="100.0" creationDate="2014-01-01"/>
+    <account id="2" iban="RO01BC1235" amount="200.0" creationDate="2014-01-01"/>
+    <account id="3" iban="RO01BC1236" amount="300.0" creationDate="2014-01-02"/>
+</dataset>

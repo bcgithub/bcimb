@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template/page-template.xhtml">
+
+    <ui:define name="browser-title">
+        ACL - AjaxLoader page
+    </ui:define>
+
+    <ui:define name="page-title">
+        AjaxLoader page
+    </ui:define>
+
+    <ui:define name="main-content">
+        <!-- insert body here -->
+
+        <h:form id="formular">
+            <h:inputText id="name" value="#{ajaxTestBean.name}" style="width:200px;margin-right:10px;"> </h:inputText>
+            <h:commandButton  id="buton" value="Load Ajax Call">
+                <f:ajax execute="name" render="output" />
+            </h:commandButton>
+            <br />
+            <h3><h:outputText id="output" value="#{ajaxTestBean.displayName()}" /></h3>
+        </h:form>
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur massa ipsum, semper nec rhoncus a, pulvinar ut neque. Vivamus volutpat enim id risus lobortis nec dictum lorem tincidunt. Mauris consequat neque id lacus pulvinar nec tincidunt nisi condimentum. Vestibulum fringilla scelerisque urna, eu vehicula risus vulputate eget. Morbi semper lectus non ligula rhoncus vestibulum. Quisque imperdiet leo non erat congue ac hendrerit sapien pellentesque. Nam turpis velit, pretium eget lobortis at, egestas quis nisi. Integer non tortor nulla. Ut eu gravida elit. Morbi in nibh turpis, vel placerat dui. In pretium consectetur dui eget vestibulum.
+        <br /><br />
+        Duis vitae mi ligula. In scelerisque libero at turpis fermentum eu dictum magna venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut urna magna, laoreet dapibus sodales at, aliquam vel dolor. Suspendisse molestie turpis risus, feugiat dapibus risus. Duis a lorem magna, ut blandit est. Sed ut erat in erat fermentum gravida at id nisi. Aenean pulvinar consequat convallis. Curabitur euismod ornare augue, eget condimentum magna vulputate id. Sed vestibulum feugiat laoreet. Vestibulum nec tincidunt eros. Sed eu nisi quis erat blandit porta. Aliquam erat volutpat.
+        <br /><br />
+        Nullam venenatis dictum risus eu ultrices. Phasellus vel ante risus, a faucibus massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sollicitudin sapien nec tortor porta eget facilisis velit suscipit. Donec ut tellus leo, sit amet iaculis est. Fusce nec ipsum arcu, sit amet rutrum elit. Quisque vehicula urna et quam consectetur mollis. Maecenas sed tincidunt est. Quisque ultricies purus vitae erat consequat laoreet. Nulla tristique odio a risus congue aliquam.
+        <br /><br />
+        Integer arcu ipsum, ornare lacinia iaculis sit amet, mattis non risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras vehicula varius est at consequat. Vivamus et feugiat nisi. Praesent porttitor eleifend tortor id consectetur. In cursus tellus quis mauris rutrum sagittis. Proin magna purus, adipiscing nec tempor vel, ornare vitae metus. Nam pulvinar felis et ante porta congue.
+        <br /><br />
+        Mauris condimentum fermentum velit eget commodo. Fusce sit amet ipsum sit amet diam congue sodales. Maecenas in lorem eu augue viverra aliquam id vitae risus. Aliquam vestibulum, mauris vel ullamcorper congue, libero erat tempor lectus, blandit laoreet dui lacus nec ipsum. Vivamus at leo quis ligula laoreet venenatis at in lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque aliquet luctus tortor nec consequat. Morbi libero metus, auctor mattis consequat at, auctor eu arcu. Suspendisse vestibulum augue vestibulum nunc convallis pharetra. Duis vel imperdiet ante. Sed tempor consequat vehicula. Duis pharetra justo porta arcu tincidunt molestie. Aliquam varius arcu ut erat tincidunt placerat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam porta sapien ut risus congue sed eleifend turpis hendrerit. Nunc vehicula egestas ipsum eget pharetra.
+        <br /><br />
+        Curabitur sed libero erat. Aliquam et felis dui, vitae congue arcu. Maecenas ut risus interdum sapien porta aliquam at nec nunc. Mauris posuere, orci eu porttitor congue, augue ante malesuada quam, tempor blandit ante tortor et ipsum. Nullam porttitor lectus in lectus placerat in molestie nisi placerat. Ut consequat turpis sit amet felis porttitor vulputate. Praesent a tortor sit amet sapien pellentesque consequat in vel nulla.
+        <br /><br />
+        Integer vulputate orci nec purus rutrum sit amet luctus mauris suscipit. Maecenas sapien lacus, elementum eu pharetra laoreet, pulvinar at mi. Praesent rutrum vulputate sollicitudin. Nam dignissim hendrerit enim ac ultricies. Nulla sollicitudin elit ac velit condimentum sit amet dignissim sapien convallis. Cras bibendum, neque et ultrices suscipit, libero tellus ultricies orci, vitae tincidunt purus dolor in dui. Sed convallis eleifend felis sit amet dapibus. Nam lacinia metus vel dolor condimentum in imperdiet leo condimentum.
+    </ui:define>
+
+</ui:composition>

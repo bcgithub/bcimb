@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:utils="http://java.sun.com/jsf/composite/utils">
+    <h:head>
+        <!-- InternetExplorer stylesheet (optional display fixes for IE6, IE7 & IE8) -->
+        <!--[if lt IE 9]>
+                    <link rel="stylesheet" href="template/css/iefix.css" type="text/css" media="screen" />
+              <![endif]-->
+        <!-- FrameWork stylesheet (includes browser reset, default html element styles etc.) -->
+        <h:outputStylesheet library="css" name="framework.css" />
+        <!-- UserCustom stylesheet (includes custom user styles, overriding default framework styles) -->
+        <h:outputStylesheet library="css" name="style.css" />
+        <!-- JQuery-UI stylesheet -->
+        <h:outputStylesheet library="css/jquery-ui-theme/smoothness" name="jquery-ui-1.8.20.custom.css" />
+
+
+        <!-- JavaScript files, JQuery, JQuery-UI, etc. -->
+        <h:outputScript library="javax.faces" name="jsf.js" />
+        <h:outputScript library="js" name="jquery-1.7.2.js" />
+        <h:outputScript library="js" name="jquery-ui-1.8.20.custom.js" />
+        <h:outputScript library="js" name="app.js" />
+
+
+        <title><ui:insert name="browser-title">ACL</ui:insert></title>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			selectMenuItem("#{facesContext.getViewRoot().getViewId()}");
+		});
+		</script>
+    </h:head>
+    <h:body>
+
+    <!-- AJAX loader component -->
+    <utils:loaderComponent />
+
+
+    <h:panelGroup  layout="block" class="main-container container">
+
+        <ui:include src="header.xhtml"/>
+        <ui:include src="menu.xhtml"/>
+        <ui:include src="content.xhtml"/>
+        <ui:include src="footer.xhtml"/>
+
+    </h:panelGroup> <!-- End main content section -->
+
+<!-- Error messages -->
+    <utils:errorMsgComponent id="errorMsgs"/>
+
+</h:body>
+</html>

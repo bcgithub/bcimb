@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.bergcomputers</groupId>
+		<artifactId>com.bergcomputers.bcBanking</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>com.bergcomputers.bcibws</groupId>
+	<artifactId>com.bergcomputers.bcibws</artifactId>
+	<packaging>war</packaging>
+	<name>bcibws</name>
+	<description>web services war</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.bergcomputers</groupId>
+			<artifactId>com.bergcomputers.bcibrestws</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<wtpversion>2.0</wtpversion>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

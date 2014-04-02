@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:utils="http://java.sun.com/jsf/composite/utils"
+                template="template/page-template.xhtml">
+
+    <ui:define name="browser-title">
+        ACL - Dialog page
+    </ui:define>
+
+    <ui:define name="page-title">
+        Dialog page
+    </ui:define>
+
+    <ui:define name="main-content">
+        <!-- insert body here -->
+
+
+
+       <!-- 1. Define dialogs behaviour (the functions which can be called onConfirm and onCancel) -->
+       <script type="text/javascript">
+           function someFunction(){
+               alert("Function 1");
+               return true;
+           }
+           function someOtherFunction(){
+               alert("Function 2");
+               return false;
+           }
+       </script>
+
+       <!-- 2. Define dialogs appearence -->
+       <utils:dialogComponent id="dialog-1" onConfirm="someFunction();" labelConfirm="Just do it!" labelCancel="Forget it...">
+           Perfom action Foo?
+       </utils:dialogComponent>
+       <utils:dialogComponent id="dialog-2" onConfirm="someOtherFunction();">
+           <h1>Test</h1>
+           Perfom action <b>Bar</b>?
+       </utils:dialogComponent>
+
+       <!-- 3. Call dialogs on events -->
+       <button onclick="$('#dialog-1').dialog('open');" >Foo</button>
+       <button onclick="$('#dialog-2').dialog('open');" >Bar</button>
+    </ui:define>
+
+
+
+</ui:composition>

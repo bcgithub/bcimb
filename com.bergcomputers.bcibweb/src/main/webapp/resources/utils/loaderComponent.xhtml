@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+    <h:head>
+        <title>loaderComponent</title>
+    </h:head>
+
+    <h:body>
+
+        <!-- Component attributes -->
+        <composite:interface>
+        </composite:interface>
+
+        <!-- Component definition -->
+        <composite:implementation>
+                <!-- Component display  -->
+                <div id="ajaxloader" style="display:none; position:fixed;z-index:9990;height:100%;width:100%;background-color:#fff;zoom:1;filter:alpha(opacity=85);opacity:0.85;">
+                    <img src="./resources/images/loader.gif" style="z-index:9999;display:block;margin:0 auto;background:transparent;" />
+                </div>
+
+                <!-- Component behaviour -->
+                <script type="text/javascript">
+                    $("#ajaxloader img").css("margin-top", $(window).height()/2-33+"px");
+                    jsf.ajax.addOnEvent(function(data) {
+                        var ajaxstatus = data.status;
+                        var ajaxloader = $("#ajaxloader");
+
+                        switch (ajaxstatus) {
+                            case "begin":
+                                ajaxloader.show();
+                                break;
+                            case "success":
+                                ajaxloader.hide();
+                                break;
+                        }
+                    });
+                </script>
+
+        </composite:implementation>
+
+    </h:body>
+</html>

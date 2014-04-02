@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+    <h:head>
+        <title>dialogComponent</title>
+    </h:head>
+
+    <h:body>
+
+        <!-- Component attributes -->
+        <composite:interface>
+                <!-- Optional predefined attributes -->
+                <composite:attribute name="title" default="Confirm action..." />
+                <composite:attribute name="labelConfirm" default="Confirm action" />
+                <composite:attribute name="labelCancel" default="Cancel action" />
+                <composite:attribute name="onCancel" default="$( this ).dialog('close');" />
+                <composite:attribute name="successMsg" default="" />
+                <composite:attribute name="errorMsg" default="" />
+                <!-- Required attributes -->
+                <composite:attribute name="id" required="true" />                
+                <composite:attribute name="onConfirm" required="true" />
+         </composite:interface>
+
+        <!-- Component definition -->
+        <composite:implementation>
+                <!-- Component display  -->
+                <h:panelGroup layout="block" class="background-overlay" style="display:none; ">
+                    <div id="#{cc.attrs.id}" title="#{cc.attrs.title}">
+                        <composite:insertChildren />
+                    </div>
+                </h:panelGroup>
+                <!-- Component behaviour -->
+                <script type="text/javascript">
+                    $('##{cc.attrs.id}').dialog({
+                        modal: true,
+                        autoOpen: false,
+                        position: 'center',
+                        buttons: {
+                        	"#{cc.attrs.labelConfirm}": function() {
+                                #{cc.attrs.onConfirm}
+                                $( this ).dialog("close");
+                            },
+                            "#{cc.attrs.labelCancel}": function() {
+                                #{cc.attrs.onCancel}
+                            }
+                        },
+                        open: function() {
+                            $(".background-overlay").show();
+                        },
+                        close: function() {
+                            $(".background-overlay").hide("slow");
+                        }
+                    });
+                </script>
+
+        </composite:implementation>
+
+    </h:body>
+</html>

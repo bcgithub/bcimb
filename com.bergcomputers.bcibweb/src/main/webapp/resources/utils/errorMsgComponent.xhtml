@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+    <h:head>
+        <title>errorMsgComponent</title>
+    </h:head>
+
+    <h:body>
+
+        <!-- Component attributes -->
+        <composite:interface>
+                <!-- Optional predefined attributes -->
+                <composite:attribute name="title" default="Error!" />
+                <composite:attribute name="onOk" default="$( this ).dialog('close');" />
+  
+                <!-- Required attributes -->
+
+         </composite:interface>
+
+        <!-- Component definition -->
+        <composite:implementation>
+                <!-- Component display  -->
+                <h:panelGroup layout="block" class="background-overlay" style="display:none; ">
+                    <div id="#{cc.clientId}" title="#{cc.attrs.title}" class="error-div">
+                    	<img id="error-img" src="./resources/images/#{errorsBean.type}.png" style="float:left;display:none;" /> 
+						<div id="error-text" style="margin-left:50px;"><h:messages/></div>
+                    </div>
+                </h:panelGroup>
+                <!-- Component behaviour -->
+                <script type="text/javascript">
+                    $('##{cc.clientId}').dialog({
+                        modal: true,
+                        autoOpen: false,
+                        position: 'center',
+                        buttons: {
+                        	"Ok": function() {
+                        		#{cc.attrs.onConfirm}
+                                $( this ).dialog("close");
+                            }
+                        },
+                        open: function() {
+                            $(".background-overlay").show();
+                            $("#error-img").show();                            
+                        },
+                        close: function() {
+                            $(".background-overlay").hide("slow");
+                            $("#error-img").hide();                            
+                        }
+                    });
+                    
+                    if(#{errorsBean.haveErrors}) {             
+                    	$('##{cc.clientId}').dialog('open');
+                    }
+
+                </script>
+
+        </composite:implementation>
+
+    </h:body>
+</html>

@@ -1,0 +1,517 @@
+/*** FrameWork stylesheet (includes browser reset, default html element styles etc.) ***/
+
+
+
+/* 1. BROWSER RESET ***************************
+   Based on Eric Meyer Reset (v2.0 | 20110126)
+   http://meyerweb.com/eric/tools/css/reset/ 
+   ********************************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+
+
+
+/* 2. BASIC STYLES & TYPOGRAPHY *****************************************
+   Basic elements, Links, Headings, Text formating, Lists, Tables, Forms
+   **********************************************************************/
+
+/* Basic elements */
+html {
+    font-size: 62.5%;
+    /* 62.5%=10px, 75%=12px, 87.5%=14px, 100%=16px */
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1em;
+    line-height: 1.5em;
+}
+p {
+    font-size: 1em;
+    line-height: 1.5em;
+    margin-bottom: 1.5em;
+}
+hr {
+    border: 0;
+    height: 1.5em;
+    background: url("../images/hr.png") 50% 0 no-repeat;
+}
+
+/* Links */
+a:link, a:visited, a:hover, a:active { color:#0000ff; }
+
+/* Headings */
+h1{
+    font-size:3em; line-height:1em;
+    margin-top:0.5em; margin-bottom:0.5em;
+}
+h2{
+    font-size:2em; line-height:1.5em;
+    margin-top:0.75em; margin-bottom:0.75em;
+}
+h3{
+    font-size:1.5em; line-height:1em;
+    margin-top:1em;	margin-bottom:1em;
+}
+h4{
+    font-size:1.2em; line-height:1.25em;
+    margin-top:1.25em; margin-bottom:1.25em;
+}
+h5, h6{
+    font-size:1em; line-height:1.5em;
+    margin-top:1.5em; margin-bottom:1.5em;
+}
+
+/* Text formationg */
+b, strong { font-weight:bold; }
+i, em { font-style:italic; }
+big {
+    font-size:1.2em;
+    line-height:1.25em;
+}
+small {
+    font-size:0.8em;
+    line-height:1.875em;
+}
+sub {
+    font-size:0.8em;
+    line-height:0;
+    vertical-align: sub;
+}
+sup {
+    font-size:0.8em;
+    line-height:0;
+    vertical-align: super;
+}
+del {
+    color:red;
+    /* to color only the line-trough in red use:
+    text-decoration:none; background: url(../images/deleted.png) repeat-x center left;*/
+}
+ins {
+    text-decoration:underline;
+}
+mark {
+    background-color:yellow;
+}
+abbr, acronym, dfn, cite {
+    border-bottom: 1px dotted;
+    cursor: help;
+    font-style:normal;
+}
+blockquote, q {
+    font-family: Georgia, serif;
+    font-style:italic;
+    color:#666;
+}
+blockquote {
+    background:transparent url("../images/quotes.png") top left no-repeat;
+    padding-left:3em;
+    margin-bottom:1.5em;
+    /*border-left:5px solid #bbb;*/
+}
+blockquote cite {
+    font-family: Arial, Helvetica, sans-serif;
+    display: block;
+    border-bottom: 0;
+    cursor:auto;
+    font-weight:bold;
+    margin-top:1em;
+}
+blockquote cite:before {
+    content:"\2014" "\00a0"; /* "- " */
+}
+address {
+    font-style:italic;
+    margin-bottom:1.5em;
+}
+pre, code {
+    font-family: "Lucida Console", Monaco, monospace;
+}
+pre {
+    margin-bottom: 1.5em;
+}
+kbd, samp {
+    font-family: monospace;
+    font-size:1.2em;
+    line-height:1.5em;
+}
+var {
+    font-style:italic;
+}
+
+/* Lists */
+ul{
+    list-style:disc;
+    margin-bottom:1.5em;
+}
+ol {
+    list-style: decimal;
+    margin-bottom:1.5em;
+}
+dl {
+    margin-left: 1.5em;
+    margin-bottom:1.5em;
+}
+dt {
+    font-weight:bold;
+}
+dd {
+    margin-left: 2.5em;
+}
+li{
+    margin-left: 2.5em;
+}
+li ul li, li ol li {
+    margin-left: 1.5em;
+}
+li ul, li ol {
+    margin-bottom:0;
+}
+ul.custom-bullet, ul.custom-bullet ul, ul.custom-bullet ul ul {
+    list-style-image:url('../images/custom-bullet.png');
+}
+ul.custom-check, ul.custom-check ul, ul.custom-check ul ul {
+    list-style-image:url('../images/custom-check.png');
+}
+ul.custom-cross, ul.custom-cross ul, ul.custom-cross ul ul {
+    list-style-image:url('../images/custom-cross.png');
+}
+/* Tables */
+table {
+    width:100%;
+    margin-bottom:1.5em;
+    background:#fff;
+}
+caption {
+    font-style: italic;
+    line-height: 3em;
+    caption-side:bottom;
+    color:#666;
+}
+thead {
+    font-weight:bold;
+    background-color:#333;
+    color:#fff;
+}
+tfoot {
+    border-top:2px solid #333;
+    font-style:italic;
+    font-weight:bold;
+    color:red;
+}
+th, td {
+   /* padding: 0.4em;*/
+    text-align:left;
+    /*border:1px solid #333;*/
+}
+th {
+    text-align:center;
+}
+td.number {
+    text-align:right;
+}
+tr.alt {
+    background-color:#ddd;
+}
+tr:hover {
+    color:#fff;
+    background-color:#666;
+}
+/* Forms */
+/* Main structure */
+form {
+    margin-bottom:0.5em;
+    background-color:#fff;
+    border:0px solid #000;
+
+}
+legend{
+    width:100%;
+    text-align:center;
+    font-weight:bold;
+}
+label {
+    display: block;
+    width:100%;
+}
+label.required:after {
+    content:'*';
+    color:red;
+}
+label.optional:after {
+    content:'(optional)';
+    font-style:italic;
+}
+fieldset {
+    padding:0.5em;
+    margin-bottom:1.5em;
+}
+fieldset li {
+    list-style-type: none;
+    margin: 0px;
+}
+/* Check boxes and radio buttons fieldsets */
+fieldset fieldset {
+    padding:0px;
+}
+fieldset fieldset legend {
+    text-align:left;
+    font-weight:bold;
+}
+fieldset fieldset label {
+    font-weight:normal;
+}
+fieldset fieldset input {
+    width:auto;
+    margin-bottom:0px;
+    padding:0px;
+}
+/* Inputs */
+input, select, textarea {
+    font-size:1.2em;
+    line-height:1.2em;
+    padding:0.5em;
+    width:97%;
+    margin-bottom:1.5em;
+    -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;
+    border:1px solid #bbb;
+    background-color:#e5e5e5;
+}
+input:focus, select:focus, textarea:focus {
+    background-color:#f0f0f0; /* #edffa4; - yellow */
+    outline:0px;
+}
+select {
+    width: 100%;
+}
+form input[type=submit], form input[type=reset], form input[type=button] {
+    width:auto;
+    margin:0px;
+    cursor:pointer;
+    background-color:#a3a3a3;
+    border:1px solid #888;
+    padding:0.5em;
+    -webkit-border-radius: 0px; -moz-border-radius: 2px; border-radius: 2px;
+    color:#fff;
+    max-height:2.4em;
+}
+form input[type=submit]:hover, form input[type=reset]:hover, form input[type=button]:hover {
+    background-color:#888;
+}
+form input.suggest {
+    font-weight:bold;
+    background-color:red;
+}
+form input.suggest:hover {
+    background-color:#333;
+}
+
+
+
+/* 3. LAYOUTING CLASSES  *************************
+   ***********************************************/
+
+.container {
+    margin: 0 auto;
+    padding: 0px 20px;
+    position:relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1140px;
+}
+
+/* use class "clear" on elements you want to beak away from the float */
+.clear {clear:both;}
+
+/* use class "clearfix" on containers only when overflow:hidden or overflow:auto is not applicable */
+.clearfix:after {clear:both; content:"."; display:block; height:0px; visibility:hidden;}
+
+/* alignment classes */
+.left {float:left;}
+.right {float:right;}
+.center {display:table !important; margin-left:auto; margin-right:auto;} /* if you also need support for IE7 and lower,
+you must wrap the element with class="center", in another div with style="text-align:center;" */
+
+.text-align-left {text-align:left;}
+.text-align-right {text-align:right;}
+.text-align-center {text-align:center;}
+
+/* to make images and embeded content fluid do not set fixed width and height on them */
+img, object, embed {max-width: 100%;}
+
+/* remove content:before & content:after  (.ncb = "no content before", .nca = "no content after" and .nc = "no content")*/
+.ncb:before, .nca:after, .nc:before, .nc:after { content:none; }
+
+/* branding */
+.logo a {
+    display:block;
+    height:100%;
+    width:100%;
+    text-indent:-9999px;
+    overflow:hidden;
+}
+
+/* prototyping classes */
+.border { border:1px solid red !important; }
+.bg { background-color:#666 !important; }
+
+/* 4. EXTRAS *************************************************
+   ***********************************************************/
+
+/* Horizontal menu */
+ul.menu {
+    list-style-type: none;
+    display: block;
+    margin-bottom: 1.5em;
+    width:auto;
+    overflow:hidden;
+}
+
+ul.menu li {
+    float: left;
+    margin: 0px;
+}
+ul.menu li a {
+    display: block;
+    padding: 0 1em;
+    text-decoration:none;
+}
+ul.menu li.current a {
+    font-weight: bold;
+}
+ul.menu li a:hover {
+    text-decoration:underline;
+}
+
+/* Dropdown menu */
+/* main */
+ul.dropdown-menu {
+    list-style-type: none;
+    display: block;
+    margin-bottom: 1.5em;
+    width:auto;
+    overflow:hidden;
+    /*background-color:#ddd;*/
+    /*border:1px solid #bbb;*/
+}
+ul.dropdown-menu li {
+    float: left;
+    margin: 0px;
+}
+ul.dropdown-menu a:link, ul.dropdown-menu a:visited {
+    display: block;
+    width:100px;
+    padding:0.3em;
+    text-decoration:none;
+    background-color:#ddd;
+    text-align:center;
+    font-weight:bold;
+    /*text-transform:uppercase;*/
+    color:#000;
+    border:1px solid #fff;
+    font-size:0.8em;
+}
+ul.dropdown-menu a:hover, ul.dropdown-menu a:active {
+    color:#fff;
+    background-color:#333;
+}
+ul.dropdown-menu a.drop:after {
+    content:"\00a0" "\00bb" ;
+    color:#666;
+    font-weight:bold;
+}
+/* dropdown */
+ul.dropdown-menu ul {
+    display:none;
+    list-style-type:none;
+    position:absolute;
+    font-weight:normal;
+    font-size:smaller;
+}
+ul.dropdown-menu li:hover ul {
+    display:block;
+}
+ul.dropdown-menu ul li {
+    float:none;
+}
+ul.dropdown-menu ul a:link, ul.dropdown-menu ul a:visited {
+    font-weight:normal;
+    text-transform:none;
+    border-bottom:1px solid #fff;
+    text-align:left;
+    background-color:#888;
+    padding-left:1em;
+    color:#fff;
+}
+ul.dropdown-menu ul a:hover, ul.dropdown-menu ul a:active {
+    background-color:#666;
+    /*padding-left:1.5em; width:inherit; */ /* uncoment if you wish to add a slide effect */
+}
+ul.dropdown-menu ul a:before {
+    content:"\00bb" "\00a0"; /* ">> " */
+}
+
+
+
+/* 5. MEDIA QUERIES FOR MOBILE DEVICES & RESPONSIVE DESIGN *****
+   *************************************************************
+   DISABLED - if ennabled, you should also add support for media queries in older browsers (IE6, IE7 & IE8) using:
+  	    <!--[if lt IE 9]>
+			<link rel="stylesheet" href="css/iefix.css" type="text/css" media="screen" />
+			<script type="text/javascript" src="scripts/mediaqueries.js"></script>
+		<![endif]--> 
+*/
+
+html { font-size: 75%; }
+.mobile-hide {display: block;}
+.mobile-only {display: none;}
+
+/*** 0px to 760px (MOBILE): (16px font)
+     Portrait & Landscape iPhone(*320*x*480*), smart phones, etc. 
+@media handheld, only screen and (max-width: 760px) {
+	html { font-size: 100%; -webkit-text-size-adjust: none; }
+	body, .container { width: 100%; min-width: 0; margin: 0; padding: 0; }
+	.mobile-hide {display: none;}
+	.mobile-only {display: block;}
+}***/
+
+/*** 760px to 980px (TABLET): (10px font)
+     Portrait iPad(*768*x1024), tablets, etc. 
+@media only screen and (min-width: 760px) and (max-width: 980px) {
+	html { font-size: 62.5%; }	
+}***/
+
+/*** 980px to 1200px (SMALL SCREENS): (12px font)
+     Landscape iPad(*1024*x768), old PC, net-books, etc.  
+@media only screen and (min-width: 980px) and (max-width: 1200px) {
+	html { font-size: 75%; }	
+}***/
+
+/*** 1200px and more (WIDE SCREENS): (14px font) 
+     Modern screens(*1280*x1024), laptops, 
+@media only screen and (min-width: 1200px) {
+	html { font-size: 87.5%; }		
+}***/

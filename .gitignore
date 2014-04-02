@@ -1,6 +1,9 @@
 *.class
-
+target
+*.log
+*.pageflow
 # Package Files #
 *.jar
 *.war
 *.ear
+
