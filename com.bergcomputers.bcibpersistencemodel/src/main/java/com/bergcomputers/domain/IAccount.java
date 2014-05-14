@@ -8,10 +8,7 @@ public interface IAccount {
 	public static final String creationDate = new String("creationDate");
 	public static final String iban = new String("iban");
 
-	public abstract Long getId();
-
-	public abstract void setId(Long id);
-
+	
 	public abstract String getIban();
 
 	public abstract void setIban(String iban);
@@ -20,8 +17,5 @@ public interface IAccount {
 
 	public abstract void setAmount(Double amount);
 
-	public abstract Date getCreationDate();
-
-	public abstract void setCreationDate(Date creationDate);
-
+	
 }
