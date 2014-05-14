@@ -1,0 +1,28 @@
+package com.bergcomputers.bcibweb.managedbeans;
+
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+
+import com.bergcomputers.bcibweb.config.Config;
+import com.bergcomputers.bcibweb.delegate.CustomersDelegate;
+import com.bergcomputers.domain.Account;
+
+@ManagedBean
+@RequestScoped
+public class CustomersBean extends BaseBean{
+
+
+	@Inject FacesContext fc;
+
+	public CustomersBean(){
+		super();
+	}
+	public List<Account> getAccounts() throws Exception{
+		return new CustomersDelegate(Config.REST_SERVICE_BASE_URL).getAccounts();
+	}
+
+}

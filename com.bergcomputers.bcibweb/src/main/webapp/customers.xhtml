@@ -1,0 +1,76 @@
+<ui:composition template="./template/page-template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:define name="browser-title">
+       Customers
+    </ui:define>
+
+	<ui:define name="page-title">
+        Customers Page
+    </ui:define>
+
+
+	<ui:define name="main-content">
+			<!-- filter div-->
+			<h:form id="usersForm">
+				<h:panelGroup layout="block" class="filter left">
+
+					<h:inputText value="#{listUsers.flt}" onkeydown='return detectEnter(event)'/>
+					<h:commandButton id='fltr' action="#{listUsers.filter}" value="Filter"  style='width: 40px; font-size:1em'/>
+
+				</h:panelGroup>
+			</h:form>
+			<h:form>
+				<!-- options menu -->
+				<ul class="options-menu menu right">
+					<li><h:commandLink action='#{createUsers.setEditFalse()}'
+							title="Add new">Add new</h:commandLink></li>
+					<li><h:commandLink href="#" title="Delete Selected">Delete Selected</h:commandLink></li>
+				</ul>
+				<br />
+
+				<!-- users table -->
+			<h:dataTable  styleClass="table-layout users-tbl"
+			 rowClasses="even-row, odd-row"
+			 columnClasses="checkboxTableClass,idTableClass,nameTableClass,loginTableClass, actionTableClass"
+			 value='#{accountsBean.accounts}' var="account">
+		    <h:column >
+						<f:facet name="header">
+							<h:outputText value=" " />
+						</f:facet>
+						<h:selectBooleanCheckbox value="FALSE" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:commandLink action="#{listUsers.setSortat(0)}">
+								<h:outputText value='First Name' />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{account.iban}" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:commandLink action="#{listUsers.setSortat(2)}">
+								<h:outputText value="Last Name" />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{account.amount}" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:commandLink action="#{listUsers.setSortat(2)}">
+								<h:outputText value="Login" />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{account.amount}" />
+					</h:column>
+				</h:dataTable>
+				</h:form>
+	</ui:define>
+</ui:composition>
