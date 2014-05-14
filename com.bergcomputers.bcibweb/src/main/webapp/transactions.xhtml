@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="template/page-template.xhtml">
+
+    <ui:define name="browser-title">
+        Transactions
+    </ui:define>
+
+    <ui:define name="page-id"></ui:define>
+
+    <ui:define name="page-title">
+        Transactions
+    </ui:define>
+
+   <ui:define name="main-content">
+			<h:form>
+				<!-- options menu -->
+				<ul class="options-menu menu left">
+				<!--  de adaugat action la butonul de Back -->
+					<li><h:commandLink 
+							title="Back">Back</h:commandLink></li>				</ul>
+				<br />
+
+				<!-- users table #{transactions.message}-->
+			<h:dataTable  styleClass="table-layout users-tbl"
+			 rowClasses="even-row, odd-row"
+			 columnClasses="checkboxTableClass,idTableClass,nameTableClass,loginTableClass, actionTableClass"
+			 value='#{accountsBean.accounts}' var="account">
+		    <h:column >
+						<f:facet name="header">
+							<h:outputText value=" " />
+						</f:facet>
+						<h:selectBooleanCheckbox value="FALSE" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+						<!--  fara actiune -->
+							<h:commandLink >  
+								<h:outputText value='Date' />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{account.iban}" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+						<!--  fara actiune -->
+							<h:commandLink >
+								<h:outputText value="Type" />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{account.amount}" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+						<!--  fara actiune -->
+							<h:commandLink >
+								<h:outputText value="Sender" />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{account.creationDate}">
+							<f:convertDateTime pattern="dd.MM.yyyy" />
+						</h:outputText>
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:outputText value="Amount" />
+						</f:facet>
+						<!--  fara actiune -->
+				  	<h:commandLink 
+							name="edit">
+							<h:graphicImage alt="Edit" library="images" name="edit.png" />
+							<f:ajax>
+							</f:ajax>
+						</h:commandLink>
+						 <h:commandLink action="#{createUsers.deleteUser(user.id)}"
+							name="delete">
+							<h:graphicImage alt="Delete" library="images"
+								name="custom-cross.png" />
+						</h:commandLink>
+					</h:column>
+
+				</h:dataTable>
+				</h:form>
+	</ui:define>
+
+</ui:composition>
+
+
