@@ -7,24 +7,22 @@ import java.util.logging.Logger;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import com.bergcomputers.bcibweb.core.net.HTTPHelper;
-import com.bergcomputers.bcibweb.delegate.Customers;
-public class CustomersDelegate {
-	private final static Logger logger = Logger.getLogger(CustomersDelegate.class.getName());
+import com.bergcomputers.bcibweb.delegate.Role;;
+public class DeviceDelegate {
+	private final static Logger logger = Logger.getLogger( DeviceDelegate.class.getName());
 
 	private String baseRestURL;
 	private CloseableHttpClient httpclient;
 
-	public CustomersDelegate(String baseUrl) {
+	public DeviceDelegate(String baseUrl) {
+		
 		httpclient = (CloseableHttpClient)HTTPHelper.createHTTPClient();
 		baseRestURL = baseUrl;
 	}
 
-	public List<Customers> getCustomers() throws Exception{
-		List<Customers> customersList = new ArrayList<Customers>();
-		String name;
-		String lastName;
-		String login;
-		customersList.add(new Customers());
+	public List< Device> getDevice() throws Exception{
+		List< Device> DeviceList = new ArrayList< Device>();
+		DeviceList.add(new Device());
 		/*try {
 			HttpGet httpget = new HttpGet(baseRestURL
 					+ Config.REST_SERVICE_ACCOUNTS_LIST);
@@ -69,6 +67,6 @@ public class CustomersDelegate {
 			}
 		}*/
 
-		return customersList;
+		return DeviceList;
 	}
 }

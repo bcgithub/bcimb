@@ -10,20 +10,23 @@ import javax.inject.Inject;
 import com.bergcomputers.bcibweb.config.Config;
 import com.bergcomputers.bcibweb.delegate.Customers;
 import com.bergcomputers.bcibweb.delegate.CustomersDelegate;
+import com.bergcomputers.bcibweb.delegate.Device;
+import com.bergcomputers.bcibweb.delegate.DeviceDelegate;
+import com.bergcomputers.bcibweb.delegate.Role;
+import com.bergcomputers.bcibweb.delegate.RoleDelegate;
 
 @ManagedBean
 @RequestScoped
-public class CustomersBean extends BaseBean{
+public class DeviceBean extends BaseBean{
 
 
 	@Inject FacesContext fc;
 
-	public CustomersBean(){
+	public DeviceBean(){
 		super();
 	}
-	
-	public List<Customers> getCustomers() throws Exception{
-		return new CustomersDelegate(Config.REST_SERVICE_BASE_URL).getCustomers();
+	public List<Device> getDevice() throws Exception{
+		return new DeviceDelegate(Config.REST_SERVICE_BASE_URL).getDevice();
 	}
 
 }

@@ -36,7 +36,7 @@
 			<h:dataTable  styleClass="table-layout users-tbl"
 			 rowClasses="even-row, odd-row"
 			 columnClasses="checkboxTableClass,idTableClass,nameTableClass,loginTableClass, actionTableClass"
-			 value='#{accountsBean.accounts}' var="account">
+			 value='#{roleBean.role}' var="role">
 		    <h:column >
 						<f:facet name="header">
 							<h:outputText value=" " />
@@ -50,7 +50,7 @@
 								<h:outputText value='Name' />
 							</h:commandLink>
 						</f:facet>
-						<h:outputText value="#{account.iban}" />
+						<h:outputText value="#{role.name}" />
 					</h:column>
 
 				</h:dataTable>
