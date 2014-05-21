@@ -63,8 +63,10 @@ public class CustomerTest {
         em.joinTransaction();
         System.out.println("Inserting records...");
         Customer u1 = new Customer();
-        u1.setIban("RO01BC1234");
-        u1.setAmount(1000.0);
+        u1.setFirstName("John");
+        u1.setLastName("Doe");
+        u1.setLogin("login");
+        u1.setPassword("123456");
         u1.setCreationDate(new Date());
         em.persist(u1);
         utx.commit();
@@ -88,7 +90,7 @@ public class CustomerTest {
 
         // then
         System.out.println("Found " + customers.size() + " customers (using JPQL):");
-        Assert.assertTrue(customers.get(0).getIban().equals("RO01BC1234"));
+        Assert.assertTrue(customers.get(0).getFirstName().equals("John"));
     }
 
     @After
