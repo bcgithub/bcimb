@@ -1,18 +1,10 @@
 package com.bergcomputers.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +13,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Entity implementation class for Entity: Beneficiary
  *
  */
+@Entity
+@Table(name = "BENEFICIARY")
+@XmlRootElement
+@NamedQuery(name=Beneficiary.findAll,query="SELECT a from Beneficiary a")
 public class Beneficiary extends BaseEntity implements Serializable, IBeneficiary {
 	
 	public final static String findAll = "com.bergcomputers.beneficiary.findAll";
@@ -81,5 +77,49 @@ public class Beneficiary extends BaseEntity implements Serializable, IBeneficiar
 	public void setAccountHolder(String accountholder)
 	{
 		this.accountholder=accountholder;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((accountholder == null) ? 0 : accountholder.hashCode());
+		result = prime * result + ((details == null) ? 0 : details.hashCode());
+		result = prime * result + ((iban == null) ? 0 : iban.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Beneficiary other = (Beneficiary) obj;
+		if (accountholder == null) {
+			if (other.accountholder != null)
+				return false;
+		} else if (!accountholder.equals(other.accountholder))
+			return false;
+		if (details == null) {
+			if (other.details != null)
+				return false;
+		} else if (!details.equals(other.details))
+			return false;
+		if (iban == null) {
+			if (other.iban != null)
+				return false;
+		} else if (!iban.equals(other.iban))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 }
