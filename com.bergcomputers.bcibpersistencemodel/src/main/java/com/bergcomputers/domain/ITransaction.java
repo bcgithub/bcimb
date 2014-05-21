@@ -9,16 +9,11 @@ public interface ITransaction {
 	public static final String sender = new String("Sender");
 	public static final String details = new String("Details");
 	public static final String status = new String("Status");
-	public static final String accountid = new String("AccountID");
 	public static final String transactionid = new String("TransactionID");
 	
-	public abstract long getTransactionId();
-	
-	public abstract void setTransactionId(Long transactionid);
-	
-	public abstract long getAccountId();
-	
-	public abstract void setAccountId(Long accountid);
+	public abstract Account getAccount();
+
+	public abstract void setAccount(Account account);
 	
 	public abstract Date getTransactionDate();
 
