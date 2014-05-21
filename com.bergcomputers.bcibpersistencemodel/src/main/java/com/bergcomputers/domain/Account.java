@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ACCOUNT")
 @XmlRootElement
 @NamedQuery(name=Account.findAll,query="SELECT a from Account a")
-public class Account implements Serializable, IAccount {
+public class Account extends BaseEntity implements Serializable, IAccount {
 
 	private static final long serialVersionUID = -7944505705705785135L;
 	public final static String findAll = "com.bergcomputers.account.findAll";
