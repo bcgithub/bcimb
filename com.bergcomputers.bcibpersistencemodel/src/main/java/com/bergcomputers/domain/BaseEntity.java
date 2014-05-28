@@ -24,33 +24,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "BaseEntity")
 @XmlRootElement
-@NamedQuery(name=BaseEntity.findAll,query="SELECT a from Account a")
+@NamedQuery(name=BaseEntity.findAll,query="SELECT a from BaseEntity a")
 public class BaseEntity implements Serializable, IBaseEntity {
 
-	
+
 	private static final long serialVersionUID = -7944505705705785135L;
-	public final static String findAll = "com.bergcomputers.account.findAll";
+	public final static String findAll = "com.bergcomputers.domain.baseentity.findAll";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-	private Long id;
-	
+	protected Long id;
+
 	@Version
     @Column(name = "VERSION")
-    private Integer version;
+    protected Integer version;
 
-	private int deleted;
-	
+	protected int deleted;
+
     @NotNull
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date creationDate;
+	protected Date creationDate;
 
 	public BaseEntity() {
 		super();
 	}
-	
-	
+
+
 	public Long getId() {
 		return id;
 	}
@@ -63,30 +63,30 @@ public class BaseEntity implements Serializable, IBaseEntity {
 	public Integer getVersion() {
 		return version;
 	}
-	
+
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	
-	
+
+
 	public int getDeleted() {
 		return deleted;
 	}
-	
+
 	public void setDeleted(int deleted) {
 		this.deleted = deleted;
 	}
-	
-	
+
+
 	public Date getCreationDate() {
 		return creationDate;
 	}
-	
+
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	
-	
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -98,7 +98,7 @@ public class BaseEntity implements Serializable, IBaseEntity {
 		result = prime * result + ((version == null) ? 0 : version.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -127,13 +127,13 @@ public class BaseEntity implements Serializable, IBaseEntity {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "BaseEntity [id=" + id + ", deleted=" + deleted + ", version="
 				+ version + ", creationDate=" + creationDate + "]";
 	}
-	
-	
+
+
 
 }

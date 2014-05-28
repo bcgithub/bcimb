@@ -5,11 +5,11 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Device extends BaseEntity implements IDevice {
-	
+
 	private String name;
 	private String deviceId;
 	@ManyToOne
-	private ICustomer customer;
+	private Customer customer;
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.domain.IDevice#getName()
 	 */
@@ -42,14 +42,14 @@ public class Device extends BaseEntity implements IDevice {
 	 * @see com.bergcomputers.domain.IDevice#getCustomer()
 	 */
 	@Override
-	public ICustomer getCustomer() {
+	public Customer getCustomer() {
 		return customer;
 	}
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.domain.IDevice#setCustomer(com.bergcomputers.domain.Customer)
 	 */
 	@Override
-	public void setCustomer(ICustomer customer) {
+	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
 }

@@ -30,20 +30,20 @@ public class Account extends BaseEntity implements Serializable, IAccount {
 	private static final long serialVersionUID = -7944505705705785135L;
 	public final static String findAll = "com.bergcomputers.account.findAll";
 
-	
+
 	@NotNull
 	@Size(min = 10, max = 10)
 	private String iban;
 	private Double amount;
 
-	
+
 	public Account() {
 		super();
 	}
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.domain.IAccount#getId()
 	 */
-	
+
 	@Override
 	public String getIban() {
 		return this.iban;
@@ -105,9 +105,9 @@ public class Account extends BaseEntity implements Serializable, IAccount {
 
 	@Override
 	public String toString() {
-		return "Account [iban=" + iban + ", amount=" + amount + "]";
+		return "Account [id="+getId()+", iban=" + iban + ", amount=" + amount + ", version=" + getVersion() + ", creationDate=" + getCreationDate() + "]";
 	}
-	
-	
+
+
 
 }

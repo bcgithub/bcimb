@@ -26,30 +26,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQuery(name=Transaction.findAll,query="SELECT t from Transaction t")
 public class Transaction extends BaseEntity implements Serializable, ITransaction  {
-	
+
 	private static final long serialVersionUID = -7944505705705785135L;
-	public final static String findAll = "com.bergcomputers.transaction.findAll";
-	
-	
+	public final static String findAll = "com.bergcomputers.domain.transaction.findAll";
+
+
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
-	
+
 	@ManyToOne
 	private Account account;
-	
+
 	private String type;
 	private Double amount;
 	private String sender;
 	private String details;
 	private String status;
-	
+
 	public Transaction(){
 		super();
 	}
-	
-	
-	
+
+
+
 	public Date getDate() {
 		return date;
 	}
@@ -68,42 +68,42 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 
 	@Override
 	public Date getTransactionDate() {
-		
+
 		return this.date;
 	}
 	@Override
 	public void setTransactionDate(Date Date) {
-		
+
 		this.date=Date;
 	}
 	@Override
 	public String getType() {
-		
+
 		return this.type;
 	}
 	@Override
 	public void setType(String type) {
-		
+
 		this.type=type;
 	}
 	@Override
 	public Double getAmount() {
-		
+
 		return this.amount;
 	}
 	@Override
 	public void setAmount(Double amount) {
-		
+
 		this.amount=amount;
 	}
 	@Override
 	public String getSender() {
-		
+
 		return this.sender;
 	}
 	@Override
 	public void setSender(String sender) {
-		
+
 		this.sender=sender;
 	}
 	@Override
@@ -127,8 +127,8 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 		this.status=status;
 	}
 
-	
-	
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -196,6 +196,6 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 				+ type + ", amount=" + amount + ", sender=" + sender
 				+ ", details=" + details + ", status=" + status + "]";
 	}
-	
-	
+
+
 }

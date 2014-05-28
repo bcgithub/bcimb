@@ -1,6 +1,5 @@
 package com.bergcomputers.domain;
 
-import java.util.Date;
 
 public interface IAccount {
 	public static final String id = new String("id");

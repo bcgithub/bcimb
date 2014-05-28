@@ -10,8 +10,8 @@ public interface IDevice {
 
 	public abstract void setDeviceId(String deviceId);
 
-	public abstract ICustomer getCustomer();
+	public abstract Customer getCustomer();
 
-	public abstract void setCustomer(ICustomer customer);
+	public abstract void setCustomer(Customer customer);
 
 }

@@ -61,7 +61,8 @@ public class BeneficiaryEntityValidatorsTest {
            beneficiar.setName("Petrescu");
            beneficiar.setDetails("Detaliu 1");
            beneficiar.setAccountHolder("Popescu");
-           
+           beneficiar.setCreationDate(new Date());
+
            // account.setAmount(200.0);
             em.persist(beneficiar);
             //em.getTransaction().commit();
