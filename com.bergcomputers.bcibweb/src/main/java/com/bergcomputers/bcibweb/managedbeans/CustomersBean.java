@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import com.bergcomputers.bcibweb.config.Config;
 import com.bergcomputers.bcibweb.delegate.Customers;
 import com.bergcomputers.bcibweb.delegate.CustomersDelegate;
+import com.bergcomputers.domain.Customer;
 
 @ManagedBean
 @RequestScoped
@@ -22,7 +23,7 @@ public class CustomersBean extends BaseBean{
 		super();
 	}
 	
-	public List<Customers> getCustomers() throws Exception{
+	public List<Customer> getCustomers() throws Exception{
 		return new CustomersDelegate(Config.REST_SERVICE_BASE_URL).getCustomers();
 	}
 

@@ -25,7 +25,7 @@ public class DeviceBean extends BaseBean{
 	public DeviceBean(){
 		super();
 	}
-	public List<Device> getDevice() throws Exception{
+	public List<com.bergcomputers.domain.Device> getDevice() throws Exception{
 		return new DeviceDelegate(Config.REST_SERVICE_BASE_URL).getDevice();
 	}
 
