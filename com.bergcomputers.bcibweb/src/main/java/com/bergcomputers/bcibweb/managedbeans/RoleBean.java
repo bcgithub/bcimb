@@ -23,7 +23,7 @@ public class RoleBean extends BaseBean{
 	public RoleBean(){
 		super();
 	}
-	public List<Role> getRole() throws Exception{
+	public List<com.bergcomputers.domain.Role> getRole() throws Exception{
 		return new RoleDelegate(Config.REST_SERVICE_BASE_URL).getRole();
 	}
 

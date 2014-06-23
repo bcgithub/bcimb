@@ -1,13 +1,23 @@
 package com.bergcomputers.bcibweb.delegate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 
+import com.bergcomputers.bcibweb.config.Config;
 import com.bergcomputers.bcibweb.core.net.HTTPHelper;
-import com.bergcomputers.bcibweb.delegate.Role;;
+import com.bergcomputers.bciweb.data.mappers.AccountMapper;
+import com.bergcomputers.bciweb.data.mappers.RoleMapper;
+
 public class RoleDelegate {
 	private final static Logger logger = Logger.getLogger(RoleDelegate.class.getName());
 
@@ -20,12 +30,12 @@ public class RoleDelegate {
 		baseRestURL = baseUrl;
 	}
 
-	public List<Role> getRole() throws Exception{
-		List<Role> RoleList = new ArrayList<Role>();
-		RoleList.add(new Role());
-		/*try {
+	public List<com.bergcomputers.domain.Role> getRole() throws Exception{
+		List<com.bergcomputers.domain.Role> RoleList = new ArrayList<com.bergcomputers.domain.Role>();
+		RoleList.add(new com.bergcomputers.domain.Role());
+		try {
 			HttpGet httpget = new HttpGet(baseRestURL
-					+ Config.REST_SERVICE_ACCOUNTS_LIST);
+					+ Config.REST_SERVICE_ROLE_LIST);
 			System.out.println("executing request " + httpget.getURI());
 			CloseableHttpResponse response = httpclient.execute(httpget);
 			try {
@@ -37,7 +47,7 @@ public class RoleDelegate {
 					System.out.println(jsonString);
 					JSONArray array = new JSONArray(jsonString);
 					System.out.println(jsonString);
-					return AccountMapper.fromJSON(array);
+					return RoleMapper.fromJSON(array);
 				} else {
 					 System.out.println("Error: "+response.getStatusLine().getStatusCode()
 					 + " : " + response.getStatusLine().getReasonPhrase());
@@ -65,7 +75,7 @@ public class RoleDelegate {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 
 		return RoleList;
 	}
