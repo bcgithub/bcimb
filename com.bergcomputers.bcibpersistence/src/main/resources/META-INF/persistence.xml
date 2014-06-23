@@ -10,7 +10,6 @@
         <class>com.bergcomputers.domain.Device</class>
         <class>com.bergcomputers.domain.Role</class>
         <class>com.bergcomputers.domain.Transaction</class>
-       
                
 
         <properties>

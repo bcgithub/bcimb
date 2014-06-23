@@ -65,6 +65,9 @@ public class TransactionTest {
         System.out.println("Inserting records...");
         Transaction u1 = new Transaction();
         Account a1 = new Account();
+        a1.setIban("RO01BC1234");
+        a1.setAmount(1000.0);
+        a1.setCreationDate(new Date());
         u1.setAccount(a1);
         u1.setTransactionDate(new Date());
         u1.setType("Credit");
