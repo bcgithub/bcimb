@@ -25,31 +25,31 @@ import com.bergcomputers.domain.Transaction;
 import com.bergcomputers.ejb.ITransactionController;
 
 @Stateless
-@Path("transaction")
+@Path("transactions")
 public class TransactionsResource {
-	
+
 	@Context
 	private UriInfo uriInfo;
-	
+
 	@EJB
 	private ITransactionController transactionController;
-	
+
 	public TransactionsResource(){
-	
+
 	}
-	
+
 	/*@Path("{transactionid}")
 	public TransactionResource getTransaction(@PathParam("transactionid") Long transactionid){
 		return new TransactionResource(uriInfo, accountController, transactionid);
 	}*/
-	
+
 	@GET
 	@Path("/detail/{transactionid}")
 	@Produces("application/json")
 	public Transaction getTransactionDetail(@PathParam("transaction.id") Long transactionid){
 		return transactionController.findTransaction(transactionid);
 	}
-	
+
 	@GET
 	@Produces("application/json")
 	@Path("uris")
@@ -59,17 +59,17 @@ public class TransactionsResource {
 				UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 				URI transactionUri = ub.path(((Transaction)transaction).getId().toString()).build();
 				uriArray.put(transactionUri.toASCIIString());
-							
+
 			}
 			return uriArray.toString();
 	}
-	
+
 	@GET
 	@Produces("application/json")
 	public List<Transaction> getTransactions(){
 		return transactionController.getTransactions();
 	}
-	
+
 	/*@PUT
 	@Consumes("application/json")
 	@Produces("application/json")

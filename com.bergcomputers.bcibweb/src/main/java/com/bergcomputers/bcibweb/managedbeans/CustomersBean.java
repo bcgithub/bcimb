@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import com.bergcomputers.bcibweb.config.Config;
-import com.bergcomputers.bcibweb.delegate.Customers;
 import com.bergcomputers.bcibweb.delegate.CustomersDelegate;
 import com.bergcomputers.domain.Customer;
 
@@ -22,7 +21,7 @@ public class CustomersBean extends BaseBean{
 	public CustomersBean(){
 		super();
 	}
-	
+
 	public List<Customer> getCustomers() throws Exception{
 		return new CustomersDelegate(Config.REST_SERVICE_BASE_URL).getCustomers();
 	}

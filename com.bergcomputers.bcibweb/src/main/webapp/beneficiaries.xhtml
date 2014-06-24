@@ -3,20 +3,92 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 template="template/page-template.xhtml">
-
-    <ui:define name="browser-title">
-        Berg Computers Internet Banking App
+	<ui:define name="browser-title">
+        Beneficiaries
     </ui:define>
 
-    <ui:define name="page-id"></ui:define>
-
-    <ui:define name="page-title">
-        #{beneficiaries.message}
+	<ui:define name="page-title">
+        Beneficiaries Page
     </ui:define>
 
-    <ui:define name="main-content">
-        hghjg
-        
-    </ui:define>
 
+	<ui:define name="main-content">
+			<!-- filter div-->
+			<h:form id="usersForm">
+				<h:panelGroup layout="block" class="filter left">
+
+					<h:inputText value="#{listUsers.flt}" onkeydown='return detectEnter(event)'/>
+					<h:commandButton id='fltr' action="#{listUsers.filter}" value="Filter"  style='width: 40px; font-size:1em'/>
+
+				</h:panelGroup>
+			</h:form>
+			<h:form>
+				<!-- options menu -->
+				<ul class="options-menu menu right">
+					<li><h:commandLink action='#{createUsers.setEditFalse()}'
+							title="Add new">Add new</h:commandLink></li>
+					<li><h:commandLink href="#" title="Delete Selected">Delete Selected</h:commandLink></li>
+				</ul>
+				<br />
+
+				<!-- users table -->
+			<h:dataTable  styleClass="table-layout users-tbl"
+			 rowClasses="even-row, odd-row"
+			 columnClasses="checkboxTableClass,templateTableClass,ibanTableClass,accountHolderTableClass, actionTableClass"
+			 value='#{beneficiariesBean.beneficiaries}' var="beneficiary">
+		    <h:column >
+						<f:facet name="header">
+							<h:outputText value=" " />
+						</f:facet>
+						<h:selectBooleanCheckbox value="FALSE" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:commandLink action="#{listUsers.setSortat(0)}">
+								<h:outputText value='#{msg.name}' />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{beneficiary.name}" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:commandLink action="#{listUsers.setSortat(2)}">
+								<h:outputText value="#{msg.iban}" />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{beneficiary.iban}" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:commandLink action="#{listUsers.setSortat(2)}">
+								<h:outputText value="#{msg.accountholder}" />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{beneficiary.accountHolder}"/>
+
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:outputText value="Action" />
+						</f:facet>
+				  	<h:commandLink action="#{createUsers.setEditTrue(user)}"
+							name="edit">
+							<h:graphicImage alt="Edit" library="images" name="edit.png" />
+							<f:ajax>
+							</f:ajax>
+						</h:commandLink>
+						 <h:commandLink action="#{createUsers.deleteUser(user.id)}"
+							name="delete">
+							<h:graphicImage alt="Delete" library="images"
+								name="custom-cross.png" />
+						</h:commandLink>
+					</h:column>
+
+				</h:dataTable>
+				</h:form>
+	</ui:define>
 </ui:composition>

@@ -2,6 +2,9 @@ package com.bergcomputers.domain;
 
 public interface ICustomer {
 
+	String firstName = "firstName";
+	String lastName = "lastName";
+	String login = "login";
 	public abstract String getFirstName();
 
 	public abstract void setFirstName(String firstName);

@@ -1,12 +1,11 @@
 package com.bergcomputers.bcibweb.delegate;
 
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
 
 public class Customers {
 	private String name ;
 	private String lastName;
 	private String login;
-	
+
 	public Customers(){
 		this.name="Ban";
 		this.lastName="Dan";

@@ -33,11 +33,17 @@
 				<br />
 
 				<!-- users table -->
-			<h:dataTable  styleClass="table-layout users-tbl"
+			<h:dataTable  styleClass="table-layout customers-tbl"
 			 rowClasses="even-row, odd-row"
-			 columnClasses="checkboxTableClass,idTableClass,nameTableClass,loginTableClass, actionTableClass"
+			 columnClasses="checkboxTableClass,nameTableClass,nameTableClass,loginTableClass, actionTableClass"
 			 value='#{customersBean.customers}' var="customer">
-		    
+
+					 <h:column >
+						<f:facet name="header">
+							<h:outputText value=" " />
+						</f:facet>
+						<h:selectBooleanCheckbox value="FALSE" />
+					</h:column>
 
 					<h:column >
 						<f:facet name="header">
@@ -45,7 +51,7 @@
 								<h:outputText value='First Name' />
 							</h:commandLink>
 						</f:facet>
-						<h:outputText value="#{customers.firstName}" />
+						<h:outputText value="#{customer.firstName}" />
 					</h:column>
 
 					<h:column >
@@ -54,7 +60,7 @@
 								<h:outputText value="Last Name" />
 							</h:commandLink>
 						</f:facet>
-						<h:outputText value="#{customers.lastName}" />
+						<h:outputText value="#{customer.lastName}" />
 					</h:column>
 
 					<h:column >
@@ -63,7 +69,24 @@
 								<h:outputText value="Login" />
 							</h:commandLink>
 						</f:facet>
-						<h:outputText value="#{customers.login}" />
+						<h:outputText value="#{customer.login}" />
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:outputText value="Action" />
+						</f:facet>
+				  	<h:commandLink action="#{createUsers.setEditTrue(user)}"
+							name="edit">
+							<h:graphicImage alt="Edit" library="images" name="edit.png" />
+							<f:ajax>
+							</f:ajax>
+						</h:commandLink>
+						 <h:commandLink action="#{createUsers.deleteUser(user.id)}"
+							name="delete">
+							<h:graphicImage alt="Delete" library="images"
+								name="custom-cross.png" />
+						</h:commandLink>
 					</h:column>
 				</h:dataTable>
 				</h:form>

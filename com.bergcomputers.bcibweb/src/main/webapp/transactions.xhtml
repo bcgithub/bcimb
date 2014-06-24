@@ -15,19 +15,23 @@
     </ui:define>
 
    <ui:define name="main-content">
+			<!-- filter div-->
+			<h:form id="usersForm">
+				<h:panelGroup layout="block" class="filter left">
+
+					<h:inputText value="#{listUsers.flt}" onkeydown='return detectEnter(event)'/>
+					<h:commandButton id='fltr' action="#{listUsers.filter}" value="Filter"  style='width: 40px; font-size:1em'/>
+
+				</h:panelGroup>
+			</h:form>
 			<h:form>
-				<!-- options menu -->
-				<ul class="options-menu menu left">
-				<!--  de adaugat action la butonul de Back -->
-					<li><h:commandLink 
-							title="Back">Back</h:commandLink></li>				</ul>
 				<br />
 
 				<!-- users table #{transactions.message}-->
 			<h:dataTable  styleClass="table-layout users-tbl"
 			 rowClasses="even-row, odd-row"
-			 columnClasses="checkboxTableClass,idTableClass,nameTableClass,loginTableClass, actionTableClass"
-			 value='#{accountsBean.accounts}' var="account">
+			 columnClasses="checkboxTableClass,idTableClass,amountTableClass,loginTableClass, idTableClass, idTableClass,actionTableClass"
+			 value='#{transactionsBean.transactions}' var="transaction">
 		    <h:column >
 						<f:facet name="header">
 							<h:outputText value=" " />
@@ -35,24 +39,27 @@
 						<h:selectBooleanCheckbox value="FALSE" />
 					</h:column>
 
+
 					<h:column >
 						<f:facet name="header">
 						<!--  fara actiune -->
-							<h:commandLink >  
+							<h:commandLink >
 								<h:outputText value='Date' />
 							</h:commandLink>
 						</f:facet>
-						<h:outputText value="#{account.iban}" />
+						<h:outputText value="#{transaction.date}">
+							<f:convertDateTime pattern="dd.MM.yyyy" />
+						</h:outputText>
 					</h:column>
 
 					<h:column >
 						<f:facet name="header">
 						<!--  fara actiune -->
 							<h:commandLink >
-								<h:outputText value="Type" />
+								<h:outputText value="Amount" />
 							</h:commandLink>
 						</f:facet>
-						<h:outputText value="#{account.amount}" />
+						<h:outputText value="#{transaction.amount}" />
 					</h:column>
 
 					<h:column >
@@ -62,17 +69,35 @@
 								<h:outputText value="Sender" />
 							</h:commandLink>
 						</f:facet>
-						<h:outputText value="#{account.creationDate}">
-							<f:convertDateTime pattern="dd.MM.yyyy" />
-						</h:outputText>
+						<h:outputText value="#{transaction.sender}"/>
 					</h:column>
 
 					<h:column >
 						<f:facet name="header">
-							<h:outputText value="Amount" />
+						<!--  fara actiune -->
+							<h:commandLink >
+								<h:outputText value="Type" />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{transaction.type}"/>
+					</h:column>
+					<h:column >
+						<f:facet name="header">
+						<!--  fara actiune -->
+							<h:commandLink >
+								<h:outputText value='Iban' />
+							</h:commandLink>
+						</f:facet>
+						<h:outputText value="#{transaction.account.iban}"/>
+
+					</h:column>
+
+					<h:column >
+						<f:facet name="header">
+							<h:outputText value="Action" />
 						</f:facet>
 						<!--  fara actiune -->
-				  	<h:commandLink 
+				  	<h:commandLink
 							name="edit">
 							<h:graphicImage alt="Edit" library="images" name="edit.png" />
 							<f:ajax>

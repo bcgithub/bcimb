@@ -1,6 +1,7 @@
 package com.bergcomputers.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -9,6 +10,7 @@ public class Device extends BaseEntity implements IDevice {
 	private String name;
 	private String deviceId;
 	@ManyToOne
+	@JoinColumn(name="CUSTOMERID")
 	private Customer customer;
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.domain.IDevice#getName()

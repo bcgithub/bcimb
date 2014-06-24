@@ -181,7 +181,7 @@ select.pagination-resultsperpage {
     height:35px;
 }
 
-.ui-dialog .ui-dialog-buttonpane { text-align: center !important; } 
+.ui-dialog .ui-dialog-buttonpane { text-align: center !important; }
 .ui-dialog-buttonset { float: none !important; }
 
 #language-form {
@@ -201,19 +201,40 @@ select.pagination-resultsperpage {
 /*	padding-left: 15px;*/
 }
 td.idTableClass{
-	width:30px;	
+	width:30px;
 	padding-left: 10px;
 }
 
 .nameTableClass{
+	width:150px;
+}
+
+.templateTableClass{
+	padding-left: 30px;
+	width:150px;
+}
+
+.amountTableClass{
+	width:120px;
+	padding-left:110px;
+}
+
+.ibanTableClass{
+	width:140px;
+	padding-left:30px;
+}
+
+table.table-layout td.accountHolderTableClass{
+	width:200px;
+	text-align:center;
 }
 
 td.nameTableClass{
 	position: relative;
-	padding-left:270px;
+	padding-left:100px;
 }
 .users-tbl td.nameTableClass{
-	padding-left:190px;
+	padding-left:160px;
 }
 
 .actionTableClass{
@@ -227,6 +248,6 @@ td.actionTableClass{
 }
 .loginTableClass{
  	width:100px;
- 	padding-left:50px;
+ 	padding-left:60px;
  }
 

@@ -9,9 +9,11 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 public class Config {
-	public final static String REST_SERVICE_ROLE_LIST="role";
+	public final static String REST_SERVICE_ROLE_LIST="roles";
 	public final static String REST_SERVICE_CUSTOMERS_LIST="customers";
 	public final static String REST_SERVICE_ACCOUNTS_LIST="accounts";
+	public final static String REST_SERVICE_BENEFICIARIES_LIST="beneficiaries";
+	public final static String REST_SERVICE_TRANSACTIONS_LIST="transactions";
 	public final static String REST_SERVICE_BASE_URL="http://localhost:8080/bcibws/rest/";
 
 	public static final DateFormat DATE_FORMAT;

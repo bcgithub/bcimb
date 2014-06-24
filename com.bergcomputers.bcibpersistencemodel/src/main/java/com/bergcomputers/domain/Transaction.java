@@ -5,9 +5,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -22,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @Entity
-@Table(name = "TRANSACTION")
+@Table(name = "TRANSACTIONTBL")
 @XmlRootElement
 @NamedQuery(name=Transaction.findAll,query="SELECT t from Transaction t")
 public class Transaction extends BaseEntity implements Serializable, ITransaction  {
@@ -35,7 +37,8 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="ACCOUNTID")
 	private Account account;
 
 	private String type;

@@ -3,6 +3,7 @@ package com.bergcomputers.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -29,6 +30,7 @@ public class Customer extends BaseEntity implements Serializable, ICustomer{
 	private String password;
 
 	@ManyToOne
+	@JoinColumn(name="ROLEID")
 	private Role role;
 
 	public Role getRole() {

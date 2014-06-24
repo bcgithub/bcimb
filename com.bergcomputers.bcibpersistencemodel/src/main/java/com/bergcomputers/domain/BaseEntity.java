@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "BaseEntity")
 @XmlRootElement
 @NamedQuery(name=BaseEntity.findAll,query="SELECT a from BaseEntity a")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class BaseEntity implements Serializable, IBaseEntity {
 
 

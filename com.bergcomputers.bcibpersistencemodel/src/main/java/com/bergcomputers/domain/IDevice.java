@@ -2,6 +2,9 @@ package com.bergcomputers.domain;
 
 public interface IDevice {
 
+	String Name = null;
+	String id = null;
+
 	public abstract String getName();
 
 	public abstract void setName(String name);
