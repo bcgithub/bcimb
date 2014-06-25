@@ -42,6 +42,10 @@ public class Account extends BaseEntity implements Serializable, IAccount {
 	@JoinColumn(name="CUSTOMERID")
 	private Customer customer;
 
+	@ManyToOne
+	@JoinColumn(name="CURRENCYID")
+	private Currency currency;
+
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -119,6 +123,14 @@ public class Account extends BaseEntity implements Serializable, IAccount {
 	@Override
 	public String toString() {
 		return "Account [id="+getId()+", iban=" + iban + ", amount=" + amount + ", version=" + getVersion() + ", creationDate=" + getCreationDate() + "]";
+	}
+
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
 	}
 
 

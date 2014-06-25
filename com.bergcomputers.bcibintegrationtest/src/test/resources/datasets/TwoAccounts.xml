@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <account id="1" iban="RO01BC1234" amount="100.0" creationDate="2014-01-01"/>
-    <account id="2" iban="RO01BC1235" amount="200.0" creationDate="2014-01-01"/>
+    <baseentity id="1" dtype="Currency"/>
+    <baseentity id="2" dtype="Role"/>
+    <baseentity id="3" dtype="Role"/>
+    <baseentity id="4" dtype="Customer"/>
+    <baseentity id="5" dtype="Customer"/>
+    <baseentity id="6" dtype="Account"/>
+    <baseentity id="7" dtype="Account"/>
+    <currency id="1" symbol="EUR" exchangerate="1.0"/>
+    <role id="2" name="customer"/>
+    <role id="3" name="employee"/>
+    <customer id="4" roleid="3" firstName="Ion" lastName="Popescu" login="ionp" password="ionp"/>
+    <customer id="5" roleid="2" firstName="Alex" lastName="Ionescu" login="alexi" password="alexi"/>
+    <account id="6" customerid="4" currencyid="1" iban="ROBUC01234" amount="100.0"/>
+    <account id="7" customerid="4" currencyid="1" iban="ROBUC01235" amount="500.0"/>
 </dataset>

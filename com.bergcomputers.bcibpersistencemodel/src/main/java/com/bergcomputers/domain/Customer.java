@@ -110,4 +110,10 @@ public class Customer extends BaseEntity implements Serializable, ICustomer{
 		this.password = password;
 	}
 
+	@Override
+	public String toString() {
+		return "Customer [firstName=" + firstName + ", lastName=" + lastName
+				+ ", login=" + login + ", role=" + role + "]";
+	}
+
 }

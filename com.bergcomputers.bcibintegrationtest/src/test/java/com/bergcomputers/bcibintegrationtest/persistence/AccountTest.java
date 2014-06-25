@@ -10,7 +10,9 @@ import javax.transaction.UserTransaction;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.CleanupUsingScript;
 import org.jboss.arquillian.persistence.PersistenceTest;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.arquillian.persistence.TransactionMode;
 import org.jboss.arquillian.persistence.Transactional;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -77,6 +79,7 @@ public class AccountTest {
         em.joinTransaction();
     }
 
+    @CleanupUsingScript(phase = TestExecutionPhase.BEFORE,value="datasets/cleanup-AccountTest.sql")
     @Test
     public void shouldFindAllGamesUsingJpqlQuery() throws Exception {
         // given

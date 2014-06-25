@@ -4,6 +4,7 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <jta-data-source>jdbc/aclws</jta-data-source>
         <class>com.bergcomputers.domain.BaseEntity</class>
+        <class>com.bergcomputers.domain.Currency</class>
         <class>com.bergcomputers.domain.Account</class>
         <class>com.bergcomputers.domain.Customer</class>
         <class>com.bergcomputers.domain.Transaction</class>

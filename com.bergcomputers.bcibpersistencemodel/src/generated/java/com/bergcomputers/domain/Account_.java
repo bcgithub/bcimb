@@ -10,6 +10,7 @@ public abstract class Account_ extends com.bergcomputers.domain.BaseEntity_ {
 
 	public static volatile SingularAttribute<Account, Double> amount;
 	public static volatile SingularAttribute<Account, Customer> customer;
+	public static volatile SingularAttribute<Account, Currency> currency;
 	public static volatile SingularAttribute<Account, String> iban;
 
 }
