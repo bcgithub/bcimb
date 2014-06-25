@@ -1,3 +1,9 @@
+drop database bcib;
+drop user bcib;
+create database bcib;
+CREATE USER 'bcib'@'localhost' IDENTIFIED BY 'bcib';
+GRANT ALL ON bcib.* TO bcib@'localhost' IDENTIFIED BY 'bcib';
+
 USE bcib;
 
 DROP TABLE IF EXISTS TransactionTbl;
@@ -7,10 +13,10 @@ DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS Role;
 DROP TABLE IF EXISTS Currency;
 DROP TABLE IF EXISTS Beneficiary;
-DROP TABLE IF EXISTS BaseEntity;  
+DROP TABLE IF EXISTS BaseEntity;
 
 CREATE TABLE BaseEntity(id BIGINT NOT NULL AUTO_INCREMENT, version INTEGER DEFAULT 0, deleted BIT DEFAULT 0, creationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-dtype VARCHAR(31) DEFAULT 'BaseEntity', 
+dtype VARCHAR(31) DEFAULT 'BaseEntity',
 PRIMARY KEY (id));
 
 CREATE TABLE Beneficiary(id BIGINT,iban VARCHAR(255),name VARCHAR(255),details VARCHAR(255),accountholder VARCHAR(255),
@@ -24,36 +30,36 @@ FOREIGN KEY (id)
 	ON DELETE CASCADE);
 
 CREATE TABLE Role (id BIGINT NOT NULL, name VARCHAR(255),
-FOREIGN KEY (id) 
-REFERENCES BaseEntity(id) 
+FOREIGN KEY (id)
+REFERENCES BaseEntity(id)
 ON DELETE CASCADE
 );
 
 
 
-CREATE TABLE Customer(id BIGINT NOT NULL, roleid BIGINT NOT NULL, firstName VARCHAR(255), lastName VARCHAR(255), login VARCHAR(255), password VARCHAR(255), 
-FOREIGN KEY (id) 
-REFERENCES BaseEntity(id) 
+CREATE TABLE Customer(id BIGINT NOT NULL, roleid BIGINT NOT NULL, firstName VARCHAR(255), lastName VARCHAR(255), login VARCHAR(255), password VARCHAR(255),
+FOREIGN KEY (id)
+REFERENCES BaseEntity(id)
 ON DELETE CASCADE,
-FOREIGN KEY (roleid) 
-REFERENCES Role(id) 
+FOREIGN KEY (roleid)
+REFERENCES Role(id)
 ON DELETE CASCADE
 );
 
 CREATE TABLE Device(id BIGINT NOT NULL, deviceid BIGINT NOT NULL, name VARCHAR(255), customerid BIGINT NOT NULL,
-FOREIGN KEY (id) 
-REFERENCES BaseEntity(id) 
+FOREIGN KEY (id)
+REFERENCES BaseEntity(id)
 ON DELETE CASCADE,
-FOREIGN KEY (customerid) 
-REFERENCES Customer(id) 
+FOREIGN KEY (customerid)
+REFERENCES Customer(id)
 ON DELETE CASCADE
 );
 
 
 
-CREATE TABLE Account (id BIGINT NOT NULL, customerid BIGINT NOT NULL, currencyid BIGINT NOT NULL, iban VARCHAR(255), amount DOUBLE, 
+CREATE TABLE Account (id BIGINT NOT NULL, customerid BIGINT NOT NULL, currencyid BIGINT NOT NULL, iban VARCHAR(255), amount DOUBLE,
 FOREIGN KEY (id)
-REFERENCES BaseEntity(id) 
+REFERENCES BaseEntity(id)
 ON DELETE CASCADE,
 FOREIGN KEY (customerid)
 REFERENCES Customer(id)
@@ -63,10 +69,10 @@ REFERENCES Currency(id)
 );
 
 CREATE TABLE TransactionTbl (id BIGINT NOT NULL, accountid BIGINT NOT NULL, date TIMESTAMP, type VARCHAR(255), amount DOUBLE, sender VARCHAR(255), details VARCHAR(255), status VARCHAR(255),
-FOREIGN KEY (id) 
+FOREIGN KEY (id)
         REFERENCES BaseEntity(id)
-        ON DELETE CASCADE, 
-FOREIGN KEY (accountid) 
+        ON DELETE CASCADE,
+FOREIGN KEY (accountid)
         REFERENCES Account(id)
         ON DELETE CASCADE
 );
