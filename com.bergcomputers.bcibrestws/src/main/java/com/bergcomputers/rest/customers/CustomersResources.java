@@ -43,7 +43,7 @@ public class CustomersResources {
         // TODO Auto-generated constructor stub
     }
 
-    @Path("{customerid}")
+    @Path("/{customerid}")
     public CustomerResource getCustomer(@PathParam("customerid") Long customerid) {
         return new CustomerResource(uriInfo, customerController, customerid);
     }
