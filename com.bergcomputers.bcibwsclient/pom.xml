@@ -1,11 +1,45 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.bergcomputers</groupId>
-    <artifactId>com.bergcomputers.bcBanking</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>com.bergcomputers.bcibwsclient</artifactId>
-  <name>bcibwsclient</name>
-  <description>web services client</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.bergcomputers</groupId>
+		<artifactId>com.bergcomputers.bcBanking</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>com.bergcomputers.bcibwsclient</artifactId>
+	<name>bcibwsclient</name>
+	<description>web services client</description>
+	<properties>
+		<glassfish.embedded.all.version>3.2-SNAPSHOT</glassfish.embedded.all.version>
+		<ejb.version>3.1</ejb.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.bergcomputers</groupId>
+			<artifactId>com.bergcomputers.bcibpersistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bergcomputers</groupId>
+			<artifactId>com.bergcomputers.bcibejb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bergcomputers</groupId>
+			<artifactId>com.bergcomputers.bcibrestws</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.ejb</artifactId>
+			<version>${ejb.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.extras</groupId>
+			<artifactId>glassfish-embedded-all</artifactId>
+			<version>${glassfish.embedded.all.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>
