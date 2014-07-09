@@ -28,7 +28,8 @@ public class TransactionController implements ITransactionController {
 	@Override
 	public Transaction create(Transaction transaction) {
 		if (null != transaction && null == transaction.getTransactionDate()){
-		return null;}
+		return null;
+		}
 		this.em.persist(transaction);
 		return transaction;
 	}
@@ -54,11 +55,12 @@ public class TransactionController implements ITransactionController {
 
 	@Override
 	public void delete(long transactionid) {
-		
-		Transaction item = findTransaction(transactionid);
+		Transaction item = em.find(Transaction.class,transactionid);
+		//Transaction item = findTransaction(transactionid);
 		if (item !=null)
 		{
 			em.remove(item);
+		
 		}
 		
 	}
