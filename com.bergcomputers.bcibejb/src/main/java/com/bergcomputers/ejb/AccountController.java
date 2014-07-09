@@ -34,7 +34,7 @@ public class AccountController implements IAccountController {
 		if (null != account && null == account.getCreationDate()){
 			account.setCreationDate(new Date());
 		}
-		this.em.persist(account);
+		this.em.persist(em.merge(account));
 		return account;
 	}
 

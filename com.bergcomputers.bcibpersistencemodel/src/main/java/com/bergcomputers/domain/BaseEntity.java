@@ -35,7 +35,7 @@ public class BaseEntity implements Serializable, IBaseEntity {
 	public final static String findAll = "com.bergcomputers.domain.baseentity.findAll";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
 	protected Long id;
 

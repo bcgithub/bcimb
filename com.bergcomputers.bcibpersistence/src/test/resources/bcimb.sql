@@ -92,6 +92,16 @@ insert into BaseEntity (dtype) values('Account');
 insert into Account values(LAST_INSERT_ID(), 4, 1, 'ROBUC012345', 100.0);
 insert into BaseEntity (dtype) values('Account');
 insert into Account values(LAST_INSERT_ID(), 4, 1, 'ROBUC012346', 500.0);
+insert into BaseEntity (dtype) values('Account');
+insert into Account values(LAST_INSERT_ID(), 4, 1, 'ROBUC012347', 800.0);
+insert into BaseEntity (dtype) values('Account');
+insert into Account values(LAST_INSERT_ID(), 4, 1, 'ROBUC012348', 900.0);
+insert into BaseEntity (dtype) values('Account');
+insert into Account values(LAST_INSERT_ID(), 4, 1, 'ROTIM012345', 960.0);
+insert into BaseEntity (dtype) values('Account');
+insert into Account values(LAST_INSERT_ID(), 4, 1, 'ROTIM012349', 100.0);
+insert into BaseEntity (dtype) values('Account');
+insert into Account values(LAST_INSERT_ID(), 4, 1, 'ROTIM012346', 300.0);
 
 insert into BaseEntity (dtype) values('Transaction');
 insert into TransactionTbl values(LAST_INSERT_ID(),7, '2014-10-21T10:30:00', 'PAYMENT', 200.0, 'Alex Ion', 'Plata factura 23434', 'NEW');
