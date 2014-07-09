@@ -62,6 +62,7 @@ public class AccountsWSTest {
             acc.setAmount(2000.0);
             acc.setIban("ro03bc1234");
             acc.setCreationDate(date);
+            System.out.println(acc.getId());
             
             //creating a new currency to associate with the account
             Currency currency=new Currency();
@@ -85,9 +86,9 @@ public class AccountsWSTest {
             System.out.println("-----");
 
              System.out.println("Deleting test account:");
-
-            wr.path("accounts/"+accounts.getJSONObject(0).get("id")).delete();
-            //c.resource((String)accounts.get(0)).delete();
+             System.out.println(accountResult.getId());
+             System.out.println(acc.getId());
+            wr.path("accounts/"+acc.getId()).delete();
             System.out.println("-----");
 
     }
@@ -139,10 +140,7 @@ public class AccountsWSTest {
  	
      //deleting an account
      System.out.println("Deleting test account:");
-    wr.path("accounts/"+13).delete();
-    //AccountsResource testAccount=new AccountsResource();
-    //testAccount.deleteAccounts(13L);
-    //wr.path("accounts/").delete(13L);
+    wr.path("accounts/"+21).delete();
     System.out.println("-----");
     
     //checking list of accounts
