@@ -75,15 +75,7 @@ public class TransactionsResource {
         return transactionEntity;
     }
 
-	/*
-	 * @PUT
-	 * 
-	 * @Consumes("application/json")
-	 * @Produces("application/json")
-	 *  public Transaction createTransaction(final Transaction jsonTransaction) throws JSOnException{
-	 * jsonTransaction.setCreationDate(null=jsonTransaction.getCreationDate()) 
-	 * }
-	 */
+
 	@DELETE
 	@Path("/{transactionid}")
 	public void delete(@PathParam("transactionid") Long transactionId) {	
