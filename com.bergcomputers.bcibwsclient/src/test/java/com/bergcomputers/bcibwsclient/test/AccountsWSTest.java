@@ -19,6 +19,7 @@ import org.junit.Test;
 import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
+import com.bergcomputers.domain.Transaction;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -83,7 +84,7 @@ public class AccountsWSTest {
 
     }
 
-        @Test
+       // @Test
     public void updateAccount() throws JSONException{
   		//creating an account
         Account acc = new Account();
@@ -283,5 +284,52 @@ public class AccountsWSTest {
         JSONArray accounts2 = wr.path("accounts/").accept("application/json").get(JSONArray.class);
         //checking if the 2 strings are the same
         Assert.assertTrue(accounts.toString().equals(accounts2.toString()));
+    }
+    
+    @Test
+    public void deleteAccountThatHasTransactions() throws JSONException{
+    	//creating a new account and a new transaction
+  		//creating an account
+        Account acc = new Account();
+        Date date=new Date();
+        acc.setAmount(2000.0);
+        acc.setIban("ro03bc1234");
+        acc.setCreationDate(date);
+        
+        //creating a new currency to associate with the account
+        Currency currency=new Currency();
+        currency.setId(1L);
+        acc.setCurrency(currency);
+        
+        Customer customer=new Customer();
+        customer.setId(4L);
+        acc.setCustomer(customer);
+        
+        Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+        System.out.println("-----");
+        
+        //creating a new transaction
+        Transaction transaction=new Transaction();
+        transaction.setAccount(acc);
+        transaction.setAmount(200D);
+        transaction.setDate(date);
+        transaction.setId(1L);
+        transaction.setCreationDate(date);
+        transaction.setDeleted(0);
+        transaction.setDetails("blabla");
+        transaction.setSender("Andrei");
+        transaction.setStatus("sent");
+        transaction.setTransactionDate(date);
+        transaction.setType("eur");
+        
+        Transaction transactionResult=wr.path("transactions").type("application/json").put(Transaction.class, transaction);
+        System.out.println("-----");
+        
+        //test the transaction on the server
+        Transaction transactionResult2=wr.path("transactions").accept("application/json").get(Transaction.class);
+        System.out.println(transactionResult2.toString());
+        
+    	
+    
     }
 }
