@@ -35,9 +35,6 @@ public class CustomerController implements ICustomerController{
 
 	@Override
 	public Customer create(Customer customer) {
-		if (null != customer && null == customer.getCreationDate()){
-			customer.setCreationDate(new Date());
-		}
 		customer = em.merge(customer);
 		em.persist(customer);
 		em.flush();
@@ -80,7 +77,13 @@ public class CustomerController implements ICustomerController{
 			em.remove(item);
 		}
 	}
-	
+	@Override
+	public Customer update(long customerid, Customer customer){
+		Customer  cust = (Customer)em.find(Customer.class ,customerid);
+		   cust.setFirstName(customer.getFirstName());
+		   cust.setLastName(customer.getLastName());
+		return cust;
+	}
 	
 
 }
