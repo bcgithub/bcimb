@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -43,9 +44,10 @@ public class AccountsResource {
         // TODO Auto-generated constructor stub
     }
 
-    @Path("{accountid}")
-    public AccountResource getAccount(@PathParam("accountid") Long accountid) {
-        return new AccountResource(uriInfo, accountController, accountid);
+    @Path("/{accountid}")
+    @GET
+    public Account getAccount(@PathParam("accountid") Long accountid) {
+    	return accountController.findAccount(accountid);
     }
 
     @GET
@@ -74,6 +76,12 @@ public class AccountsResource {
     	return accountController.getAccounts();
     }
 
+    @DELETE
+    @Path("/{accountid}")
+    @Produces("application/json")
+    public void deleteAccounts(@PathParam("accountid") Long accountid){
+    	accountController.delete(accountid);
+    }
     /*
      * Works but is better to use the other version
     @PUT
