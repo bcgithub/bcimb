@@ -84,7 +84,7 @@ public class AccountsWSTest {
 
     }
 
-       // @Test
+        @Test
     public void updateAccount() throws JSONException{
   		//creating an account
         Account acc = new Account();
@@ -273,9 +273,9 @@ public class AccountsWSTest {
         System.out.println("Deleting test account with the id 10000:");
         try{
         wr.path("accounts/"+10000).delete();
-        //Assert.fail();
+       
         } catch (RuntimeException e) {
-            Assert.assertTrue(true);
+        	 Assert.fail();
         }
         
         //checking the new list of accounts (which should be the same as the
