@@ -125,7 +125,7 @@ public class CustomerResource {
             .put("amount", customerEntity.getAmount())
             .put("createDate", customerEntity.getCreationDate()).toString();
     }
-
+*/
     @DELETE
     public void deleteCustomer() {
         if (null == customerEntity) {
@@ -133,7 +133,6 @@ public class CustomerResource {
         }
         customerController.delete(customerid);
     }
-	 */
 
     public String asString() {
         return toString();

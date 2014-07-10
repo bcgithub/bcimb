@@ -1,15 +1,15 @@
 package com.bergcomputers.rest.customers;
 
 import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
+import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.ICustomerController;
 
@@ -100,15 +101,29 @@ public class CustomersResources {
             .put("amount", customerEntity.getAmount())
             .put("createDate", customerEntity.getCreationDate()).toString();
     } */
-/*
-    @PUT
+    
+    @DELETE
+    @Path("/{accountid}")
+    @Produces("application/json")
+    public void deleteCustomer(@PathParam("accountid") Long accountid){
+    	customerController.delete(accountid);
+    }
+
+    @POST
     @Consumes("application/json")
     @Produces("application/json")
     public Customer createCustomer(final Customer jsonCustomer) throws JSONException {
-
     	jsonCustomer.setCreationDate(null ==jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
     	Customer customerEntity = customerController.create(jsonCustomer);
         return customerEntity;
     }
-*/
+    
+    @PUT
+    @Path("/{accountid}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Customer updateCustomer(@PathParam("accountid") Long accountid, final Customer jsonCustomer) throws JSONException {
+    	Customer customerEntity = customerController.update(accountid, jsonCustomer);
+        return customerEntity;
+    }
 }

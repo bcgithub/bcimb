@@ -11,4 +11,5 @@ public interface ICustomerController {
 	public Customer findCustomer(long id);
 	void delete(long customerid);
 	Customer create(Customer customer);
+	Customer update(long customerid, Customer customer);
 }
