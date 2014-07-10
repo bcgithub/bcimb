@@ -83,9 +83,66 @@ public class AccountsWSTest {
 
     }
 
-       // @Test
+        @Test
     public void updateAccount() throws JSONException{
+  		//creating an account
+        Account acc = new Account();
+        Date date=new Date();
+        acc.setAmount(2000.0);
+        acc.setIban("ro03bc1234");
+        acc.setCreationDate(date);
+        
+        //creating a new currency to associate with the account
+        Currency currency=new Currency();
+        currency.setId(1L);
+        acc.setCurrency(currency);
+        
+        Customer customer=new Customer();
+        customer.setId(4L);
+        acc.setCustomer(customer);
+        
+        Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+        System.out.println("-----");
+    	
+        // make sure it was added
         System.out.println("Getting list of accounts:");
+        JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+        System.out.println("-----");
+        
+    	//updating the account
+        System.out.println("Updating test account:");
+        Date date2=new Date();
+        acc.setAmount(4000.0);
+        acc.setIban("RO03TM2345");
+        acc.setCreationDate(date2);
+        
+        //creating a new currency to associate with the account
+        Currency currency2=new Currency();
+        currency.setId(2L);
+        acc.setCurrency(currency2);
+        
+        Customer customer2=new Customer();
+        customer.setId(5L);
+        acc.setCustomer(customer2);
+        System.out.println(acc.toString());
+        accountResult = wr.path("accounts/").type("application/json").put(Account.class, acc);
+        System.out.println("-----");
+        
+        // make sure it was added correctly
+        Account accountEntity = wr.path("accounts/"+accountResult.getId()).accept("application/json").get(Account.class);
+       
+        Assert.assertTrue(accountEntity.getId()==accountResult.getId());      
+        System.out.println(accountEntity.getId());
+        Assert.assertEquals(accountEntity.getAmount(),accountResult.getAmount());
+        Assert.assertEquals(accountResult.getIban(), accountEntity.getIban());
+        Assert.assertEquals(accountResult.getCurrency().toString(), accountEntity.getCurrency().toString());
+        
+        System.out.println("Deleting test account:");
+        wr.path("accounts/"+accountResult.getId()).delete();
+        System.out.println("-----");
+        
+    	/* System.out.println("Getting list of accounts:");
         JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
         System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
         System.out.println("-----");
@@ -115,7 +172,7 @@ public class AccountsWSTest {
 
         System.out.println("Deleting test account:");
         wr.path("accounts/"+account.get("id")).delete();
-        System.out.println("-----");
+        System.out.println("-----");*/
 
     }
 
@@ -203,4 +260,28 @@ public class AccountsWSTest {
        System.out.println("-----");
 
    }
+    
+    @Test
+    public void deleteAccountThatDoesntExist() throws JSONException {
+        System.out.println("Getting list of accounts:");
+        JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+        System.out.println("-----");
+        
+        //trying to delete and unexisting account
+        System.out.println("Deleting test account with the id 10000:");
+        try{
+        wr.path("accounts/"+10000).delete();
+        //Assert.fail();
+        } catch (RuntimeException e) {
+            Assert.assertTrue(true);
+        }
+        
+        //checking the new list of accounts (which should be the same as the
+        //old one)
+        System.out.println("Getting list of accounts:");
+        JSONArray accounts2 = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+        //checking if the 2 strings are the same
+        Assert.assertTrue(accounts.toString().equals(accounts2.toString()));
+    }
 }
