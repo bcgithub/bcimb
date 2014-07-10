@@ -56,19 +56,16 @@ public class AccountsWSTest {
     }
     @Test
     public void createAccount() throws JSONException{
-
+    		//creating an account
             Account acc = new Account();
             Date date=new Date();
             acc.setAmount(2000.0);
             acc.setIban("ro03bc1234");
             acc.setCreationDate(date);
-            System.out.println(acc.getId());
             
             //creating a new currency to associate with the account
             Currency currency=new Currency();
             currency.setId(1L);
-           /* currency.setExchangerate(1.0);
-            currency.setSymbol("EUR");  */ 
             acc.setCurrency(currency);
             
             Customer customer=new Customer();
@@ -78,9 +75,7 @@ public class AccountsWSTest {
             Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
             System.out.println("-----");
             
-            // make sure it was added
-
-           
+           //deleting the account
              System.out.println("Deleting test account:");
              System.out.println(accountResult.getId());
              wr.path("accounts/"+accountResult.getId()).delete();
@@ -132,11 +127,29 @@ public class AccountsWSTest {
      JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
      System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
      System.out.println("-----");
+	//creating an account
+     Account acc = new Account();
+     Date date=new Date();
+     acc.setAmount(2000.0);
+     acc.setIban("ro03bc1234");
+     acc.setCreationDate(date);
+     
+     //creating a new currency to associate with the account
+     Currency currency=new Currency();
+     currency.setId(1L);
+     acc.setCurrency(currency);
+     
+     Customer customer=new Customer();
+     customer.setId(4L);
+     acc.setCustomer(customer);
+     
+     Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+     System.out.println("-----");
  	
      //deleting an account
-     System.out.println("Deleting test account:");
-    wr.path("accounts/"+21).delete();
-    System.out.println("-----");
+     System.out.println("Deleting test account with the id " +accountResult.getId()+":");
+    wr.path("accounts/"+accountResult.getId()).delete();
+    System.out.println("Deleted");
     
     //checking list of accounts
     System.out.println("Getting list of accounts:");
@@ -144,7 +157,7 @@ public class AccountsWSTest {
     System.out.println(String.format("List of accounts found:\n%s", accounts2.toString()));
     System.out.println("-----");
     //test if the new string and the old one are equal
-    Assert.assertFalse(accounts.toString().equals(accounts2.toString()));
+    Assert.assertFalse(accountResult.toString().equals(accounts2.toString()));
     
 
        
@@ -155,34 +168,39 @@ public class AccountsWSTest {
        JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
        System.out.println("-----");
-       // add a new account
-
-       System.out.println("Creating test account:");
+		//creating an account
        Account acc = new Account();
+       Date date=new Date();
        acc.setAmount(2000.0);
        acc.setIban("ro03bc1234");
+       acc.setCreationDate(date);
+       
        //creating a new currency to associate with the account
        Currency currency=new Currency();
-       currency.setExchangerate(1.0);
-       currency.setSymbol("EUR");   
+       currency.setId(1L);
        acc.setCurrency(currency);
-      
-       System.out.println("---created --"+acc);
+       
+       Customer customer=new Customer();
+       customer.setId(4L);
+       acc.setCustomer(customer);
+       
+       Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+       System.out.println("-----");
 
        // make sure it was added
-       Account accountEntity = wr.path("accounts/"+22).accept("application/json").get(Account.class);
+       Account accountEntity = wr.path("accounts/"+accountResult.getId()).accept("application/json").get(Account.class);
       
 
-       Assert.assertTrue(accountEntity.getId()==22);      
+       Assert.assertTrue(accountEntity.getId()==accountResult.getId());      
        System.out.println(accountEntity.getId());
-       Assert.assertTrue(accountEntity.getAmount()==960.0);
-       Assert.assertEquals("ROTIM012345", accountEntity.getIban());
-       Assert.assertEquals(currency.toString(), accountEntity.getCurrency().toString());
+       Assert.assertEquals(accountEntity.getAmount(),accountResult.getAmount());
+       Assert.assertEquals(accountResult.getIban(), accountEntity.getIban());
+       Assert.assertEquals(accountResult.getCurrency().toString(), accountEntity.getCurrency().toString());
        
        //deleting the created account
-      /* System.out.println("Deleting test account:");
-       wr.path("accounts/"+acc.getId()).delete();
-       System.out.println("-----");*/
+      System.out.println("Deleting test account:");
+       wr.path("accounts/"+accountResult.getId()).delete();
+       System.out.println("-----");
 
    }
 }
