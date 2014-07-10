@@ -28,11 +28,20 @@ public class TransactionController implements ITransactionController {
 	@Override
 	public Transaction create(Transaction transaction) {
 		if (null != transaction && null == transaction.getTransactionDate()){
-		return null;
+		transaction.setCreationDate(new Date());
 		}
+		transaction=em.merge(transaction);
 		this.em.persist(transaction);
+		em.flush();
 		return transaction;
-	}
+		}
+	/*public Transacation create(int id,..){
+	 Transaction tr = new Transaction();
+	 tr.setId(id);
+	 ...
+	 em.persist(tr);
+	 return tr;
+	 }*/
 
 	@Override
 	public void save(Transaction transaction) {

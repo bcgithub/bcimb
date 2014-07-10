@@ -58,20 +58,34 @@ public class TransactionsWSTest {
             System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
             System.out.println("-----");
        
-            // add a new user
+            Transaction created= new Transaction();
+            Account acc = new Account();
+            acc.setId(7L);
+            created.setAccount(acc);
+            created.setId(10L);
+            created.setAmount(5000.0);
+            created.setDetails("Plata salar1");
+            created.setSender("bCOMPUTERS1");
+            created.setStatus("NEW1");
+            Date creation= new Date();
+            created.setTransactionDate(creation);
+            created.setType("CREDIT");
+            created.setDate(creation);
+            created.setCreationDate(creation);
+           //created.setVersion(0);
+           System.out.println("Creating test transaction:");
+           created = wr.path("transactions").type("application/json").put(Transaction.class, created);
+           System.out.println("---created --"+created);
 
+           System.out.println("Getting list of transactions:");
+           transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
+           System.out.println(String.format("List of transactions found:\n%s",transactions.toString()));
+           System.out.println("-----");
+           /* 
             System.out.println("Creating test transactions:");
             JSONObject transaction = new JSONObject();
-            transaction.put("type", "type?")
-             	       .put("amount", 1000.0);
+            transaction.put("type", "type?").put("amount", 1000.0);
             wr.path("transactions").type("application/json").put(transaction.toString());
-            System.out.println("-----");
-
-            // make sure it was added
-
-            System.out.println("Getting list of transactions:");
-            transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
-            System.out.println(String.format("List of transactions found:\n%s",transactions.toString()));
             System.out.println("-----");
 
             System.out.println("Deleting test transaction:");
@@ -79,6 +93,7 @@ public class TransactionsWSTest {
             wr.path("transactions/"+transactions.getJSONObject(0).get("id")).delete();
             //c.resource((String)accounts.get(0)).delete();
             System.out.println("-----");
+            */
 
     }
 
@@ -88,9 +103,47 @@ public class TransactionsWSTest {
         JSONArray transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
         System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
         System.out.println("-----");
-        // add a new account
+     
+        
+        Transaction created= new Transaction();
+        Account acc = new Account();
+        acc.setId(7L);
+        created.setAccount(acc);
+        created.setId(9L);
+        created.setAmount(1000.0);
+        created.setDetails("Plata salar");
+        created.setSender("bCOMPUTERS");
+        created.setStatus("NEW");
+        Date creation= new Date();
+        created.setTransactionDate(creation);
+        created.setType("CREDIT");
+        created.setDate(creation);
+        created.setCreationDate(creation);
+       //created.setVersion(0);
+       System.out.println("Creating test transaction:");
+       created = wr.path("transactions").type("application/json").put(Transaction.class, created);
+       System.out.println("---created --"+created);
+       
+       System.out.println("Getting list of transactions:");
+       transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
+       System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
+       System.out.println("-----");
 
-        System.out.println("Creating test transaction:");
+       System.out.println("Updating test transaction:");
+       created.setId(11L);
+       created.setAmount(9000.0);
+       created = wr.path("transactions/"+ created.getId()).type("application/json").post(Transaction.class,  created);
+       System.out.println("-----Updated "+ created);
+       
+       System.out.println("Getting list of transactions:");
+       transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
+       System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
+       System.out.println("-----");
+
+       System.out.println("Deleting test transaction:");
+       wr.path("transactions/"+created.getId()).delete();
+       System.out.println("-----");
+        /*System.out.println("Creating test transaction:");
         JSONObject transaction = new JSONObject();
         transaction.put("type", "CREDIT").put("amount", 1500.0);
         transaction = wr.path("transactions").type("application/json").put(JSONObject.class, transaction);
@@ -119,7 +172,7 @@ public class TransactionsWSTest {
         System.out.println("Deleting test transaction:");
         wr.path("transactions/"+transaction.get("id")).delete();
         System.out.println("-----");
-
+        */
     }
 
     @Test
@@ -129,15 +182,37 @@ public class TransactionsWSTest {
         System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
         System.out.println("-----");
         
-        System.out.println("Deleting test transaction:");
-        wr.path("transactions/"+8).delete();
-        System.out.println("-----");
+        Transaction created= new Transaction();
+        Account acc = new Account();
+        acc.setId(7L);
+        created.setAccount(acc);
+        created.setId(9L);
+        created.setAmount(1000.0);
+        created.setDetails("Plata salar");
+        created.setSender("bCOMPUTERS");
+        created.setStatus("NEW");
+        Date creation= new Date();
+        created.setTransactionDate(creation);
+        created.setType("CREDIT");
+        created.setDate(creation);
+        created.setCreationDate(creation);
+       //created.setVersion(0);
+       System.out.println("Creating test transaction:");
+       created = wr.path("transactions").type("application/json").put(Transaction.class, created);
+       System.out.println("---created --"+created);
+       
+       Transaction transactionResult = wr.path("transactions/"+created.getId()).accept("application/json").get(Transaction.class);
+       
+       System.out.println("Deleting test transaction:");
+       wr.path("transactions/"+created.getId()).delete();
+       System.out.println("-----");
         
-        System.out.println("Getting list of transactions:");
-        transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
-        System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
-        System.out.println("-----");
-        
+       System.out.println("Getting list of transactions:");
+       JSONArray transactions1 = wr.path("transactions/").accept("application/json").get(JSONArray.class);
+       System.out.println(String.format("List of transactions found:\n%s", transactions1.toString()));
+       System.out.println("-----");
+       //Assert.assertFalse(transactionResult.toString(),equals(transactions1.toString()));
+       Assert.assertFalse(transactionResult.toString().equals(transactions1.toString()));
     }
     @Test
     public void getTransaction()throws JSONException{
@@ -167,17 +242,15 @@ public class TransactionsWSTest {
        
       
       Transaction transactionEntity = wr.path("transactions/"+created.getId()).accept("application/json").get(Transaction.class);
+      
       Assert.assertEquals(created.getId(),transactionEntity.getId());
       Assert.assertEquals(created.getAmount(),transactionEntity.getAmount());
       Assert.assertEquals(created.getDetails(),transactionEntity.getDetails());
-      Assert.assertEquals(created.getSender(),transactionEntity.getSender());
       Assert.assertEquals(created.getStatus(),transactionEntity.getStatus());
-      Assert.assertEquals(created.getTransactionDate(),transactionEntity.getTransactionDate());
-      Assert.assertEquals(created.getType(),transactionEntity.getType());
       Assert.assertEquals(created.getDate(),transactionEntity.getDate());
+      Assert.assertEquals(created.getTransactionDate(),transactionEntity.getTransactionDate());
       Assert.assertEquals(created.getCreationDate(),transactionEntity.getCreationDate());
-      Assert.assertEquals(created.getAccount(),transactionEntity.getAccount());
-      
+      Assert.assertEquals(acc.getId(),transactionEntity.getAccount().getId());
       
       System.out.println("Deleting test transaction:");
       wr.path("transactions/"+created.getId()).delete();
