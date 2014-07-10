@@ -80,15 +80,10 @@ public class AccountsWSTest {
             
             // make sure it was added
 
-            System.out.println("Getting list of accounts:");
-            JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-            System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-            System.out.println("-----");
-
+           
              System.out.println("Deleting test account:");
              System.out.println(accountResult.getId());
-             System.out.println(acc.getId());
-            wr.path("accounts/"+acc.getId()).delete();
+             wr.path("accounts/"+accountResult.getId()).delete();
             System.out.println("-----");
 
     }
@@ -171,25 +166,15 @@ public class AccountsWSTest {
        currency.setExchangerate(1.0);
        currency.setSymbol("EUR");   
        acc.setCurrency(currency);
-       //wr.path("accounts/").type("application/json").put(Account.class, acc);
-       //wr.path("accounts/").type("application/json").put(acc.toString());
-       //System.out.println(account.toString());
-       //JSONObject account=wr.path("accounts").type("application/json").put(JSONObject.class, acc);
+      
        System.out.println("---created --"+acc);
 
        // make sure it was added
-       Account accountEntity = wr.path("accounts/"+13).accept("application/json").get(Account.class);
-       /*Assert.assertEquals(acc.getId(), accountEntity.getId());
-       Assert.assertEquals(acc.getAmount(), accountEntity.getAmount());
-       Assert.assertEquals(acc.getIban(), accountEntity.getIban());
-       Assert.assertEquals(acc.getCurrency(), accountEntity.getCurrency());*/
-      /*Assert.assertEquals(null, accountEntity.getId());
-       boolean equal=accountEntity.getAmount()==2000.0;
-       Assert.assertTrue(equal);
-       Assert.assertEquals("ro03bc1234", accountEntity.getIban());
-       Assert.assertEquals(currency, accountEntity.getCurrency());*/
+       Account accountEntity = wr.path("accounts/"+22).accept("application/json").get(Account.class);
+      
 
-       Assert.assertTrue(accountEntity.getId()==13);       
+       Assert.assertTrue(accountEntity.getId()==22);      
+       System.out.println(accountEntity.getId());
        Assert.assertTrue(accountEntity.getAmount()==960.0);
        Assert.assertEquals("ROTIM012345", accountEntity.getIban());
        Assert.assertEquals(currency.toString(), accountEntity.getCurrency().toString());
