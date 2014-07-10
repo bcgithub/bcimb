@@ -22,6 +22,7 @@ public class CustomerController implements ICustomerController{
 	public CustomerController(){
 		
 	}
+	
 	public List<Customer> getCustomers()
 	{
 		return this.em.createNamedQuery(Customer.findAll).getResultList();
@@ -30,20 +31,23 @@ public class CustomerController implements ICustomerController{
 	@PostConstruct
 	public void init(){
 	}
+	*/
 
 	@Override
 	public Customer create(Customer customer) {
 		if (null != customer && null == customer.getCreationDate()){
 			customer.setCreationDate(new Date());
 		}
-		this.em.persist(customer);
+		customer = em.merge(customer);
+		em.persist(customer);
+		em.flush();
 		return customer;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.ejb.ICustomerController#save(com.bergcomputers.domain.Customer)
-	 */
-	/*
+	 
+
 	@Override
 	
 	public void save(Customer customer)
@@ -67,7 +71,6 @@ public class CustomerController implements ICustomerController{
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.ejb.ICustomerController#delete(long)
 	 */
-	/*
 	@Override
 	public void delete(long customerid)
 	{
@@ -77,7 +80,8 @@ public class CustomerController implements ICustomerController{
 			em.remove(item);
 		}
 	}
-	*/
+	
+	
 
 }
 
