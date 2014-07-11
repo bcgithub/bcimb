@@ -79,10 +79,14 @@ public class CustomerController implements ICustomerController{
 	}
 	
 	@Override
-	public Customer update(long customerid, Customer customer){
-		Customer  cust = (Customer)em.find(Customer.class ,customerid);
+	public Customer update(Customer customer){
+		Customer  cust = (Customer)em.find(Customer.class ,customer.getId());
 		   cust.setFirstName(customer.getFirstName());
 		   cust.setLastName(customer.getLastName());
+		   cust.setLogin(customer.getLogin());
+		   cust.setPassword(customer.getPassword());
+		   cust.setCreationDate(customer.getCreationDate());
+		   cust.setRole(customer.getRole());
 		return cust;
 	}
 	

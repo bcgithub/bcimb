@@ -53,7 +53,11 @@ public class CustomersResources {
     @Path("/detail/{customerid}")
     @Produces("application/json")
     public Customer getCustomerDetails(@PathParam("customerid") Long customerid) {
+    	try{
         return customerController.findCustomer(customerid);
+    	}catch(Exception e){
+    		return null;
+    	}
     }
 
     @GET
@@ -119,11 +123,10 @@ public class CustomersResources {
     }
     
     @PUT
-    @Path("/{accountid}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Customer updateCustomer(@PathParam("accountid") Long accountid, final Customer jsonCustomer) throws JSONException {
-    	Customer customerEntity = customerController.update(accountid, jsonCustomer);
+    public Customer updateCustomer(final Customer jsonCustomer) throws JSONException {
+    	Customer customerEntity = customerController.update(/*accountid,*/ jsonCustomer);
         return customerEntity;
     }
 }
