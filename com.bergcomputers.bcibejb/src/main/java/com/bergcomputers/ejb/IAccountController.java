@@ -17,5 +17,7 @@ public interface IAccountController {
 	public abstract List<Account> getAccounts();
 
 	public abstract void delete(long accountid);
+	
+	public abstract Account update(Account account);
 
 }

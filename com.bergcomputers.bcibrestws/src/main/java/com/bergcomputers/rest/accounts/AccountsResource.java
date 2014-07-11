@@ -82,6 +82,16 @@ public class AccountsResource {
     public void deleteAccounts(@PathParam("accountid") Long accountid){
     	accountController.delete(accountid);
     }
+    
+    @PUT
+    @Path("/{accountid}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Account updateAccount(final Account jsonAccount) throws JSONException {
+     Account accountEntity = accountController.update(jsonAccount);
+        return accountEntity;
+    }
+    
     /*
      * Works but is better to use the other version
     @PUT
