@@ -1,9 +1,16 @@
 package com.bergcomputers.bcibwsclient.test;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -17,8 +24,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import static org.hamcrest.CoreMatchers.*;
-import java.util.Date;
 
 public class CustomersWSTest {
 	final static String UrlBase = "http://localhost:"+"8080"+"/bcibws/rest/";
@@ -102,7 +107,7 @@ public class CustomersWSTest {
         assertEquals(customerResult.getRole().getId(),cust.getRole().getId());
         
         System.out.println("deleting test customer:");
-        wr.path("accounts/"+customerResult.getId()).delete();
+        wr.path("customers/"+customerResult.getId()).delete();
         
         JSONArray customers3 = wr.path("customers/").accept("application/json").get(JSONArray.class);
         assertFalse("Create customer test: can't delete customer", customers2.equals(customers3));
@@ -114,7 +119,6 @@ public class CustomersWSTest {
     public void updateCustomer() throws JSONException{
     	System.out.println("Update customer test: started");
     	System.out.println("-----");
-        System.out.println("Creating test customer:");
         
         JSONArray customers = wr.path("customers/").accept("application/json").get(JSONArray.class);
         System.out.println("Creating test customer:");
@@ -136,20 +140,21 @@ public class CustomersWSTest {
         System.out.println("Updating test customer:");
         customer.setFirstName("newFirstName");
         customer.setLastName("newLastName");
-        //customer.setLogin("newLogin");
-        //customer.setPassword("newPassword");
+        customer.setLogin("newLogin");
+        customer.setPassword("newPassword");
         customer.setCreationDate(new Date());
         role = new Role();
         role.setName("role");
         role.setId(3L);
         customer.setRole(role);
         Customer customerResult = wr.path("customers").type("application/json").put(Customer.class, customer);
-        //assertTrue("Update customer test: can't update customer", customerResult.toString().equals(customer.toString()));
-        assertThat(customerResult.getFirstName(), (equalTo(customer.getFirstName())));
-        assertThat(customerResult.getLastName(), (equalTo(customer.getLastName())));
-        assertThat(customerResult.getLogin(), (equalTo(customer.getLogin())));
-        assertThat(customerResult.getPassword(), (equalTo(customer.getPassword())));
-        assertThat(customerResult.getCreationDate(), (equalTo(customer.getCreationDate())));
+        assertTrue("Update customer test: can't update customer", customerResult.toString().equals(customer.toString()));
+        assertThat(customerResult.getFirstName(), equalTo(customer.getFirstName()));
+        assertThat(customerResult.getLastName(), equalTo(customer.getLastName()));
+        assertThat(customerResult.getLogin(), equalTo(customer.getLogin()));
+        assertThat(customerResult.getPassword(), equalTo(customer.getPassword()));
+        assertThat(customerResult.getCreationDate(), equalTo(customer.getCreationDate()));
+        assertThat(customerResult.getRole().getId(), equalTo(customer.getRole().getId()));
 
         customers2 = wr.path("customers/").accept("application/json").get(JSONArray.class);
 
@@ -158,8 +163,90 @@ public class CustomersWSTest {
         JSONArray customers3 = wr.path("customers/").accept("application/json").get(JSONArray.class);
         assertFalse("Update customer test: can't delete customer", customers2.equals(customers3));
         assertFalse("Update customer test: JSONArrays not equal after delete", customers.equals(customers3));
-        System.out.println("Create customer test: finished");
+        System.out.println("Update customer test: finished");
 
+    }
+    
+    @Test
+    public void getCustomer() throws JSONException{
+    	System.out.println("Get customer test: started");
+    	System.out.println("-----");
+        
+        JSONArray customers = wr.path("customers/").accept("application/json").get(JSONArray.class);
+        System.out.println("Creating test customer:");
+        Customer customer = new Customer();
+        customer.setFirstName("firstName2");
+        customer.setLastName("lastName");
+        customer.setLogin("login");
+        customer.setPassword("password");
+        Role role = new Role();
+        role.setName("role");
+        role.setId(2L);
+        customer.setRole(role);
+        customer.setCreationDate(new Date());
+        customer = wr.path("customers").type("application/json").post(Customer.class, customer);
+        JSONArray customers2 = wr.path("customers/").accept("application/json").get(JSONArray.class);
+        assertFalse("Get customer test: can't create customer", customers.equals(customers2));
+        
+        System.out.println("Getting test customer:");
+
+        Customer customerEntity = wr.path("customers/"+customer.getId()).accept("application/json").get(Customer.class);
+        System.out.println(customerEntity.toString());
+        //Response responseEntity = wr.path("customers/"+customer.getId()).accept("application/json").get(Response.class);
+        //Customer customerEntity = (Customer)responseEntity.getEntity();
+        
+        assertEquals(customer.getFirstName() , customerEntity.getFirstName());
+        assertEquals(customer.getLastName(), customerEntity.getLastName());
+        assertEquals(customer.getLogin(), customerEntity.getLogin());
+        assertEquals(customer.getPassword(), customerEntity.getPassword());
+        assertEquals(customer.getCreationDate(), customerEntity.getCreationDate());
+        assertEquals(customer.getRole().getId(), customerEntity.getRole().getId());
+        
+        System.out.println("Deleting test customer:");
+        wr.path("customers/"+customer.getId()).delete();
+        JSONArray customers3 = wr.path("customers/").accept("application/json").get(JSONArray.class);
+        assertFalse("Can't delete customer", customers2.equals(customers3));
+        assertFalse("JSONArrays not equal after delete", customers.equals(customers3));
+        System.out.println("Get customer test: finished");
+    }
+    
+    @Test
+    public void ResourceNotFoundException() throws JSONException{
+    	
+    }
+    
+    /*@Test
+    public void curatare() throws JSONException{
+    	for(int i = 80; i<81;i++)
+    		wr.path("customers/"+i).delete();
+    }*/
+    
+    @Test
+    public void deleteNonExistingCustomer() throws JSONException{
+    	System.out.println("delete non existing customer test: started");
+    	System.out.println("-----");
+    	
+    	System.out.println("Deleting test customer:");
+    	
+        wr.path("customers/"+1).delete();
+      //????????????????????????????????????????????????????????????????????????????????????????????????
+        
+        System.out.println("Delete non existing customer test: finished");
+    }
+    
+    @Test
+    public void getNonExistingCustomer() throws JSONException{
+    	System.out.println("delete non existing customer test: started");
+    	System.out.println("-----");
+    	
+    	System.out.println("Geting test customer:");
+    	/*try{*/
+    	Customer customerEntity = wr.path("customers/"+1).accept("application/json").get(Customer.class);
+    	/*}catch(Exception e){
+    		System.out.println("exception caught");
+    	}*/
+        
+        System.out.println("Get non existing customer test: finished");
     }
     
     @Test

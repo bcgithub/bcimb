@@ -17,7 +17,8 @@
 
 
 		<properties>
-			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+			<!-- <property name="eclipselink.ddl-generation" value="create-or-extend-tables" /> -->
+			<property name="eclipselink.ddl-generation" value="none" />
 			<property name="URL" value="localhost:3306/bcib"></property>
 			<!-- <property name="eclipselink.application-location" value="D:/training/aplicatiifacute/nwksp/aclws/target/"/> 
 				<property name="eclipselink.create-ddl-jdbc-file-name" value="testwsjavadb.sql"/> -->

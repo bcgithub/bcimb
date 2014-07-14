@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,16 +16,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
-import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.ICustomerController;
+import com.bergcomputers.rest.exception.BaseException;
+import com.bergcomputers.rest.exception.InvalidServiceArgumentException;
+import com.bergcomputers.rest.exception.ResourceNotFoundException;
+import com.bergcomputers.rest.interceptors.ExceptionHandlingInterceptor;
 
+@Interceptors(ExceptionHandlingInterceptor.class)
 @Stateless
 @Path("customers")
 public class CustomersResources {
@@ -44,21 +50,31 @@ public class CustomersResources {
         // TODO Auto-generated constructor stub
     }
 
+    @GET
     @Path("/{customerid}")
-    public CustomerResource getCustomer(@PathParam("customerid") Long customerid) {
-        return new CustomerResource(uriInfo, customerController, customerid);
+    @Produces("application/json")
+    public Response getCustomer(@PathParam("customerid") Long customerId) {
+        
+    	if (null == customerId){
+    		throw new InvalidServiceArgumentException("Customer Id shall be specified", BaseException.CUSTOMER_ID_REQUIRED_CODE);
+    	}
+    	Customer result =  customerController.findCustomer(customerId);
+        if (null == result){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+customerId+") not found", BaseException.CUSTOMER_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(result)
+                .build();
+        
     }
 
-    @GET
+   /* @GET
     @Path("/detail/{customerid}")
     @Produces("application/json")
     public Customer getCustomerDetails(@PathParam("customerid") Long customerid) {
-    	try{
         return customerController.findCustomer(customerid);
-    	}catch(Exception e){
-    		return null;
-    	}
-    }
+    }*/
 
     @GET
     @Produces("application/json")
