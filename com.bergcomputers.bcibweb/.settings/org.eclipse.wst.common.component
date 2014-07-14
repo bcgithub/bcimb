@@ -8,6 +8,6 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/com.bergcomputers.bcibweb/target/classes"/>
-        <property name="context-root" value="bcibweb"/>
+        <property name="context-root" value="com.bergcomputers.bcibweb"/>
     </wb-module>
 </project-modules>

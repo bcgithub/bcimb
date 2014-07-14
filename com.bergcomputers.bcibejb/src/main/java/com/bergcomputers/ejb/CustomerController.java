@@ -22,6 +22,7 @@ public class CustomerController implements ICustomerController{
 	public CustomerController(){
 		
 	}
+	
 	public List<Customer> getCustomers()
 	{
 		return this.em.createNamedQuery(Customer.findAll).getResultList();
@@ -30,20 +31,23 @@ public class CustomerController implements ICustomerController{
 	@PostConstruct
 	public void init(){
 	}
+	*/
 
 	@Override
 	public Customer create(Customer customer) {
-		if (null != customer && null == customer.getCreationDate()){
-			customer.setCreationDate(new Date());
-		}
-		this.em.persist(customer);
-		return customer;
+		if (customer != null){
+			customer = em.merge(customer);
+			em.persist(customer);
+			em.flush();
+			return customer;
+		}else
+			return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.ejb.ICustomerController#save(com.bergcomputers.domain.Customer)
-	 */
-	/*
+	 
+
 	@Override
 	
 	public void save(Customer customer)
@@ -58,7 +62,8 @@ public class CustomerController implements ICustomerController{
 	@Override
 	public Customer findCustomer(long id)
 	{
-		return this.em.find(Customer.class, id);
+		Customer item = em.find(Customer.class, id);
+		return item;
 	}
 
 	
@@ -67,7 +72,6 @@ public class CustomerController implements ICustomerController{
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.ejb.ICustomerController#delete(long)
 	 */
-	/*
 	@Override
 	public void delete(long customerid)
 	{
@@ -77,7 +81,22 @@ public class CustomerController implements ICustomerController{
 			em.remove(item);
 		}
 	}
-	*/
+	
+	@Override
+	public Customer update(Customer customer){
+		Customer  cust = (Customer)em.find(Customer.class ,customer.getId());
+		if(cust != null){
+		   cust.setFirstName(customer.getFirstName());
+		   cust.setLastName(customer.getLastName());
+		   cust.setLogin(customer.getLogin());
+		   cust.setPassword(customer.getPassword());
+		   cust.setCreationDate(customer.getCreationDate());
+		   cust.setRole(customer.getRole());
+		   return cust;}
+		else
+			return null;
+	}
+	
 
 }
 
