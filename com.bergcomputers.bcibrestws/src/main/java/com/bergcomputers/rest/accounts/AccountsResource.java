@@ -1,20 +1,20 @@
 package com.bergcomputers.rest.accounts;
 
 import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
@@ -43,9 +43,10 @@ public class AccountsResource {
         // TODO Auto-generated constructor stub
     }
 
-    @Path("{accountid}")
-    public AccountResource getAccount(@PathParam("accountid") Long accountid) {
-        return new AccountResource(uriInfo, accountController, accountid);
+    @Path("/{accountid}")
+    @GET
+    public Account getAccount(@PathParam("accountid") Long accountid) {
+    	return accountController.findAccount(accountid);
     }
 
     @GET
@@ -74,6 +75,30 @@ public class AccountsResource {
     	return accountController.getAccounts();
     }
 
+    @DELETE
+    @Path("/{accountid}")
+    @Produces("application/json")
+    public Response deleteAccounts(@PathParam("accountid") Long accountid){
+    	accountController.delete(accountid);
+    	return Response.status(Response.Status.OK).build();
+    }
+    
+/*    @DELETE
+    @Produces("application/json")
+    public void deleteAllAccounts(){
+    	accountController.delete();
+    }
+    */
+    
+    @PUT
+    @Path("/{accountid}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Account updateAccount(final Account jsonAccount) throws JSONException {
+     Account accountEntity = accountController.update(jsonAccount);
+        return accountEntity;
+    }
+    
     /*
      * Works but is better to use the other version
     @PUT

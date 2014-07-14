@@ -1,20 +1,22 @@
 package com.bergcomputers.rest.customers;
 
 import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
@@ -23,7 +25,12 @@ import org.codehaus.jettison.json.JSONException;
 
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.ICustomerController;
+import com.bergcomputers.rest.exception.BaseException;
+import com.bergcomputers.rest.exception.InvalidServiceArgumentException;
+import com.bergcomputers.rest.exception.ResourceNotFoundException;
+import com.bergcomputers.rest.interceptors.ExceptionHandlingInterceptor;
 
+@Interceptors(ExceptionHandlingInterceptor.class)
 @Stateless
 @Path("customers")
 public class CustomersResources {
@@ -43,17 +50,31 @@ public class CustomersResources {
         // TODO Auto-generated constructor stub
     }
 
+    @GET
     @Path("/{customerid}")
-    public CustomerResource getCustomer(@PathParam("customerid") Long customerid) {
-        return new CustomerResource(uriInfo, customerController, customerid);
+    @Produces("application/json")
+    public Response getCustomer(@PathParam("customerid") Long customerId) {
+        
+    	if (null == customerId){
+    		throw new InvalidServiceArgumentException("Customer Id shall be specified", BaseException.CUSTOMER_ID_REQUIRED_CODE);
+    	}
+    	Customer result =  customerController.findCustomer(customerId);
+        if (null == result){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+customerId+") not found", BaseException.CUSTOMER_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(result)
+                .build();
+        
     }
 
-    @GET
+   /* @GET
     @Path("/detail/{customerid}")
     @Produces("application/json")
     public Customer getCustomerDetails(@PathParam("customerid") Long customerid) {
         return customerController.findCustomer(customerid);
-    }
+    }*/
 
     @GET
     @Produces("application/json")
@@ -100,15 +121,28 @@ public class CustomersResources {
             .put("amount", customerEntity.getAmount())
             .put("createDate", customerEntity.getCreationDate()).toString();
     } */
-/*
-    @PUT
+    
+    @DELETE
+    @Path("/{accountid}")
+    @Produces("application/json")
+    public void deleteCustomer(@PathParam("accountid") Long accountid){
+    	customerController.delete(accountid);
+    }
+
+    @POST
     @Consumes("application/json")
     @Produces("application/json")
     public Customer createCustomer(final Customer jsonCustomer) throws JSONException {
-
     	jsonCustomer.setCreationDate(null ==jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
     	Customer customerEntity = customerController.create(jsonCustomer);
         return customerEntity;
     }
-*/
+    
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Customer updateCustomer(final Customer jsonCustomer) throws JSONException {
+    	Customer customerEntity = customerController.update(/*accountid,*/ jsonCustomer);
+        return customerEntity;
+    }
 }

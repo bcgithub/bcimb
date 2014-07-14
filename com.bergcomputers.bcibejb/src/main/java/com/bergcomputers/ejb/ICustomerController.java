@@ -9,4 +9,7 @@ import com.bergcomputers.domain.Customer;
 public interface ICustomerController {
 	public  List <Customer> getCustomers();
 	public Customer findCustomer(long id);
+	void delete(long customerid);
+	Customer create(Customer customer);
+	Customer update(Customer customer);
 }
