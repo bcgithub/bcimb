@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.bergcomputers.rest.exception.BaseException;
@@ -57,20 +58,20 @@ public class ExceptionHandlingInterceptor {
 			}
 			errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
 					.toString(), e.getMessage());
-			 return Response.status(httpStatus).entity(errorInfo)
+			 return Response.status(httpStatus).entity(errorInfo).type(MediaType.APPLICATION_JSON)
 		                .build();
 		} catch (ResourceNotFoundException e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 			httpStatus = Response.Status.NOT_FOUND;
 			errorInfo = new ErrorInfo(url,e.getMessage(), e.getErrorCode()
 					.toString(), e.getMessage());
-			return Response.status(httpStatus).entity(errorInfo)
+			return Response.status(httpStatus).entity(errorInfo).type(MediaType.APPLICATION_JSON)
 	                .build();
 
 		} catch (Exception e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 			errorInfo =  new ErrorInfo(url,"Unexpected exception", String.valueOf(BaseException.UNEXPECTED_CODE), e.getMessage());
-			return Response.status(httpStatus).entity(errorInfo)
+			return Response.status(httpStatus).entity(errorInfo).type(MediaType.APPLICATION_JSON)
             .build();
 		}
 	}

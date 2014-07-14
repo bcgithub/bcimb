@@ -6,6 +6,8 @@ public abstract class BaseException extends RuntimeException {
 	public static final int UNEXPECTED_CODE = BASE_CODE + 1;
 	public static final int CUSTOMER_ID_REQUIRED_CODE = BASE_CODE + 2;
 	public static final int CUSTOMER_NOT_FOUND_CODE = BASE_CODE + 3;
+	public static final int ACCOUNT_ID_REQUIRED_CODE = BASE_CODE + 4;
+	public static final int ACCOUNT_NOT_FOUND_CODE = BASE_CODE + 5;
 	
 
 	

@@ -22,7 +22,11 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
 import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.IAccountController;
+import com.bergcomputers.rest.exception.BaseException;
+import com.bergcomputers.rest.exception.InvalidServiceArgumentException;
+import com.bergcomputers.rest.exception.ResourceNotFoundException;
 
 @Stateless
 @Path("accounts")
@@ -44,9 +48,21 @@ public class AccountsResource {
     }
 
     @Path("/{accountid}")
+    @Produces("application/json")
     @GET
-    public Account getAccount(@PathParam("accountid") Long accountid) {
-    	return accountController.findAccount(accountid);
+    public Response getAccount(@PathParam("accountid") Long accountid) {
+    	//return accountController.findAccount(accountid);
+    	if (null == accountid){
+    		throw new InvalidServiceArgumentException("Account Id shall be specified", BaseException.ACCOUNT_ID_REQUIRED_CODE);
+    	}
+    	Account result =  accountController.findAccount(accountid);
+        if (null == result){
+        	throw new ResourceNotFoundException(Account.class.getSimpleName()+
+        			"("+accountid+") not found", BaseException.ACCOUNT_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(result)
+                .build();
     }
 
     @GET
@@ -83,12 +99,6 @@ public class AccountsResource {
     	return Response.status(Response.Status.OK).build();
     }
     
-/*    @DELETE
-    @Produces("application/json")
-    public void deleteAllAccounts(){
-    	accountController.delete();
-    }
-    */
     
     @PUT
     @Path("/{accountid}")
