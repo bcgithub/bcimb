@@ -54,24 +54,88 @@ public class AccountsWSTest {
             JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
             System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
             System.out.println("-----");
-            //checking if the number of accounts is the same
-            Assert.assertEquals(accounts.length(), 7);
-            //checking to see if the first object has the right values
-            JSONObject account=new JSONObject();
-            try{
-            account=accounts.getJSONObject(0);
-            Assert.assertEquals(0 , account.get("deleted"));
-            Assert.assertEquals(0 , account.get("version"));
-            Assert.assertEquals(100.0 , account.get("amount"));
-            Assert.assertTrue(account.get("iban").equals("ROBUC012345"));
+            //checking the initial number of accounts
+            int initAcc=accounts.length();
             
-            }
-            catch (JSONException e){
-            	System.out.println("JSONException");
-            }
-          
+          //creating an account
+            Account acc = new Account();
+            Date date=new Date();
+            acc.setAmount(2000.0);
+            acc.setIban("ro03bc1234");
+            acc.setCreationDate(date);
+            
+            //creating a new currency to associate with the account
+            Currency currency=new Currency();
+            currency.setId(1L);
+            acc.setCurrency(currency);
+            
+            Customer customer=new Customer();
+            customer.setId(4L);
+            acc.setCustomer(customer);
+            
+            Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+            System.out.println("-----");
+                     
+            accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+            //checking the number of accounts again
+            Assert.assertEquals(initAcc+1, accounts.length());
+            Assert.assertTrue(accountResult.getAmount()==2000.0);
+            Assert.assertTrue(accountResult.getIban().equals("ro03bc1234"));
+            
+            //deleting the account
+            wr.path("accounts/"+accountResult.getId()).delete();
+            
+            System.out.println("Id of the account that was deleted: "+accountResult.getId());
+            
+            //checking the number of accounts again, should be equal to the 
+            //initial number
+            accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+            Assert.assertEquals(initAcc, accounts.length());
+            
     }
     @Test
+    public void getAccount() throws JSONException{
+	       System.out.println("Getting list of accounts:");
+	       JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+	       System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+	       System.out.println("-----");
+			//creating an account
+	       Account acc = new Account();
+	       Date date=new Date();
+	       acc.setAmount(2000.0);
+	       acc.setIban("ro03bc1234");
+	       acc.setCreationDate(date);
+	       
+	       //creating a new currency to associate with the account
+	       Currency currency=new Currency();
+	       currency.setId(1L);
+	       acc.setCurrency(currency);
+	       
+	       Customer customer=new Customer();
+	       customer.setId(4L);
+	       acc.setCustomer(customer);
+	       
+	       Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+	       System.out.println("-----");
+	
+	       // make sure it was added
+	       Account accountEntity = wr.path("accounts/"+accountResult.getId()).accept("application/json").get(Account.class);
+	      
+	
+	       Assert.assertEquals(accountEntity.getId(), accountResult.getId());      
+	       System.out.println(accountEntity.getId());
+	       Assert.assertEquals(accountEntity.getAmount(),accountResult.getAmount());
+	       Assert.assertEquals(accountResult.getIban(), accountEntity.getIban());
+	       Assert.assertEquals(accountResult.getCurrency().toString(), accountEntity.getCurrency().toString());
+	       
+	       //deleting the created account
+	      System.out.println("Deleting test account:");
+	       wr.path("accounts/"+accountResult.getId()).delete();
+	       System.out.println("-----");
+	
+	   }
+
+	@Test
     public void createAccount() throws JSONException{
     		//creating an account
             Account acc = new Account();
@@ -156,7 +220,7 @@ public class AccountsWSTest {
         // make sure it was added correctly
         Account accountEntity = wr.path("accounts/"+accountResult2.getId()).accept("application/json").get(Account.class);
        
-        Assert.assertTrue(accountEntity.getId()==accountResult2.getId());      
+        Assert.assertEquals(accountEntity.getId(), accountResult2.getId());      
         Assert.assertEquals(accountEntity.getAmount(),accountResult2.getAmount());
         Assert.assertEquals(accountResult2.getIban(), accountEntity.getIban());
         Assert.assertEquals(accountResult2.getCurrency().toString(), accountEntity.getCurrency().toString());
@@ -167,48 +231,6 @@ public class AccountsWSTest {
         
     }
 
-    @Test
-   public void getAccount() throws JSONException{
-       System.out.println("Getting list of accounts:");
-       JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-       System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-       System.out.println("-----");
-		//creating an account
-       Account acc = new Account();
-       Date date=new Date();
-       acc.setAmount(2000.0);
-       acc.setIban("ro03bc1234");
-       acc.setCreationDate(date);
-       
-       //creating a new currency to associate with the account
-       Currency currency=new Currency();
-       currency.setId(1L);
-       acc.setCurrency(currency);
-       
-       Customer customer=new Customer();
-       customer.setId(4L);
-       acc.setCustomer(customer);
-       
-       Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
-       System.out.println("-----");
-
-       // make sure it was added
-       Account accountEntity = wr.path("accounts/"+accountResult.getId()).accept("application/json").get(Account.class);
-      
-
-       Assert.assertTrue(accountEntity.getId()==accountResult.getId());      
-       System.out.println(accountEntity.getId());
-       Assert.assertEquals(accountEntity.getAmount(),accountResult.getAmount());
-       Assert.assertEquals(accountResult.getIban(), accountEntity.getIban());
-       Assert.assertEquals(accountResult.getCurrency().toString(), accountEntity.getCurrency().toString());
-       
-       //deleting the created account
-      System.out.println("Deleting test account:");
-       wr.path("accounts/"+accountResult.getId()).delete();
-       System.out.println("-----");
-
-   }
-    
     @Test
 	    public void deleteAccount() throws JSONException{
 	
@@ -288,7 +310,7 @@ public class AccountsWSTest {
         Assert.assertTrue(accounts.toString().equals(accounts2.toString()));
     }
     
-    @Test
+    //@Test
     public void deleteAccountThatHasTransactions() throws JSONException{
     	//creating a new account and a new transaction
   		//creating an account
@@ -323,7 +345,7 @@ public class AccountsWSTest {
         transaction.setStatus("sent");
         transaction.setTransactionDate(date);
         transaction.setType("eur");
-       // transaction.setId(9L);
+        transaction.setId(9L);
         System.out.println("Transaction created");
         System.out.println(transaction.toString());
         
@@ -331,6 +353,7 @@ public class AccountsWSTest {
         Transaction transactionInit=wr.path("transactions").accept("application/json").get(Transaction.class);
         System.out.println(transactionInit.toString());
         
+    	
         //updating the list of transactions 
         Transaction transactionResult=wr.path("transactions").type("application/json").put(Transaction.class, transaction);
         System.out.println("-----");

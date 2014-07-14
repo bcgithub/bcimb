@@ -1,8 +1,6 @@
 package com.bergcomputers.rest.accounts;
 
 import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
@@ -79,9 +78,17 @@ public class AccountsResource {
     @DELETE
     @Path("/{accountid}")
     @Produces("application/json")
-    public void deleteAccounts(@PathParam("accountid") Long accountid){
+    public Response deleteAccounts(@PathParam("accountid") Long accountid){
     	accountController.delete(accountid);
+    	return Response.status(Response.Status.OK).build();
     }
+    
+/*    @DELETE
+    @Produces("application/json")
+    public void deleteAllAccounts(){
+    	accountController.delete();
+    }
+    */
     
     @PUT
     @Path("/{accountid}")
