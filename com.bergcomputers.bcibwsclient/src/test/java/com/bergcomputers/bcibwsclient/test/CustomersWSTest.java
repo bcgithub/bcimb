@@ -1,10 +1,7 @@
 package com.bergcomputers.bcibwsclient.test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +17,7 @@ import org.junit.Test;
 
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.domain.Role;
+import com.bergcomputers.rest.exception.ErrorInfo;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -155,6 +153,7 @@ public class CustomersWSTest {
         assertThat(customerResult.getPassword(), equalTo(customer.getPassword()));
         assertThat(customerResult.getCreationDate(), equalTo(customer.getCreationDate()));
         assertThat(customerResult.getRole().getId(), equalTo(customer.getRole().getId()));
+        System.out.println(customerResult.getRole().getId());
 
         customers2 = wr.path("customers/").accept("application/json").get(JSONArray.class);
 
@@ -240,11 +239,14 @@ public class CustomersWSTest {
     	System.out.println("-----");
     	
     	System.out.println("Geting test customer:");
-    	/*try{*/
-    	Customer customerEntity = wr.path("customers/"+1).accept("application/json").get(Customer.class);
-    	/*}catch(Exception e){
+    	try{
+    	Response customerEntity = wr.path("customers/"+1).accept("application/json").get(Response.class);
+    	assertEquals(Response.Status.NOT_FOUND, customerEntity.getStatus());
+    	ErrorInfo entity = (ErrorInfo)customerEntity.getEntity();
+    	assertNotNull(entity);
+    	}catch(Exception e){
     		System.out.println("exception caught");
-    	}*/
+    	}
         
         System.out.println("Get non existing customer test: finished");
     }
