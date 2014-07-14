@@ -148,7 +148,7 @@ public class TransactionsWSTest {
        Account acc1 = new Account();
        acc.setId(7L);
        created.setAccount(acc1);
-       Transaction tr1 = wr.path("transactions/"+ created.getId()).type("application/json").post(Transaction.class,  created);
+       Transaction tr1 = wr.path("transactions/"+ created.getId()).type("application/json").post(Transaction.class,created);
        System.out.println("-----Updated "+ created);
        assertTrue("Update transaction test-can't update transaction",tr1.toString().equals(created.toString()));
     

@@ -8,6 +8,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Transaction;
 
 @Stateless
@@ -44,9 +46,24 @@ public class TransactionController implements ITransactionController {
 	 }*/
 
 	@Override
-	public void save(Transaction transaction) {
-
-			this.em.merge(transaction);
+	public Transaction save(Transaction transaction) {
+		Account acc = null;
+		Transaction tr =(Transaction)em.find(Transaction.class, transaction.getId());
+		 if(transaction.getAccount()!=null){
+			 acc = (Account)em.find(Account.class, transaction.getAccount().getId());
+			  }
+		tr.setAccount(acc);
+		tr.setAmount(transaction.getAmount());
+        tr.setId(transaction.getId());
+        tr.setDetails(transaction.getDetails());
+        tr.setSender(transaction.getSender());
+        tr.setStatus(transaction.getStatus());
+        tr.setType(transaction.getType());
+        tr.setTransactionDate(transaction.getTransactionDate());       
+        tr.setDate(transaction.getDate());
+        tr.setCreationDate(transaction.getCreationDate());
+		tr=this.em.merge(tr);
+		return tr;
 		
 	}
 

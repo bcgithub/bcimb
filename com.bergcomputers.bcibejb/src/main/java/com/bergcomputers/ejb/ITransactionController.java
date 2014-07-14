@@ -10,7 +10,7 @@ import com.bergcomputers.domain.Transaction;
 public interface ITransactionController {
 
 	public abstract Transaction create(Transaction transaction);
-	public abstract void save (Transaction transaction);
+	public abstract Transaction save (Transaction transaction);
 	
 	public abstract Transaction findTransaction(long id);
 	
