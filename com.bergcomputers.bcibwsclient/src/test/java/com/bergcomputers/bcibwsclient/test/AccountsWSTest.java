@@ -42,7 +42,6 @@ public class AccountsWSTest {
             c = Client.create(cc);
             wr = c.resource(UrlBase);
     }
-
     @AfterClass
     public static void cleanup(){
         wr=null;
@@ -310,7 +309,7 @@ public class AccountsWSTest {
         Assert.assertTrue(accounts.toString().equals(accounts2.toString()));
     }
     
-    //@Test
+    @Test
     public void deleteAccountThatHasTransactions() throws JSONException{
     	//creating a new account and a new transaction
   		//creating an account
@@ -331,6 +330,7 @@ public class AccountsWSTest {
         
         Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
         System.out.println("-----");
+        System.out.println(accountResult.getId());
         
                 
         //creating a new transaction
@@ -350,7 +350,7 @@ public class AccountsWSTest {
         System.out.println(transaction.toString());
         
         //getting a list of the initial transactions
-        Transaction transactionInit=wr.path("transactions").accept("application/json").get(Transaction.class);
+        JSONArray transactionInit=wr.path("transactions").accept("application/json").get(JSONArray.class);
         System.out.println(transactionInit.toString());
         
     	
@@ -358,15 +358,16 @@ public class AccountsWSTest {
         Transaction transactionResult=wr.path("transactions").type("application/json").put(Transaction.class, transaction);
         System.out.println("-----");
         System.out.println(transactionResult.toString());
-        //test the transaction on the server
-        Transaction transactionResult2=wr.path("transactions").accept("application/json").get(Transaction.class);
-        System.out.println(transactionResult2.toString());
 
         //deleting the account, this should also delete the transaction        System.out.println("Deleting test account:");
         wr.path("accounts/"+accountResult.getId()).delete();
         System.out.println("-----");
         
+        //getting the new list of transactions
+        JSONArray transactionResult2=wr.path("transactions").accept("application/json").get(JSONArray.class);
+        System.out.println(transactionResult2.toString());
+        
         //testing to see if the new list of transaction is equal to the old one
-        //Assert.assertTrue(transactionInit.toString().equals(transactionResult2.toString()));
+        Assert.assertTrue(transactionInit.toString().equals(transactionResult2.toString()));
     }
 }
