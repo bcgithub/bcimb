@@ -49,11 +49,27 @@ public class AccountsWSTest {
         c=null;
     }
     @Test
-    public void getAccountsJSONArray(){
+    public void getAccounts(){
             System.out.println("Getting list of accounts:");
             JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
             System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
             System.out.println("-----");
+            //checking if the number of accounts is the same
+            Assert.assertEquals(accounts.length(), 7);
+            //checking to see if the first object has the right values
+            JSONObject account=new JSONObject();
+            try{
+            account=accounts.getJSONObject(0);
+            Assert.assertEquals(0 , account.get("deleted"));
+            Assert.assertEquals(0 , account.get("version"));
+            Assert.assertEquals(100.0 , account.get("amount"));
+            Assert.assertTrue(account.get("iban").equals("ROBUC012345"));
+            
+            }
+            catch (JSONException e){
+            	System.out.println("JSONException");
+            }
+          
     }
     @Test
     public void createAccount() throws JSONException{
@@ -152,61 +168,7 @@ public class AccountsWSTest {
     }
 
     @Test
-    public void deleteAccount() throws JSONException{
-
- 	//check list of accounts
-     System.out.println("Getting list of accounts:");
-     JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-     System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-     System.out.println("-----");
-	//creating an account
-     Account acc = new Account();
-     Date date=new Date();
-     acc.setAmount(2000.0);
-     acc.setIban("ro03bc1234");
-     acc.setCreationDate(date);
-     
-     //creating a new currency to associate with the account
-     Currency currency=new Currency();
-     currency.setId(1L);
-     acc.setCurrency(currency);
-     
-     Customer customer=new Customer();
-     customer.setId(4L);
-     acc.setCustomer(customer);
-     
-     Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
-     System.out.println("-----");
- 	
-     //deleting an account
-     System.out.println("Deleting test account with the id " +accountResult.getId()+":");
-    wr.path("accounts/"+accountResult.getId()).delete();
-    System.out.println("Deleted");
-    
-    //checking list of accounts
-    System.out.println("Getting list of accounts:");
-    JSONArray accounts2 = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-    System.out.println(String.format("List of accounts found:\n%s", accounts2.toString()));
-    System.out.println("-----");
-    //test if the new string and the old one are equal
-    Assert.assertFalse(accountResult.toString().equals(accounts2.toString()));
-    
-    
-/*    wr.path("accounts/"+79).delete();
-    wr.path("accounts/"+80).delete();
-    wr.path("accounts/"+81).delete();
-    wr.path("accounts/"+82).delete();
-    wr.path("accounts/"+83).delete();
-    wr.path("accounts/"+84).delete();
-    wr.path("accounts/"+85).delete();
-    wr.path("accounts/"+86).delete();
-    wr.path("accounts/"+87).delete();*/
-
-
-       
-    }
-    @Test
-   public void getAccountDetails() throws JSONException{
+   public void getAccount() throws JSONException{
        System.out.println("Getting list of accounts:");
        JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
@@ -248,6 +210,61 @@ public class AccountsWSTest {
    }
     
     @Test
+	    public void deleteAccount() throws JSONException{
+	
+	 	//check list of accounts
+	     System.out.println("Getting list of accounts:");
+	     JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+	     System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+	     System.out.println("-----");
+		//creating an account
+	     Account acc = new Account();
+	     Date date=new Date();
+	     acc.setAmount(2000.0);
+	     acc.setIban("ro03bc1234");
+	     acc.setCreationDate(date);
+	     
+	     //creating a new currency to associate with the account
+	     Currency currency=new Currency();
+	     currency.setId(1L);
+	     acc.setCurrency(currency);
+	     
+	     Customer customer=new Customer();
+	     customer.setId(4L);
+	     acc.setCustomer(customer);
+	     
+	     Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+	     System.out.println("-----");
+	 	
+	     //deleting an account
+	     System.out.println("Deleting test account with the id " +accountResult.getId()+":");
+	    wr.path("accounts/"+accountResult.getId()).delete();
+	    System.out.println("Deleted");
+	    
+	    //checking list of accounts
+	    System.out.println("Getting list of accounts:");
+	    JSONArray accounts2 = wr.path("accounts/").accept("application/json").get(JSONArray.class);
+	    System.out.println(String.format("List of accounts found:\n%s", accounts2.toString()));
+	    System.out.println("-----");
+	    //test if the new string and the old one are equal
+	    Assert.assertFalse(accountResult.toString().equals(accounts2.toString()));
+	    
+	    
+	/*    wr.path("accounts/"+79).delete();
+	    wr.path("accounts/"+80).delete();
+	    wr.path("accounts/"+81).delete();
+	    wr.path("accounts/"+82).delete();
+	    wr.path("accounts/"+83).delete();
+	    wr.path("accounts/"+84).delete();
+	    wr.path("accounts/"+85).delete();
+	    wr.path("accounts/"+86).delete();
+	    wr.path("accounts/"+87).delete();*/
+	
+	
+	       
+	    }
+
+	@Test
     public void deleteAccountThatDoesntExist() throws JSONException {
         System.out.println("Getting list of accounts:");
         JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
@@ -271,7 +288,7 @@ public class AccountsWSTest {
         Assert.assertTrue(accounts.toString().equals(accounts2.toString()));
     }
     
-    //@Test
+    @Test
     public void deleteAccountThatHasTransactions() throws JSONException{
     	//creating a new account and a new transaction
   		//creating an account
@@ -293,9 +310,10 @@ public class AccountsWSTest {
         Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
         System.out.println("-----");
         
+                
         //creating a new transaction
         Transaction transaction=new Transaction();
-        transaction.setAccount(acc);
+        transaction.setAccount(accountResult);
         transaction.setAmount(200D);
         transaction.setDate(date);
         transaction.setCreationDate(date);
@@ -305,20 +323,27 @@ public class AccountsWSTest {
         transaction.setStatus("sent");
         transaction.setTransactionDate(date);
         transaction.setType("eur");
+       // transaction.setId(9L);
+        System.out.println("Transaction created");
+        System.out.println(transaction.toString());
         
+        //getting a list of the initial transactions
+        Transaction transactionInit=wr.path("transactions").accept("application/json").get(Transaction.class);
+        System.out.println(transactionInit.toString());
+        
+        //updating the list of transactions 
         Transaction transactionResult=wr.path("transactions").type("application/json").put(Transaction.class, transaction);
         System.out.println("-----");
-        
+        System.out.println(transactionResult.toString());
         //test the transaction on the server
         Transaction transactionResult2=wr.path("transactions").accept("application/json").get(Transaction.class);
         System.out.println(transactionResult2.toString());
-/*        try{
-        	wr.path("accounts/"+accountResult.getId()).delete();
-        	Assert.fail();
-        } catch (TooManyTransactions e){
-        	Assert.assertTrue(true);
-        }*/
- 	
-    
+
+        //deleting the account, this should also delete the transaction        System.out.println("Deleting test account:");
+        wr.path("accounts/"+accountResult.getId()).delete();
+        System.out.println("-----");
+        
+        //testing to see if the new list of transaction is equal to the old one
+        //Assert.assertTrue(transactionInit.toString().equals(transactionResult2.toString()));
     }
 }
