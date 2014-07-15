@@ -17,11 +17,14 @@ import org.junit.Test;
 
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.domain.Role;
+import com.bergcomputers.rest.exception.BaseException;
 import com.bergcomputers.rest.exception.ErrorInfo;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.json.JSONConfiguration;
 
 public class CustomersWSTest {
 	final static String UrlBase = "http://localhost:"+"8080"+"/bcibws/rest/";
@@ -33,6 +36,7 @@ public class CustomersWSTest {
     @BeforeClass
     public static void setupClass(){
          	ClientConfig cc = new DefaultClientConfig();
+         	cc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
             c = Client.create(cc);
             wr = c.resource(UrlBase);
     }
@@ -239,16 +243,21 @@ public class CustomersWSTest {
     	System.out.println("-----");
     	
     	System.out.println("Geting test customer:");
-    	try{
-    	Response customerEntity = wr.path("customers/"+1).accept("application/json").get(Response.class);
-    	assertEquals(Response.Status.NOT_FOUND, customerEntity.getStatus());
-    	ErrorInfo entity = (ErrorInfo)customerEntity.getEntity();
+    	
+    	ClientResponse customerEntity = wr.path("customers/"+1).accept("application/json").get(ClientResponse.class);
+    	assertEquals(Response.Status.NOT_FOUND.getStatusCode(), customerEntity.getStatus());
+    	ErrorInfo entity=(ErrorInfo)customerEntity.getEntity(ErrorInfo.class);
     	assertNotNull(entity);
-    	}catch(Exception e){
-    		System.out.println("exception caught");
-    	}
-        
+    	assertEquals(entity.getCode(), String.valueOf(BaseException.CUSTOMER_NOT_FOUND_CODE));
+    	assertEquals(entity.getUrl(), "http://localhost:8080/bcibws/rest/customers/1");
+    	assertEquals(entity.getMessage(), "Customer(1) not found");
+    	assertEquals(entity.getDeveloperMessage(), "Customer(1) not found");
         System.out.println("Get non existing customer test: finished");
+    }
+    
+    @Test
+    public void updateNonExistingCustomer() throws JSONException{
+    	ClientResponse customer = wr.path("customers").type("application/json").post(ClientResponse.class, null);
     }
     
     @Test

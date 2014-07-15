@@ -132,10 +132,30 @@ public class CustomersResources {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Customer createCustomer(final Customer jsonCustomer) throws JSONException {
+    public Response createCustomer(final Customer jsonCustomer) throws JSONException {
+    	/*if (null == customerId){
+    		throw new InvalidServiceArgumentException("Customer Id shall be specified", BaseException.CUSTOMER_ID_REQUIRED_CODE);
+    	}
+    	Customer result =  customerController.findCustomer(customerId);
+        if (null == result){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+customerId+") not found", BaseException.CUSTOMER_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(result)
+                .build();
+                */
+    	if(null == jsonCustomer){
+    		throw new InvalidServiceArgumentException("Customer create argument must be not null", BaseException.CUSTOMER_CREATE_NULL_ARGUMENT_CODE);
+    	}
+    	if (null == jsonCustomer.getRole()){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+jsonCustomer+") not found", BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE);
+        }
     	jsonCustomer.setCreationDate(null ==jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
     	Customer customerEntity = customerController.create(jsonCustomer);
-        return customerEntity;
+    	return Response.status(Response.Status.OK).entity(customerEntity)
+                .build();
     }
     
     @PUT
