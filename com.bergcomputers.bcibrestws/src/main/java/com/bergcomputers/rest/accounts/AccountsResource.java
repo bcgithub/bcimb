@@ -66,13 +66,6 @@ public class AccountsResource {
     }
 
     @GET
-    @Path("/detail/{accountid}")
-    @Produces("application/json")
-    public Account getAccountDetails(@PathParam("accountid") Long accountid) {
-        return accountController.findAccount(accountid);
-    }
-
-    @GET
     @Produces("application/json")
     @Path("uris")
     public String getAccountsURIs() {
@@ -100,16 +93,69 @@ public class AccountsResource {
     }
     
     
-    @PUT
+/*    @PUT
     @Path("/{accountid}")
     @Consumes("application/json")
     @Produces("application/json")
     public Account updateAccount(final Account jsonAccount) throws JSONException {
      Account accountEntity = accountController.update(jsonAccount);
         return accountEntity;
+    }*/
+    
+    @PUT
+    @Path("/{accountid}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response updateAccount(final Account jsonAccount) throws JSONException {
+    	if (null == jsonAccount.getCurrency()){
+    		throw new InvalidServiceArgumentException("Every account should have a currency", BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	if (null == jsonAccount.getCustomer()){
+    		throw new InvalidServiceArgumentException("Every account should have a customer", BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	Account accountEntity = accountController.update(jsonAccount);
+        if (null == accountEntity){
+        	throw new ResourceNotFoundException(Account.class.getSimpleName()+
+        			"("+jsonAccount.getId()+") not found", BaseException.ACCOUNT_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(accountEntity)
+                .build();
     }
     
-    /*
+/*    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Account createAccount(final Account jsonAccount) throws JSONException {
+
+    	jsonAccount.setCreationDate(null ==jsonAccount.getCreationDate() ? new Date():jsonAccount.getCreationDate());
+    	Account accountEntity = accountController.create(jsonAccount);
+        return accountEntity;
+        
+        
+    }*/
+
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response createAccount(final Account jsonAccount) throws JSONException {
+    	if (null == jsonAccount.getCurrency()){
+    		throw new InvalidServiceArgumentException("Every account should have a currency", BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	if (null == jsonAccount.getCustomer()){
+    		throw new InvalidServiceArgumentException("Every account should have a customer", BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	jsonAccount.setCreationDate(null ==jsonAccount.getCreationDate() ? new Date():jsonAccount.getCreationDate());
+    	Account accountEntity = accountController.create(jsonAccount);
+        if (null == accountEntity){
+        	throw new ResourceNotFoundException(Account.class.getSimpleName()+
+        			"("+jsonAccount.getId()+") not found", BaseException.ACCOUNT_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(accountEntity)
+                .build();
+}   
+}
+/*
      * Works but is better to use the other version
     @PUT
     @Consumes("application/json")
@@ -135,15 +181,3 @@ public class AccountsResource {
             .put("amount", accountEntity.getAmount())
             .put("createDate", accountEntity.getCreationDate()).toString();
     } */
-
-    @PUT
-    @Consumes("application/json")
-    @Produces("application/json")
-    public Account createAccount(final Account jsonAccount) throws JSONException {
-
-    	jsonAccount.setCreationDate(null ==jsonAccount.getCreationDate() ? new Date():jsonAccount.getCreationDate());
-    	Account accountEntity = accountController.create(jsonAccount);
-        return accountEntity;
-    }
-
-}
