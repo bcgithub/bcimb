@@ -21,12 +21,13 @@ import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.domain.Transaction;
-import com.bergcomputers.rest.exception.BaseException;
 import com.bergcomputers.rest.exception.ErrorInfo;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.json.JSONConfiguration;
 /**
  *
  * @author Administrator
@@ -42,6 +43,7 @@ public class AccountsWSTest {
     @BeforeClass
     public static void setupClass(){
          	ClientConfig cc = new DefaultClientConfig();
+         	cc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
             c = Client.create(cc);
             wr = c.resource(UrlBase);
     }
@@ -317,10 +319,13 @@ public class AccountsWSTest {
         
         //trying to delete and unexisting account
         System.out.println("Gettind the account with the Id 10000:");
-        Response acc = wr.path("accounts/"+10000).accept("application/json").get(Response.class);
-        Assert.assertEquals(acc.getStatus(), Response.Status.NOT_FOUND);
-        ErrorInfo err=(ErrorInfo)acc.getEntity();
-        Assert.assertEquals(err.getCode(), BaseException.ACCOUNT_ID_REQUIRED_CODE);
+        ClientResponse acc = wr.path("accounts/"+10000).accept("application/json").get(ClientResponse.class);
+        Assert.assertEquals(acc.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
+        ErrorInfo err=(ErrorInfo)acc.getEntity(ErrorInfo.class);
+/*        Assert.assertEquals(err.getCode(), BaseException.ACCOUNT_ID_REQUIRED_CODE);
+        Assert.assertEquals(err.getDeveloperMessage(), );
+        Assert.assertEquals(err.getMessage(), );
+        Assert.assertEquals(err.getUrl(), actual);*/
 
         
     }

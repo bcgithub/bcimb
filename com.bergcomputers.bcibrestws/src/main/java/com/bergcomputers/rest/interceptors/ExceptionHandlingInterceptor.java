@@ -50,6 +50,14 @@ public class ExceptionHandlingInterceptor {
 				url = "http://localhost:8080/bcibws/rest/customers/{customerid}";
 				httpStatus = Response.Status.NOT_FOUND;
 				break;
+			}case BaseException.ACCOUNT_ID_REQUIRED_CODE:{
+				url = "http://localhost:8080/bcibws/rest/accounts/null";
+				httpStatus = Response.Status.BAD_REQUEST;
+				break;
+			}case BaseException.ACCOUNT_NOT_FOUND_CODE:{
+				url = "http://localhost:8080/bcibws/rest/accounts/{customerid}";
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
 			}
 			default:{
 				
