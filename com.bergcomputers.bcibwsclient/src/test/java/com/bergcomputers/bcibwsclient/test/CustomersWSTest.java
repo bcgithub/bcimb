@@ -243,15 +243,14 @@ public class CustomersWSTest {
     	System.out.println("-----");
     	
     	System.out.println("Geting test customer:");
-    	
-    	ClientResponse customerEntity = wr.path("customers/"+1).accept("application/json").get(ClientResponse.class);
+    	ClientResponse customerEntity = wr.path("customers/"+Integer.MAX_VALUE).accept("application/json").get(ClientResponse.class);
     	assertEquals(Response.Status.NOT_FOUND.getStatusCode(), customerEntity.getStatus());
     	ErrorInfo entity=(ErrorInfo)customerEntity.getEntity(ErrorInfo.class);
     	assertNotNull(entity);
     	assertEquals(entity.getCode(), String.valueOf(BaseException.CUSTOMER_NOT_FOUND_CODE));
-    	assertEquals(entity.getUrl(), "http://localhost:8080/bcibws/rest/customers/1");
-    	assertEquals(entity.getMessage(), "Customer(1) not found");
-    	assertEquals(entity.getDeveloperMessage(), "Customer(1) not found");
+    	assertEquals(entity.getUrl(), "http://localhost:8080/bcibws/rest/customers/2147483647");
+    	assertEquals(entity.getMessage(), "Customer(2147483647) not found");
+    	assertEquals(entity.getDeveloperMessage(), "Customer(2147483647) not found");
         System.out.println("Get non existing customer test: finished");
     }
     

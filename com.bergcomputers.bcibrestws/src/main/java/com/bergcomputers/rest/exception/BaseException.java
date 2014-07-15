@@ -8,8 +8,9 @@ public abstract class BaseException extends RuntimeException {
 	public static final int CUSTOMER_NOT_FOUND_CODE = BASE_CODE + 3;
 	public static final int CUSTOMER_CREATE_NULL_ARGUMENT_CODE = BASE_CODE + 4;
 	public static final int CUSTOMER_CREATE_NULL_ROLE_CODE = BASE_CODE + 5;
-	public static final int ACCOUNT_ID_REQUIRED_CODE = BASE_CODE + 6;
-	public static final int ACCOUNT_NOT_FOUND_CODE = BASE_CODE + 7;
+	public static final int CUSTOMER_CREATE_NULL_ROLE_ID_CODE = BASE_CODE + 6;
+	public static final int ACCOUNT_ID_REQUIRED_CODE = BASE_CODE + 7;
+	public static final int ACCOUNT_NOT_FOUND_CODE = BASE_CODE + 8;
 	
 
 	

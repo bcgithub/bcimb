@@ -150,7 +150,10 @@ public class CustomersResources {
     	}
     	if (null == jsonCustomer.getRole()){
         	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
-        			"("+jsonCustomer+") not found", BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE);
+        			"("+jsonCustomer+") Role not found", BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE);
+        }else if(null ==jsonCustomer.getRole().getId()){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+jsonCustomer+") Role Id not found", BaseException.CUSTOMER_CREATE_NULL_ROLE_ID_CODE);
         }
     	jsonCustomer.setCreationDate(null ==jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
     	Customer customerEntity = customerController.create(jsonCustomer);

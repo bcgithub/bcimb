@@ -40,6 +40,10 @@ public class RestExceptionHandler implements ExceptionMapper<BaseException> {
 				httpStatus = Response.Status.NOT_FOUND;
 				break;
 			}
+			case BaseException.CUSTOMER_CREATE_NULL_ARGUMENT_CODE: {
+				httpStatus = Response.Status.BAD_REQUEST;
+				break;
+			}
 			default: {
 
 			}
