@@ -39,6 +39,14 @@ public class RestExceptionHandler implements ExceptionMapper<BaseException> {
 			case BaseException.CUSTOMER_NOT_FOUND_CODE: {
 				httpStatus = Response.Status.NOT_FOUND;
 				break;
+			}case BaseException.ACCOUNT_ID_REQUIRED_CODE:{
+				url = "http://localhost:8080/bcibws/rest/accounts/null";
+				httpStatus = Response.Status.BAD_REQUEST;
+				break;
+			}case BaseException.ACCOUNT_NOT_FOUND_CODE:{
+				url = "http://localhost:8080/bcibws/rest/accounts/{customerid}";
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
 			}
 			case BaseException.CUSTOMER_CREATE_NULL_ARGUMENT_CODE: {
 				httpStatus = Response.Status.BAD_REQUEST;
