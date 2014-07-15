@@ -40,9 +40,9 @@ public class TransactionsResource {
 	@POST
 	@Consumes("application/json")
     @Produces("application/json")
-	public void updateTransaction(final Transaction jsonTransaction) {
-		transactionController.save(jsonTransaction);
-       
+	public Transaction updateTransaction(final Transaction jsonTransaction) {
+		Transaction transactionEntity = transactionController.save(jsonTransaction);
+        return transactionEntity;
 	}
 	
 	@GET

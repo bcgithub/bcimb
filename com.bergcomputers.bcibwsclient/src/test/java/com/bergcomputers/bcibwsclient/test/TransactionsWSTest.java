@@ -135,7 +135,7 @@ public class TransactionsWSTest {
        //updating the transaction
        System.out.println("Updating test transaction:");
        created.setAccount(acc);
-       created.setId(3L);
+      
        created.setAmount(5000.0);
        created.setDetails("Plata salar1");
        created.setSender("bCOMPUTERS1");
@@ -146,21 +146,21 @@ public class TransactionsWSTest {
        created.setDate(creation1);
        created.setCreationDate(creation1);
        Account acc1 = new Account();
-       acc.setId(7L);
+       acc1.setId(7L);
        created.setAccount(acc1);
-       Transaction tr1 = wr.path("transactions/"+ created.getId()).type("application/json").post(Transaction.class,created);
+       Transaction tr1 = wr.path("transactions").type("application/json").post(Transaction.class,created);
        System.out.println("-----Updated "+ created);
-       assertTrue("Update transaction test-can't update transaction",tr1.toString().equals(created.toString()));
+
     
        //make sure it was added corectly 
       // assertThat(transactionEntity.getId(),equalTo(created.getId()));
        Assert.assertEquals(tr1.getId(),created.getId());
-       Assert.assertEquals(created.getAmount(),tr1.getAmount());
-       Assert.assertEquals(created.getDetails(),tr1.getDetails());
-       Assert.assertEquals(created.getStatus(),tr1.getStatus());
-       Assert.assertEquals(created.getDate(),tr1.getDate());
-       Assert.assertEquals(created.getTransactionDate(),tr1.getTransactionDate());
-       Assert.assertEquals(created.getCreationDate(),tr1.getCreationDate());
+       Assert.assertEquals(tr1.getAmount(),created.getAmount());
+       Assert.assertEquals(tr1.getDetails(),created.getDetails());
+       Assert.assertEquals(tr1.getStatus(),created.getStatus());
+       Assert.assertEquals(tr1.getDate(),created.getDate());
+       Assert.assertEquals(tr1.getTransactionDate(),created.getTransactionDate());
+       Assert.assertEquals(tr1.getCreationDate(),created.getCreationDate());
        Assert.assertEquals(acc.getId(),tr1.getAccount().getId());
         
        //delete the transaction
