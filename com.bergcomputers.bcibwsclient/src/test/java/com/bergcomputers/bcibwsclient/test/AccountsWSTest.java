@@ -84,7 +84,7 @@ public class AccountsWSTest {
 	        //testing to see if the account is the same
 	        Assert.assertEquals(accountResult.getAmount(), acc.getAmount());
 	        Assert.assertEquals(accountResult.getIban(),acc.getIban());
-	        Assert.assertEquals(accountResult.getCreationDate().getTime(),acc.getCreationDate().getTime());
+	        Assert.assertEquals(accountResult.getCreationDate(),acc.getCreationDate());
 	        Assert.assertEquals(accountResult.getCustomer().getId(), acc.getCustomer().getId());
 	        Assert.assertEquals(accountResult.getCurrency().getId(),acc.getCurrency().getId());
 	        
