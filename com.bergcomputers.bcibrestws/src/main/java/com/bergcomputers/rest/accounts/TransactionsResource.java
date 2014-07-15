@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -36,6 +37,14 @@ public class TransactionsResource {
 	public TransactionsResource() {
 		// TODO Auto-generated constructor stub
 	}
+	@POST
+	@Consumes("application/json")
+    @Produces("application/json")
+	public Transaction updateTransaction(final Transaction jsonTransaction) {
+		Transaction transactionEntity = transactionController.save(jsonTransaction);
+        return transactionEntity;
+	}
+	
 	@GET
 	@Path("/{transactionid}")
 	public Transaction getTransaction(@PathParam("transactionid") Long transactionid) {
@@ -68,7 +77,7 @@ public class TransactionsResource {
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public Transaction createTransaction(final Transaction jsonTransaction) throws JSONException {
+    public Transaction createTransaction(final Transaction jsonTransaction) {
 
     	jsonTransaction.setCreationDate(null ==jsonTransaction.getCreationDate() ? new Date():jsonTransaction.getCreationDate());
     	Transaction transactionEntity = transactionController.create(jsonTransaction);
