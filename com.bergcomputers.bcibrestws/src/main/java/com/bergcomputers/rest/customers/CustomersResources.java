@@ -28,9 +28,9 @@ import com.bergcomputers.ejb.ICustomerController;
 import com.bergcomputers.rest.exception.BaseException;
 import com.bergcomputers.rest.exception.InvalidServiceArgumentException;
 import com.bergcomputers.rest.exception.ResourceNotFoundException;
-import com.bergcomputers.rest.interceptors.ExceptionHandlingInterceptor;
+import com.bergcomputers.rest.interceptors.PerfLoggingInterceptor;
 
-@Interceptors(ExceptionHandlingInterceptor.class)
+@Interceptors(PerfLoggingInterceptor.class)
 @Stateless
 @Path("customers")
 public class CustomersResources {

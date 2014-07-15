@@ -1,6 +1,8 @@
 package com.bergcomputers.rest.exception;
 
-public class ErrorInfo {
+import java.io.Serializable;
+
+public class ErrorInfo implements Serializable{
 	private String url;
 	private String message;
 	private String code;
@@ -21,6 +23,9 @@ public class ErrorInfo {
 		this.message = message;
 		this.code = code;
 		this.developerMessage = developerMessage;
+	}
+	public ErrorInfo() {
+		super();
 	}
 	public ErrorInfo(String message, String code) {
 		super();
