@@ -10,6 +10,9 @@ import java.util.Date;
 
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.AfterClass;
@@ -21,6 +24,7 @@ import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.domain.Transaction;
+import com.bergcomputers.rest.exception.BaseException;
 import com.bergcomputers.rest.exception.ErrorInfo;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -44,7 +48,11 @@ public class AccountsWSTest {
     public static void setupClass(){
          	ClientConfig cc = new DefaultClientConfig();
          	cc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-            c = Client.create(cc);
+         	JacksonJsonProvider jacksonJsonProvider = 
+         		    new JacksonJaxbJsonProvider()
+         		    .configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+         	cc.getSingletons().add(jacksonJsonProvider);
+         	c = Client.create(cc);
             wr = c.resource(UrlBase);
     }
     @AfterClass
@@ -76,7 +84,7 @@ public class AccountsWSTest {
 	        //testing to see if the account is the same
 	        Assert.assertEquals(accountResult.getAmount(), acc.getAmount());
 	        Assert.assertEquals(accountResult.getIban(),acc.getIban());
-	        Assert.assertEquals(accountResult.getCreationDate(),acc.getCreationDate());
+	        Assert.assertEquals(accountResult.getCreationDate().getTime(),acc.getCreationDate().getTime());
 	        Assert.assertEquals(accountResult.getCustomer().getId(), acc.getCustomer().getId());
 	        Assert.assertEquals(accountResult.getCurrency().getId(),acc.getCurrency().getId());
 	        
@@ -322,15 +330,16 @@ public class AccountsWSTest {
         ClientResponse acc = wr.path("accounts/"+10000).accept("application/json").get(ClientResponse.class);
         Assert.assertEquals(acc.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
         ErrorInfo err=(ErrorInfo)acc.getEntity(ErrorInfo.class);
-/*        Assert.assertEquals(err.getCode(), BaseException.ACCOUNT_ID_REQUIRED_CODE);
-        Assert.assertEquals(err.getDeveloperMessage(), );
-        Assert.assertEquals(err.getMessage(), );
-        Assert.assertEquals(err.getUrl(), actual);*/
+        Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.ACCOUNT_NOT_FOUND_CODE);
+        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts/10000");
+        Assert.assertTrue(err.getDeveloperMessage().equals("Account(10000) not found"));
+        Assert.assertTrue(err.getMessage().equals("Account(10000) not found"));
+       
 
         
     }
     
-    @Test
+/*    @Test
     public void getAccountThatDoesntHaveId() throws JSONException{
         System.out.println("Getting list of accounts:");
         JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
@@ -339,7 +348,7 @@ public class AccountsWSTest {
     	
         System.out.println("Gettind the account with the Id ' ' ");
         Account acc = wr.path("accounts/"+null).accept("application/json").get(Account.class);
-    }
+    }*/
 	@Test
     public void updateAccount() throws JSONException{
   		//creating an account
