@@ -52,20 +52,53 @@ public class RestExceptionHandler implements ExceptionMapper<BaseException> {
 				httpStatus = Response.Status.BAD_REQUEST;
 				break;
 			}
-			default: {
-
+			case BaseException.CUSTOMER_UPDATE_NULL_ARGUMENT_CODE: {
+				httpStatus = Response.Status.BAD_REQUEST;
+				break;
 			}
-				errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
-						.toString(), e.getMessage());
+			default: {
+				break;
+			}
 			}
 		} else if (e instanceof ResourceNotFoundException) {
-			log.log(Level.SEVERE, e.getMessage(), e);
-			httpStatus = Response.Status.NOT_FOUND;
-			errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
-					.toString(), e.getMessage());
-		}else
+			switch (e.getErrorCode()) {
+			case BaseException.CUSTOMER_NOT_FOUND_CODE: {
+				httpStatus = Response.Status.NOT_FOUND;
+				errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
+						.toString(), e.getMessage());
+				break;
+			}
+			case BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE: {
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
+			}
+			case BaseException.CUSTOMER_CREATE_NULL_ROLE_ID_CODE: {
+				httpStatus = Response.Status.BAD_REQUEST;
+				break;
+			}
+			case BaseException.CUSTOMER_UPDATE_NULL_ROLE_CODE: {
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
+			}
+			case BaseException.CUSTOMER_UPDATE_NULL_ROLE_ID_CODE: {
+				httpStatus = Response.Status.BAD_REQUEST;
+				break;
+			}
+			default: {
+				break;
+			}
+			}
+		}else{
 		errorInfo = new ErrorInfo(url, "Unexpected exception",
 				String.valueOf(BaseException.UNEXPECTED_CODE), e.getMessage());
+		
+		return Response.status(httpStatus).entity(errorInfo).
+				type(MediaType.APPLICATION_JSON).build();
+		}
+		
+		errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
+				.toString(), e.getMessage());
+		
 		return Response.status(httpStatus).entity(errorInfo).
 				type(MediaType.APPLICATION_JSON).build();
 

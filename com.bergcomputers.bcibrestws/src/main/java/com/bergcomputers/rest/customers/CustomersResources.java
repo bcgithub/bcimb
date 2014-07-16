@@ -16,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -54,18 +55,14 @@ public class CustomersResources {
     @Path("/{customerid}")
     @Produces("application/json")
     public Response getCustomer(@PathParam("customerid") Long customerId) {
-        
-    	if (null == customerId){
-    		throw new InvalidServiceArgumentException("Customer Id shall be specified", BaseException.CUSTOMER_ID_REQUIRED_CODE);
-    	}
     	Customer result =  customerController.findCustomer(customerId);
         if (null == result){
         	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
         			"("+customerId+") not found", BaseException.CUSTOMER_NOT_FOUND_CODE);
         }
         
-        return Response.status(Response.Status.OK).entity(result)
-                .build();
+        return Response.status(Response.Status.OK).entity(result).
+        		build();
         
     }
 
@@ -133,18 +130,6 @@ public class CustomersResources {
     @Consumes("application/json")
     @Produces("application/json")
     public Response createCustomer(final Customer jsonCustomer) throws JSONException {
-    	/*if (null == customerId){
-    		throw new InvalidServiceArgumentException("Customer Id shall be specified", BaseException.CUSTOMER_ID_REQUIRED_CODE);
-    	}
-    	Customer result =  customerController.findCustomer(customerId);
-        if (null == result){
-        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
-        			"("+customerId+") not found", BaseException.CUSTOMER_NOT_FOUND_CODE);
-        }
-        
-        return Response.status(Response.Status.OK).entity(result)
-                .build();
-                */
     	if(null == jsonCustomer){
     		throw new InvalidServiceArgumentException("Customer create argument must be not null", BaseException.CUSTOMER_CREATE_NULL_ARGUMENT_CODE);
     	}
@@ -157,15 +142,27 @@ public class CustomersResources {
         }
     	jsonCustomer.setCreationDate(null ==jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
     	Customer customerEntity = customerController.create(jsonCustomer);
-    	return Response.status(Response.Status.OK).entity(customerEntity)
-                .build();
+    	return Response.status(Response.Status.OK).entity(customerEntity).
+    			build();
     }
     
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public Customer updateCustomer(final Customer jsonCustomer) throws JSONException {
-    	Customer customerEntity = customerController.update(/*accountid,*/ jsonCustomer);
-        return customerEntity;
+    public Response updateCustomer(final Customer jsonCustomer) throws JSONException {
+    	if(null == jsonCustomer){
+    		throw new InvalidServiceArgumentException("Customer update argument must be not null", BaseException.CUSTOMER_UPDATE_NULL_ARGUMENT_CODE);
+    	}
+    	if (null == jsonCustomer.getRole()){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+jsonCustomer+") Role not found", BaseException.CUSTOMER_UPDATE_NULL_ROLE_CODE);
+        }else if(null ==jsonCustomer.getRole().getId()){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+jsonCustomer+") Role Id not found", BaseException.CUSTOMER_UPDATE_NULL_ROLE_ID_CODE);
+        }
+    	jsonCustomer.setCreationDate(null == jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
+    	Customer customerEntity = customerController.update(jsonCustomer);
+        return Response.status(Response.Status.OK).entity(customerEntity).
+    			build();
     }
 }
