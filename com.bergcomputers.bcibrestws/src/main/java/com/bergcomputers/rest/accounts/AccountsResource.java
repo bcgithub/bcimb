@@ -22,8 +22,11 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
 import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.IAccountController;
+import com.bergcomputers.ejb.ICurrencyController;
+import com.bergcomputers.ejb.ICustomerController;
 import com.bergcomputers.rest.exception.BaseException;
 import com.bergcomputers.rest.exception.InvalidServiceArgumentException;
 import com.bergcomputers.rest.exception.ResourceNotFoundException;
@@ -31,12 +34,17 @@ import com.bergcomputers.rest.exception.ResourceNotFoundException;
 @Stateless
 @Path("accounts")
 public class AccountsResource {
-
 	@Context
     private UriInfo uriInfo;
 
     @EJB
     private IAccountController accountController;
+    
+    @EJB
+    private ICurrencyController currencyResource;
+    
+    @EJB
+    private ICustomerController customerResource;
 
     //private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 
@@ -113,6 +121,17 @@ public class AccountsResource {
     	if (null == jsonAccount.getCustomer()){
     		throw new InvalidServiceArgumentException("Every account should have a customer", BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
     	}
+    	Customer customer=customerResource.findCustomer(jsonAccount.getCustomer().getId());
+    			//wr.path("customers"+jsonAccount.getCustomer().getId()).accept("application/json").get(Customer.class);
+    	if (null == customer.getId()){
+    		throw new InvalidServiceArgumentException("Every account should have a customer", BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	Currency currency=currencyResource.findCurrency(jsonAccount.getCurrency().getId());
+    //			wr.path("currency"+jsonAccount.getCurrency().getId()).accept("application/json").get(Currency.class);
+    	if (null == currency.getId()){
+    		throw new InvalidServiceArgumentException("Every account should have a currency", BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	
     	Account accountEntity = accountController.update(jsonAccount);
         if (null == accountEntity){
         	throw new ResourceNotFoundException(Account.class.getSimpleName()+
@@ -134,18 +153,32 @@ public class AccountsResource {
         
         
     }*/
-
+    @PUT
     @Consumes("application/json")
     @Produces("application/json")
     public Response createAccount(final Account jsonAccount) throws JSONException {
+
     	if (null == jsonAccount.getCurrency()){
     		throw new InvalidServiceArgumentException("Every account should have a currency", BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
     	}
     	if (null == jsonAccount.getCustomer()){
     		throw new InvalidServiceArgumentException("Every account should have a customer", BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
     	}
+    	Customer customer=customerResource.findCustomer(jsonAccount.getCustomer().getId());
+		//wr.path("customers"+jsonAccount.getCustomer().getId()).accept("application/json").get(Customer.class);
+    	if (null == customer.getId()){
+    		throw new InvalidServiceArgumentException("Every account should have a customer", BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	Currency currency=currencyResource.findCurrency(jsonAccount.getCurrency().getId());
+    	//			wr.path("currency"+jsonAccount.getCurrency().getId()).accept("application/json").get(Currency.class);
+    	if (null == currency.getId()){
+    		throw new InvalidServiceArgumentException("Every account should have a currency", BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
+    	}
+    	System.out.println(jsonAccount.getCreationDate());
     	jsonAccount.setCreationDate(null ==jsonAccount.getCreationDate() ? new Date():jsonAccount.getCreationDate());
+    	System.out.println(jsonAccount.getCreationDate());
     	Account accountEntity = accountController.create(jsonAccount);
+    	
         if (null == accountEntity){
         	throw new ResourceNotFoundException(Account.class.getSimpleName()+
         			"("+jsonAccount.getId()+") not found", BaseException.ACCOUNT_NOT_FOUND_CODE);

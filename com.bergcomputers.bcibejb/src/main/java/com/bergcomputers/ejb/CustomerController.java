@@ -23,6 +23,10 @@ public class CustomerController implements ICustomerController{
 		
 	}
 	
+	@PostConstruct
+	public void init(){
+	}
+	
 	public List<Customer> getCustomers()
 	{
 		return this.em.createNamedQuery(Customer.findAll).getResultList();
