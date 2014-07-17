@@ -134,7 +134,7 @@ public class AccountsResource {
         
         
     }*/
-
+    @PUT
     @Consumes("application/json")
     @Produces("application/json")
     public Response createAccount(final Account jsonAccount) throws JSONException {

@@ -15,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
@@ -23,7 +24,11 @@ import org.codehaus.jettison.json.JSONException;
 
 import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Transaction;
+import com.bergcomputers.ejb.IAccountController;
 import com.bergcomputers.ejb.ITransactionController;
+import com.bergcomputers.rest.exception.BaseException;
+import com.bergcomputers.rest.exception.InvalidServiceArgumentException;
+import com.bergcomputers.rest.exception.ResourceNotFoundException;
 
 @Stateless
 @Path("transactions")
@@ -34,23 +39,61 @@ public class TransactionsResource {
 	@EJB
 	private ITransactionController transactionController;
 
+
+	@EJB
+	private IAccountController accountResource;
+	
 	public TransactionsResource() {
 		// TODO Auto-generated constructor stub
 	}
-	@POST
+	/*@POST
 	@Consumes("application/json")
     @Produces("application/json")
 	public Transaction updateTransaction(final Transaction jsonTransaction) {
 		Transaction transactionEntity = transactionController.save(jsonTransaction);
         return transactionEntity;
 	}
+	*/
+	@POST
+	@Consumes("application/json")
+    @Produces("application/json")
+	public Response updateTransaction(final Transaction jsonTransaction) {
+		if (null == jsonTransaction.getAccount()){
+    		throw new InvalidServiceArgumentException("Every transaction should have a account", BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND);
+    	}
+    	Transaction transactionEntity = transactionController.save(jsonTransaction);
+    	if (null == transactionEntity){
+        	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
+        			"("+jsonTransaction.getId()+") not found", BaseException.TRANSACTION_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(transactionEntity).build();
+    }
 	
-	@GET
+	/*@GET
 	@Path("/{transactionid}")
 	public Transaction getTransaction(@PathParam("transactionid") Long transactionid) {
 		 return transactionController.findTransaction(transactionid);
 		
 	}
+	*/
+	
+	    @GET
+	    @Path("/{transactionid}")
+	    public Response getTransaction(@PathParam("transactionid") Long transactionid) {
+	    	if (null == transactionid){
+	    		throw new InvalidServiceArgumentException("Transaction Id shall be specified", BaseException.TRANSACTION_ID_REQUIRED_CODE);
+	    	}
+	    	Transaction result =  transactionController.findTransaction(transactionid);
+	        if (null == result){
+	        	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
+	        			"("+transactionid+") not found", BaseException.TRANSACTION_NOT_FOUND_CODE);
+	        }
+	        
+	        return Response.status(Response.Status.OK).entity(result)
+	                .build();
+	    }
+
 	@GET
 	@Produces("application/json")
 	public List<Transaction> getTransactions() {
@@ -74,20 +117,47 @@ public class TransactionsResource {
             }
         return uriArray.toString();
     }
-    @PUT
+   /* @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public Transaction createTransaction(final Transaction jsonTransaction) {
+    public Transaction createTransaction(final Transaction jsonTransaction) throws JSONException {
 
     	jsonTransaction.setCreationDate(null ==jsonTransaction.getCreationDate() ? new Date():jsonTransaction.getCreationDate());
     	Transaction transactionEntity = transactionController.create(jsonTransaction);
         return transactionEntity;
+     */   
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response createTransaction(final Transaction jsonTransaction) {
+    	if (null == jsonTransaction.getAccount()){
+    		throw new InvalidServiceArgumentException("Every transaction should have a account", BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND);
+    	}
+        Account account = accountResource.findAccount(jsonTransaction.getAccount().getId());
+        if (null == account.getId()){
+         throw new InvalidServiceArgumentException("Every transaction should have a account", BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND);
+        }
+    	jsonTransaction.setCreationDate(null ==jsonTransaction.getCreationDate() ? new Date():jsonTransaction.getCreationDate());
+    	Transaction transactionEntity = transactionController.create(jsonTransaction);
+        if (null == transactionEntity){
+        	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
+        			"("+jsonTransaction.getId()+") not found", BaseException.TRANSACTION_NOT_FOUND_CODE);
+        }
+        
+        return Response.status(Response.Status.OK).entity(transactionEntity).build();
     }
 
 
-	@DELETE
+/*	@DELETE
 	@Path("/{transactionid}")
 	public void delete(@PathParam("transactionid") Long transactionId) {	
 		transactionController.delete(transactionId);
 	}
+*/
+   @DELETE
+   @Path("/{transactionid}")
+    public Response delete(@PathParam("transactionid") Long transactionId){
+	transactionController.delete(transactionId);
+	return Response.status(Response.Status.OK).build();
+   }
 }
