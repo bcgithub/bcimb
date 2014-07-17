@@ -84,6 +84,14 @@ public class RestExceptionHandler implements ExceptionMapper<BaseException> {
 				httpStatus = Response.Status.BAD_REQUEST;
 				break;
 			}
+			case BaseException.CUSTOMER_CREATE_ROLE_ID_NOT_FOUND_CODE: {
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
+			}
+			case BaseException.CUSTOMER_UPDATE_ROLE_ID_NOT_FOUND_CODE: {
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
+			}
 			default: {
 				break;
 			}

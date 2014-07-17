@@ -39,6 +39,11 @@ public class CustomerController implements ICustomerController{
 	@Override
 	public Customer create(Customer customer) {
 		if (customer != null){
+			if(customer.getRole() != null){
+				Role role = new Role();
+				role = em.find(Role.class, customer.getRole().getId());
+				customer.setRole(role);
+			}
 			customer = em.merge(customer);
 			em.persist(customer);
 			em.flush();

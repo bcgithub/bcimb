@@ -26,6 +26,7 @@ import org.codehaus.jettison.json.JSONException;
 
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.ICustomerController;
+import com.bergcomputers.ejb.IRoleController;
 import com.bergcomputers.rest.exception.BaseException;
 import com.bergcomputers.rest.exception.InvalidServiceArgumentException;
 import com.bergcomputers.rest.exception.ResourceNotFoundException;
@@ -41,6 +42,9 @@ public class CustomersResources {
 
     @EJB
     private ICustomerController customerController;
+    
+    @EJB
+    private IRoleController roleController;
 
     //private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 
@@ -135,10 +139,13 @@ public class CustomersResources {
     	}
     	if (null == jsonCustomer.getRole()){
         	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
-        			"("+jsonCustomer+") Role not found", BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE);
+        			"("+jsonCustomer+") null Role", BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE);
         }else if(null ==jsonCustomer.getRole().getId()){
         	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
-        			"("+jsonCustomer+") Role Id not found", BaseException.CUSTOMER_CREATE_NULL_ROLE_ID_CODE);
+        			"("+jsonCustomer+") null Role Id", BaseException.CUSTOMER_CREATE_NULL_ROLE_ID_CODE);
+        }else if(null == roleController.getRole(jsonCustomer.getRole().getId())){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+jsonCustomer+") Role Id not found", BaseException.CUSTOMER_CREATE_ROLE_ID_NOT_FOUND_CODE);
         }
     	jsonCustomer.setCreationDate(null ==jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
     	Customer customerEntity = customerController.create(jsonCustomer);
@@ -158,7 +165,10 @@ public class CustomersResources {
         			"("+jsonCustomer+") Role not found", BaseException.CUSTOMER_UPDATE_NULL_ROLE_CODE);
         }else if(null ==jsonCustomer.getRole().getId()){
         	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
-        			"("+jsonCustomer+") Role Id not found", BaseException.CUSTOMER_UPDATE_NULL_ROLE_ID_CODE);
+        			"("+jsonCustomer+") null Role Id", BaseException.CUSTOMER_UPDATE_NULL_ROLE_ID_CODE);
+        }else if(null == roleController.getRole(jsonCustomer.getRole().getId())){
+        	throw new ResourceNotFoundException(Customer.class.getSimpleName()+
+        			"("+jsonCustomer+") Role Id not found", BaseException.CUSTOMER_UPDATE_ROLE_ID_NOT_FOUND_CODE);
         }
     	jsonCustomer.setCreationDate(null == jsonCustomer.getCreationDate() ? new Date():jsonCustomer.getCreationDate());
     	Customer customerEntity = customerController.update(jsonCustomer);
