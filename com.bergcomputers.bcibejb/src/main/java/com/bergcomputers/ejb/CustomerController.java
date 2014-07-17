@@ -8,7 +8,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
+import com.bergcomputers.domain.Role;
 
 /**
  * Session Bean implementation class AccountController
@@ -36,6 +39,11 @@ public class CustomerController implements ICustomerController{
 	@Override
 	public Customer create(Customer customer) {
 		if (customer != null){
+			if(customer.getRole() != null){
+				Role role = new Role();
+				role = em.find(Role.class, customer.getRole().getId());
+				customer.setRole(role);
+			}
 			customer = em.merge(customer);
 			em.persist(customer);
 			em.flush();
@@ -86,12 +94,16 @@ public class CustomerController implements ICustomerController{
 	public Customer update(Customer customer){
 		Customer  cust = (Customer)em.find(Customer.class ,customer.getId());
 		if(cust != null){
+			if(customer.getRole() != null){
+				Role role = new Role();
+				role = em.find(Role.class, customer.getRole().getId());
+				cust.setRole(role);
+			}
 		   cust.setFirstName(customer.getFirstName());
 		   cust.setLastName(customer.getLastName());
 		   cust.setLogin(customer.getLogin());
 		   cust.setPassword(customer.getPassword());
 		   cust.setCreationDate(customer.getCreationDate());
-		   cust.setRole(customer.getRole());
 		   return cust;}
 		else
 			return null;
