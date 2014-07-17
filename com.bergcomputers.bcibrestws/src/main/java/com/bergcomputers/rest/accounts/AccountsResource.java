@@ -174,9 +174,9 @@ public class AccountsResource {
     	if (null == currency.getId()){
     		throw new InvalidServiceArgumentException("Every account should have a currency", BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
     	}
-    	System.out.println(jsonAccount.getCreationDate());
+    	//System.out.println(jsonAccount.getCreationDate());
     	jsonAccount.setCreationDate(null ==jsonAccount.getCreationDate() ? new Date():jsonAccount.getCreationDate());
-    	System.out.println(jsonAccount.getCreationDate());
+    	//System.out.println(jsonAccount.getCreationDate());
     	Account accountEntity = accountController.create(jsonAccount);
     	
         if (null == accountEntity){

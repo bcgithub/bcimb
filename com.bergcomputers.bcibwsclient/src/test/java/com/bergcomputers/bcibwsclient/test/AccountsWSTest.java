@@ -9,16 +9,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -72,6 +71,7 @@ public class AccountsWSTest {
 	        acc.setIban("ro03bc1234");
 	        acc.setCreationDate(date);
 	        
+	        
 	        //creating a new currency to associate with the account
 	        Currency currency=new Currency();
 	        currency.setId(1L);
@@ -87,7 +87,7 @@ public class AccountsWSTest {
 	        //testing to see if the account is the same
 	        Assert.assertEquals(accountResult.getAmount(), acc.getAmount());
 	        Assert.assertEquals(accountResult.getIban(),acc.getIban());
-	        Assert.assertEquals(accountResult.getCreationDate(),acc.getCreationDate());
+	        //Assert.assertEquals(accountResult.getCreationDate(),acc.getCreationDate());
 	        Assert.assertEquals(accountResult.getCustomer().getId(), acc.getCustomer().getId());
 	        Assert.assertEquals(accountResult.getCurrency().getId(),acc.getCurrency().getId());
 	        
@@ -106,12 +106,13 @@ public class AccountsWSTest {
 	     List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
 	     System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
 	     System.out.println("-----");
-		//creating an account
+	     //creating an account
 	     Account acc = new Account();
 	     Date date=new Date();
 	     acc.setAmount(2000.0);
 	     acc.setIban("ro03bc1234");
 	     acc.setCreationDate(date);
+	     //acc.setVersion(1);
 	     
 	     //creating a new currency to associate with the account
 	     Currency currency=new Currency();
@@ -121,6 +122,7 @@ public class AccountsWSTest {
 	     Customer customer=new Customer();
 	     customer.setId(4L);
 	     acc.setCustomer(customer);
+	     System.out.println(acc.toString());
 	     
 	     Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
 	     System.out.println("-----");
@@ -324,27 +326,18 @@ public class AccountsWSTest {
 
     @Test
     public void getAccountThatDoesntExist() throws JSONException{
-        System.out.println("Getting list of accounts:");
-        List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
-        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-        System.out.println("-----");
         
-        //trying to delete and unexisting account
-        System.out.println("Gettind the account with the Id 10000:");
-        ClientResponse acc = wr.path("accounts/"+10000).accept("application/json").get(ClientResponse.class);
-        Assert.assertEquals(acc.getStatus(), Response.Status.NOT_FOUND.getStatusCode());
-        ErrorInfo err=(ErrorInfo)acc.getEntity(ErrorInfo.class);
-        Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.ACCOUNT_NOT_FOUND_CODE);
-        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts/10000");
-        Assert.assertTrue(err.getDeveloperMessage().equals("Account(10000) not found"));
-        Assert.assertTrue(err.getMessage().equals("Account(10000) not found"));
-       
-
+        Account acc=null;
+        ClientResponse responseEntity = wr.path("accounts/").type("application/json").post(ClientResponse.class, acc);
         
+        String errorEntity=(String)responseEntity.getEntity(String.class);
+        assertNotNull(errorEntity);
+        assertTrue(errorEntity.contains("Bad Request"));
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), responseEntity.getStatus());  
     }
     
     @Test
-    public void getAccountThatDoesntHaveCurrency() throws JSONException{
+    public void createAccountThatDoesntHaveCurrency() throws JSONException{
         System.out.println("Getting list of accounts:");
         List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
         System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
@@ -363,20 +356,18 @@ public class AccountsWSTest {
         acc.setCustomer(customer);
         acc.setCurrency(null);
         
-        Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
-        System.out.println("-----");
-        
-        ClientResponse account = wr.path("accounts/"+accountResult.getId()).accept("application/json").get(ClientResponse.class);
-        ErrorInfo err=(ErrorInfo)account.getEntity(ErrorInfo.class);
+        ClientResponse accountResult = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
+        ErrorInfo err=(ErrorInfo)accountResult.getEntity(ErrorInfo.class);
         Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
-        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts/"+accountResult.getId());
-/*        Assert.assertTrue(err.getDeveloperMessage().equals("Account(10000) not found"));
-        Assert.assertTrue(err.getMessage().equals("Account(10000) not found"));*/
+        Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a currency");
+        Assert.assertEquals(err.getMessage(), "Every account should have a currency");
+        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts");
         
+
     }
     
     @Test
-    public void getAccountThatDoesntHaveCustomer() throws JSONException{
+    public void createAccountThatDoesntHaveCustomer() throws JSONException{
         System.out.println("Getting list of accounts:");
         List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
         System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
@@ -393,15 +384,12 @@ public class AccountsWSTest {
 	    currency.setId(1L);
 	    acc.setCurrency(currency);
         
-        Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
-        System.out.println("-----");
-        
-        ClientResponse account = wr.path("accounts/"+accountResult.getId()).accept("application/json").get(ClientResponse.class);
-        ErrorInfo err=(ErrorInfo)account.getEntity(ErrorInfo.class);
+        ClientResponse accountResult = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
+        ErrorInfo err=(ErrorInfo)accountResult.getEntity(ErrorInfo.class);
         Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
-        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts/"+accountResult.getId());
-/*        Assert.assertTrue(err.getDeveloperMessage().equals("Account(10000) not found"));
-        Assert.assertTrue(err.getMessage().equals("Account(10000) not found"));*/
+        Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a customer");
+        Assert.assertEquals(err.getMessage(), "Every account should have a customer");
+        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts");
         
     }
     
@@ -459,7 +447,7 @@ public class AccountsWSTest {
         accountResult.setCustomer(customer2);
         System.out.println(accountResult.toString());
         ClientResponse accountResult2 = wr.path("accounts/"+accountResult.getId()).type("application/json").put(ClientResponse.class, accountResult);
-        Account acc2=accountResult2.getEntity(Account.class );
+        Account acc2=accountResult2.getEntity(Account.class);
         System.out.println("-----");
         
         // make sure it was added correctly
