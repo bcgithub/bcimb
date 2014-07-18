@@ -17,7 +17,9 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.AfterClass;
 import org.junit.Assert;
+
 import static org.junit.Assert.*;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -87,6 +89,8 @@ public class AccountsWSTest {
 	        //testing to see if the account is the same
 	        Assert.assertEquals(accountResult.getAmount(), acc.getAmount());
 	        Assert.assertEquals(accountResult.getIban(),acc.getIban());
+	        
+	        //change after fixing the date program
 	        //Assert.assertEquals(accountResult.getCreationDate(),acc.getCreationDate());
 	        Assert.assertEquals(accountResult.getCustomer().getId(), acc.getCustomer().getId());
 	        Assert.assertEquals(accountResult.getCurrency().getId(),acc.getCurrency().getId());
@@ -97,6 +101,61 @@ public class AccountsWSTest {
 	         wr.path("accounts/"+accountResult.getId()).delete();
 	        System.out.println("-----");
 	
+	}
+	@Test
+	public void createAccountThatDoesntHaveCurrency() throws JSONException{
+	    System.out.println("Getting list of accounts:");
+	    List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
+	    System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+	    System.out.println("-----");
+	    
+	  //creating an account
+	    Account acc = new Account();
+	    Date date=new Date();
+	    acc.setAmount(2000.0);
+	    acc.setIban("ro03bc1234");
+	    acc.setCreationDate(date);
+	    
+	    
+	    Customer customer=new Customer();
+	    customer.setId(4L);
+	    acc.setCustomer(customer);
+	    acc.setCurrency(null);
+	    
+	    ClientResponse accountResult = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
+	    ErrorInfo err=(ErrorInfo)accountResult.getEntity(ErrorInfo.class);
+	    Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
+	    Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a currency");
+	    Assert.assertEquals(err.getMessage(), "Every account should have a currency");
+	    Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts");
+	    
+	
+	}
+	@Test
+	public void createAccountThatDoesntHaveCustomer() throws JSONException{
+	    System.out.println("Getting list of accounts:");
+	    List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
+	    System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+	    System.out.println("-----");
+	
+	  //creating an account
+	    Account acc = new Account();
+	    Date date=new Date();
+	    acc.setAmount(2000.0);
+	    acc.setIban("ro03bc1234");
+	    acc.setCreationDate(date);
+	    
+	    Currency currency=new Currency();
+	    currency.setId(1L);
+	    acc.setCurrency(currency);
+	    
+	    ClientResponse accountResult = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
+	    ErrorInfo err=(ErrorInfo)accountResult.getEntity(ErrorInfo.class);
+	    Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
+	    Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a customer");
+	    Assert.assertEquals(err.getMessage(), "Every account should have a customer");
+	    Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts");
+	    
 	}
 	@Test
 	    public void deleteAccount() throws JSONException{
@@ -327,73 +386,16 @@ public class AccountsWSTest {
     @Test
     public void getAccountThatDoesntExist() throws JSONException{
         
-        Account acc=null;
-        ClientResponse responseEntity = wr.path("accounts/").type("application/json").post(ClientResponse.class, acc);
+       
+        ClientResponse responseEntity = wr.path("accounts/"+10000).type("application/json").get(ClientResponse.class);
         
         String errorEntity=(String)responseEntity.getEntity(String.class);
         assertNotNull(errorEntity);
-        assertTrue(errorEntity.contains("Bad Request"));
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), responseEntity.getStatus());  
+        assertTrue(errorEntity.contains("not found"));
+        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), responseEntity.getStatus());  
     }
     
-    @Test
-    public void createAccountThatDoesntHaveCurrency() throws JSONException{
-        System.out.println("Getting list of accounts:");
-        List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
-        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-        System.out.println("-----");
-        
-      //creating an account
-        Account acc = new Account();
-        Date date=new Date();
-        acc.setAmount(2000.0);
-        acc.setIban("ro03bc1234");
-        acc.setCreationDate(date);
-        
-        
-        Customer customer=new Customer();
-        customer.setId(4L);
-        acc.setCustomer(customer);
-        acc.setCurrency(null);
-        
-        ClientResponse accountResult = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
-        ErrorInfo err=(ErrorInfo)accountResult.getEntity(ErrorInfo.class);
-        Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
-        Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a currency");
-        Assert.assertEquals(err.getMessage(), "Every account should have a currency");
-        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts");
-        
-
-    }
-    
-    @Test
-    public void createAccountThatDoesntHaveCustomer() throws JSONException{
-        System.out.println("Getting list of accounts:");
-        List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
-        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-        System.out.println("-----");
-       
-      //creating an account
-        Account acc = new Account();
-        Date date=new Date();
-        acc.setAmount(2000.0);
-        acc.setIban("ro03bc1234");
-        acc.setCreationDate(date);
-        
-	    Currency currency=new Currency();
-	    currency.setId(1L);
-	    acc.setCurrency(currency);
-        
-        ClientResponse accountResult = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
-        ErrorInfo err=(ErrorInfo)accountResult.getEntity(ErrorInfo.class);
-        Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
-        Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a customer");
-        Assert.assertEquals(err.getMessage(), "Every account should have a customer");
-        Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts");
-        
-    }
-    
-/*    @Test
+    /*    @Test
     public void getAccountThatDoesntHaveId() throws JSONException{
         System.out.println("Getting list of accounts:");
         JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
