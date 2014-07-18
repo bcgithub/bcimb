@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.codehaus.jettison.json.JSONArray;
@@ -73,4 +74,11 @@ public abstract class BaseDelegate<T> {
 
 			return listOfEntities;
 		}
+	
+	public void delete(String url) throws Exception{
+		HttpDelete httpget = new HttpDelete(url);
+		System.out.println("executing request " + httpget.getURI());
+		CloseableHttpResponse response = httpclient.execute(httpget);
+		response.close();
+	}
 }
