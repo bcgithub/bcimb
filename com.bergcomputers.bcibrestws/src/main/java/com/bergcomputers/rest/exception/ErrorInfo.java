@@ -2,6 +2,9 @@ package com.bergcomputers.rest.exception;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class ErrorInfo implements Serializable{
 	private String url;
 	private String message;
