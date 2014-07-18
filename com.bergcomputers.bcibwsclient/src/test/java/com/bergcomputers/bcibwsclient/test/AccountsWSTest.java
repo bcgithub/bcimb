@@ -465,4 +465,122 @@ public class AccountsWSTest {
         System.out.println("-----");
         
     }
+	
+	@Test
+	public void updateAccountThatDoesntHaveCurrency() throws JSONException{
+  		//creating an account
+        Account acc = new Account();
+        Date date=new Date();
+        acc.setAmount(2000.0);
+        acc.setIban("ro03bc1234");
+        acc.setCreationDate(date);
+        
+        //creating a new currency to associate with the account
+        Currency currency=new Currency();
+        currency.setId(1L);
+        acc.setCurrency(currency);
+        
+        Customer customer=new Customer();
+        customer.setId(4L);
+        acc.setCustomer(customer);
+        
+        Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+        System.out.println("-----");
+    	
+        // make sure it was added
+        System.out.println("Getting list of accounts:");
+        List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
+        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+        System.out.println("-----");
+        
+    	//updating the account
+        System.out.println("Updating test account:");
+        Date date2=new Date();
+        accountResult.setAmount(4000.0);
+        accountResult.setIban("RO03TM2345");
+        accountResult.setCreationDate(date2);
+        
+        //creating a new currency to associate with the account
+        accountResult.setCurrency(null);
+        
+        Customer customer2=new Customer();
+        customer2.setId(5L);
+        accountResult.setCustomer(customer2);
+        System.out.println(accountResult.toString());
+        ClientResponse accountResult2 = wr.path("accounts/"+accountResult.getId()).type("application/json").put(ClientResponse.class, accountResult);
+        //Account acc2=accountResult2.getEntity(Account.class);
+        System.out.println("-----");	
+		
+		
+		
+	    //ClientResponse accountResult3 = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
+	    ErrorInfo err=(ErrorInfo)accountResult2.getEntity(ErrorInfo.class);
+	    Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CURRENCY_OF_ACCOUNT_NOT_FOUND);
+	    Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a currency");
+	    Assert.assertEquals(err.getMessage(), "Every account should have a currency");
+	    Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts/"+accountResult.getId());
+	
+        System.out.println("Deleting test account:");
+        wr.path("accounts/"+accountResult.getId()).delete();
+        System.out.println("-----");
+	}
+	
+	@Test
+	public void updateAccountThatDoesntHaveCustomer() throws JSONException{
+  		//creating an account
+        Account acc = new Account();
+        Date date=new Date();
+        acc.setAmount(2000.0);
+        acc.setIban("ro03bc1234");
+        acc.setCreationDate(date);
+        
+        //creating a new currency to associate with the account
+        Currency currency=new Currency();
+        currency.setId(1L);
+        acc.setCurrency(currency);
+        
+        Customer customer=new Customer();
+        customer.setId(4L);
+        acc.setCustomer(customer);
+        
+        Account accountResult = wr.path("accounts").type("application/json").put(Account.class, acc);
+        System.out.println("-----");
+    	
+        // make sure it was added
+        System.out.println("Getting list of accounts:");
+        List<Account> accounts = wr.path("accounts/").accept("application/json").get(new GenericType<List<Account>>(){});
+        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
+        System.out.println("-----");
+        
+    	//updating the account
+        System.out.println("Updating test account:");
+        Date date2=new Date();
+        accountResult.setAmount(4000.0);
+        accountResult.setIban("RO03TM2345");
+        accountResult.setCreationDate(date2);
+        
+        //creating a new currency to associate with the account
+        Currency currency2=new Currency();
+        currency2.setId(1L);
+        accountResult.setCurrency(currency2);
+        
+        accountResult.setCustomer(null);
+        System.out.println(accountResult.toString());
+        ClientResponse accountResult2 = wr.path("accounts/"+accountResult.getId()).type("application/json").put(ClientResponse.class, accountResult);
+        //Account acc2=accountResult2.getEntity(Account.class);
+        System.out.println("-----");	
+		
+		
+		
+	    //ClientResponse accountResult3 = wr.path("accounts").type("application/json").put(ClientResponse.class, acc);
+	    ErrorInfo err=(ErrorInfo)accountResult2.getEntity(ErrorInfo.class);
+	    Assert.assertTrue(Integer.valueOf(err.getCode())== BaseException.CUSTOMER_OF_ACCOUNT_NOT_FOUND);
+	    Assert.assertEquals(err.getDeveloperMessage(), "Every account should have a customer");
+	    Assert.assertEquals(err.getMessage(), "Every account should have a customer");
+	    Assert.assertEquals(err.getUrl(), "http://localhost:8080/bcibws/rest/accounts/"+accountResult.getId());
+	
+        System.out.println("Deleting test account:");
+        wr.path("accounts/"+accountResult.getId()).delete();
+        System.out.println("-----");
+	}
 }

@@ -33,11 +33,11 @@ public class RestExceptionHandler implements ExceptionMapper<Exception> {
 		ErrorInfo errorInfo = null;
 		String url = uriInfo.getAbsolutePath().toString();
 		log.log(Level.SEVERE, exc.getMessage(), exc);
-		BaseException e  = null;
+		BaseException be  = null;
 		if (exc instanceof BaseException) {
-			e = ((BaseException) exc);
-			if (e instanceof InvalidServiceArgumentException) {
-				switch (e.getErrorCode()) {
+			be = ((BaseException) exc);
+			if (be instanceof InvalidServiceArgumentException) {
+				switch (be.getErrorCode()) {
 				case BaseException.CUSTOMER_ID_REQUIRED_CODE: {
 					httpStatus = Response.Status.BAD_REQUEST;
 					break;
@@ -54,87 +54,82 @@ public class RestExceptionHandler implements ExceptionMapper<Exception> {
 					httpStatus = Response.Status.NOT_FOUND;
 					break;
 				}
+				case BaseException.CUSTOMER_CREATE_NULL_ARGUMENT_CODE: {
+					httpStatus = Response.Status.BAD_REQUEST;
+					break;
+				}
+				case BaseException.CUSTOMER_UPDATE_NULL_ARGUMENT_CODE: {
+					httpStatus = Response.Status.BAD_REQUEST;
+					break;
+				}
 				default: {
 	
 				}
-					errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
-							.toString(), e.getMessage());
+					errorInfo = new ErrorInfo(url, be.getMessage(), be.getErrorCode()
+							.toString(), be.getMessage());
 				}
-			}
-		} else if (e instanceof ResourceNotFoundException) {
-			switch (e.getErrorCode()) {
-			case BaseException.CUSTOMER_NOT_FOUND_CODE: {
+			} else if (be instanceof ResourceNotFoundException) {
+				log.log(Level.SEVERE, be.getMessage(), be);
 				httpStatus = Response.Status.NOT_FOUND;
-				errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
-						.toString(), e.getMessage());
-				break;
+				
+				switch (be.getErrorCode()) {
+				case BaseException.CUSTOMER_NOT_FOUND_CODE: {
+					httpStatus = Response.Status.NOT_FOUND;
+					break;
+				}
+				case BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE: {
+					httpStatus = Response.Status.NOT_FOUND;
+					break;
+				}
+				case BaseException.CUSTOMER_CREATE_NULL_ROLE_ID_CODE: {
+					httpStatus = Response.Status.BAD_REQUEST;
+					break;
+				}
+				case BaseException.CUSTOMER_UPDATE_NULL_ROLE_CODE: {
+					httpStatus = Response.Status.NOT_FOUND;
+					break;
+				}
+				case BaseException.CUSTOMER_UPDATE_NULL_ROLE_ID_CODE: {
+					httpStatus = Response.Status.BAD_REQUEST;
+					break;
+				}
+				case BaseException.CUSTOMER_CREATE_ROLE_ID_NOT_FOUND_CODE: {
+					httpStatus = Response.Status.NOT_FOUND;
+					break;
+				}
+				case BaseException.CUSTOMER_UPDATE_ROLE_ID_NOT_FOUND_CODE: {
+					httpStatus = Response.Status.NOT_FOUND;
+					break;
+				}
+				default: {
+					break;
+				}
+				}
+				errorInfo = new ErrorInfo(url, be.getMessage(), be.getErrorCode()
+						.toString(), be.getMessage());
+			}else{
+				errorInfo = new ErrorInfo(url, "Unexpected exception",
+						String.valueOf(BaseException.UNEXPECTED_CODE), be.getMessage());
 			}
-			case BaseException.CUSTOMER_CREATE_NULL_ROLE_CODE: {
-				httpStatus = Response.Status.NOT_FOUND;
-				break;
+			return Response.status(httpStatus).entity(errorInfo).
+					type(MediaType.APPLICATION_JSON).build();
+		}else{ //if not base exception
+			if (getCause(exc, ConstraintViolationException.class) instanceof ConstraintViolationException){
+				StringBuffer sb = new StringBuffer(); 
+				ConstraintViolationException cex = (ConstraintViolationException)getCause(exc, ConstraintViolationException.class);
+				Set<ConstraintViolation<?>> constraintViolations = cex.getConstraintViolations();
+				for(ConstraintViolation cv:constraintViolations){
+					sb.append(cv.getMessage()).append("\n");
+				}
+				errorInfo = new ErrorInfo(url, sb.toString(),
+						String.valueOf(BaseException.UNEXPECTED_CODE), getCause(exc, ConstraintViolationException.class) .getMessage());
+			}else{
+			
+			errorInfo = new ErrorInfo(url, "Unexpected exception",
+					String.valueOf(BaseException.UNEXPECTED_CODE), exc.getMessage());
 			}
-			case BaseException.CUSTOMER_CREATE_NULL_ROLE_ID_CODE: {
-				httpStatus = Response.Status.BAD_REQUEST;
-				break;
-			}
-			case BaseException.CUSTOMER_UPDATE_NULL_ROLE_CODE: {
-				httpStatus = Response.Status.NOT_FOUND;
-				break;
-			}
-			case BaseException.CUSTOMER_UPDATE_NULL_ROLE_ID_CODE: {
-				httpStatus = Response.Status.BAD_REQUEST;
-				break;
-			}
-			case BaseException.CUSTOMER_CREATE_ROLE_ID_NOT_FOUND_CODE: {
-				httpStatus = Response.Status.NOT_FOUND;
-				break;
-			}
-			case BaseException.TRANSACTION_UPDATE_NULL_ACCOUNT_ID_CODE: {
-				httpStatus = Response.Status.BAD_REQUEST;
-				break;
-			}
-			case BaseException.TRANSACTION_UPDATE_ACCOUNT_ID_NOT_FOUND_CODE: {
-				httpStatus = Response.Status.NOT_FOUND;
-				break;
-			}
-			case BaseException.TRANSACTION_NOT_FOUND_CODE: {
-				httpStatus = Response.Status.NOT_FOUND;
-				break;
-			}
-			case BaseException.CUSTOMER_UPDATE_ROLE_ID_NOT_FOUND_CODE: {
-				httpStatus = Response.Status.NOT_FOUND;
-				break;
-			}
-			case BaseException.TRANSACTION_ID_REQUIRED_CODE: {
-				httpStatus = Response.Status.BAD_REQUEST;
-				break;
-			}			
-			case BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND: {
-				httpStatus = Response.Status.BAD_REQUEST;
-				break;
-			}
-			case BaseException.CUSTOMER_CREATE_NULL_ARGUMENT_CODE: {
-				httpStatus = Response.Status.BAD_REQUEST;
-				break;
-			}
-			case BaseException.CUSTOMER_UPDATE_NULL_ARGUMENT_CODE: {
-				httpStatus = Response.Status.BAD_REQUEST;
-				break;
-			}
-			default: {
-				break;
-			}
-			}
-		}else{
-		errorInfo = new ErrorInfo(url, "Unexpected exception",
-				String.valueOf(BaseException.UNEXPECTED_CODE), e.getMessage());
-		
-		return Response.status(httpStatus).entity(errorInfo).
-				type(MediaType.APPLICATION_JSON).build();
+			
 		}
-		
-		errorInfo = new ErrorInfo(url, e.getMessage(), e.getErrorCode()
-				.toString(), e.getMessage());				
 		return Response.status(httpStatus).entity(errorInfo).
 				type(MediaType.APPLICATION_JSON).build();
 		
