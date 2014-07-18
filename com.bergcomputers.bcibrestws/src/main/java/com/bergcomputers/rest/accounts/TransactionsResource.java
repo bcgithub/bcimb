@@ -64,7 +64,7 @@ public class TransactionsResource {
     	}
 		else if(null ==jsonTransaction.getAccount().getId()){
         	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
-        			"("+jsonTransaction+") null Account Id", BaseException.TRANSACTION_UPDATE_NULL_ACCOUNT_ID_CODE);
+        			"("+jsonTransaction+") null Account Id", BaseException.TRANSACTION_CREATE_NULL_ACCOUNT_ID_CODE);
         }else if(null == accountController.findAccount(jsonTransaction.getAccount().getId())){
         	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
         			"("+jsonTransaction+") Account Id not found", BaseException.TRANSACTION_UPDATE_ACCOUNT_ID_NOT_FOUND_CODE);
@@ -142,7 +142,13 @@ public class TransactionsResource {
     	if (null == jsonTransaction.getAccount()){
     		throw new InvalidServiceArgumentException("Every transaction should have a account", BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND);
     	}
-       
+    	else if(null ==jsonTransaction.getAccount().getId()){
+        	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
+        			"("+jsonTransaction+") null Account Id", BaseException.TRANSACTION_CREATE_NULL_ACCOUNT_ID_CODE);
+        }else if(null == accountController.findAccount(jsonTransaction.getAccount().getId())){
+        	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
+        			"("+jsonTransaction+") Account ID not found", BaseException.TRANSACTION_CREATE_ACCOUNT_ID_NOT_FOUND_CODE);
+        }
     	jsonTransaction.setCreationDate(null ==jsonTransaction.getCreationDate() ? new Date():jsonTransaction.getCreationDate());
     	Transaction transactionEntity = transactionController.create(jsonTransaction);
         if (null == transactionEntity){

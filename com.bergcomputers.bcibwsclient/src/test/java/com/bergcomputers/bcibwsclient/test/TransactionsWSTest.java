@@ -55,12 +55,12 @@ public class TransactionsWSTest {
     @BeforeClass
     public static void setupClass(){
          	ClientConfig cc = new DefaultClientConfig();
-         	/*cc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
+         	cc.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
          	JacksonJsonProvider jacksonJsonProvider =  
          	             new JacksonJaxbJsonProvider()
                          .configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                          .configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, true);
-         	cc.getSingletons().add(jacksonJsonProvider);*/
+         	cc.getSingletons().add(jacksonJsonProvider);
             c = Client.create(cc);
             wr = c.resource(UrlBase);
     }
@@ -137,16 +137,16 @@ public class TransactionsWSTest {
            //created.setVersion(0);
             
            System.out.println("Creating test transaction:");
-           Transaction transactionEntity = wr.path("transactions").type("application/json").put(Transaction.class, created);
-           System.out.println("---created --"+created);
- 
-           Assert.assertEquals(created.getAmount(),transactionEntity.getAmount());
-           Assert.assertEquals(created.getDetails(),transactionEntity.getDetails());
-           Assert.assertEquals(created.getStatus(),transactionEntity.getStatus());
-           Assert.assertEquals(created.getDate(),transactionEntity.getDate());
-           Assert.assertEquals(created.getTransactionDate(),transactionEntity.getTransactionDate());
-           Assert.assertEquals(created.getCreationDate(),transactionEntity.getCreationDate());
-           Assert.assertEquals(acc.getId(),transactionEntity.getAccount().getId());
+           ClientResponse clientResult = wr.path("transactions").type("application/json").put(ClientResponse.class, created);
+           Transaction transactionEntity =  (Transaction)clientResult.getEntity(Transaction.class);
+           
+           Assert.assertEquals(transactionEntity.getAmount(),created.getAmount());
+           Assert.assertEquals(transactionEntity.getDetails(),created.getDetails());
+           Assert.assertEquals(transactionEntity.getStatus(),created.getStatus());
+           Assert.assertEquals(transactionEntity.getDate(),created.getDate());
+           Assert.assertEquals(transactionEntity.getTransactionDate(),created.getTransactionDate());
+           Assert.assertEquals(transactionEntity.getCreationDate(),created.getCreationDate());
+           Assert.assertEquals(transactionEntity.getAccount().getId(),acc.getId());
            
          
            //deleting the transaction
@@ -160,7 +160,7 @@ public class TransactionsWSTest {
         @Test
     public void updateTransaction() throws JSONException{
        System.out.println("Getting list of transactions:");
-       JSONArray transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
+       List<Transaction> transactions = wr.path("transactions/").accept("application/json").get(new GenericType<List<Transaction>>(){});
        System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
        System.out.println("-----");
         //creating a transaction
@@ -181,13 +181,14 @@ public class TransactionsWSTest {
        //created.setVersion(0);
         
        System.out.println("Creating test transaction:");
-       created = wr.path("transactions").type("application/json").put(Transaction.class, created);
+       ClientResponse clientResult = wr.path("transactions").type("application/json").put(ClientResponse.class, created);
+       created  =  (Transaction)clientResult.getEntity(Transaction.class);
        System.out.println("---created --"+created);
       
        
        //make sure it was added 
        System.out.println("Getting list of transactions:");
-       JSONArray transactions1 = wr.path("transactions/").accept("application/json").get(JSONArray.class);
+       List<Transaction> transactions1 = wr.path("transactions/").accept("application/json").get(new GenericType<List<Transaction>>(){});
        System.out.println(String.format("List of transactions found:\n%s", transactions1.toString()));
        System.out.println("-----");
        assertFalse("Create transaction test-can't create transaction",transactions.equals(transactions1));
@@ -208,9 +209,8 @@ public class TransactionsWSTest {
        Account acc1 = new Account();
        acc1.setId(7L);
        created.setAccount(acc1);
-       Transaction tr1 = wr.path("transactions").type("application/json").post(Transaction.class,created);
-       System.out.println("-----Updated "+ created);
-
+       ClientResponse clientResult2 = wr.path("transactions").type("application/json").put(ClientResponse.class, created);
+       Transaction tr1  =  (Transaction)clientResult2.getEntity(Transaction.class);
     
        //make sure it was added corectly 
       // assertThat(transactionEntity.getId(),equalTo(created.getId()));
@@ -227,7 +227,7 @@ public class TransactionsWSTest {
        System.out.println("Deleting test transaction:");
        wr.path("transactions/"+created.getId()).delete();
        System.out.println("-----");
-       JSONArray transactions2 = wr.path("transactions/").accept("application/json").get(JSONArray.class);
+       List<Transaction> transactions2 = wr.path("transactions/").accept("application/json").get(new GenericType<List<Transaction>>(){});
        assertFalse("Create transaction test:can't delete the transaction",transactions1.equals(transactions2));
        assertFalse("Create transaction test: JSONArrays not equal after delete",transactions.equals(transactions2));
        System.out.println("Create transaction test finished:");
@@ -284,6 +284,20 @@ public class TransactionsWSTest {
         System.out.println("-----");
         Transaction created= new Transaction();
         Account acc = new Account();
+        Date date=new Date();
+        acc.setAmount(2000.0);
+        acc.setIban("ro03bc1234");
+        acc.setCreationDate(date);
+        
+        
+        //creating a new currency to associate with the account
+        Currency currency=new Currency();
+        currency.setId(1L);
+        acc.setCurrency(currency);
+        
+        Customer customer=new Customer();
+        customer.setId(4L);
+        acc.setCustomer(customer);
         acc.setId(7L);
         created.setAccount(acc);
         //created.setId(9L);
@@ -298,12 +312,9 @@ public class TransactionsWSTest {
         created.setCreationDate(creation);
       //created.setVersion(0);
       System.out.println("Creating test transaction:");
-      created = wr.path("transactions").type("application/json").put(Transaction.class, created);
+      ClientResponse clientResult = wr.path("transactions").type("application/json").put(ClientResponse.class, created);
+      Transaction transactionEntity  =  (Transaction)clientResult.getEntity(Transaction.class);
       System.out.println("---created --"+created);
-      
-       
-      
-      Transaction transactionEntity = wr.path("transactions/"+created.getId()).accept("application/json").get(Transaction.class);
       
       Assert.assertEquals(created.getId(),transactionEntity.getId());
       Assert.assertEquals(created.getAmount(),transactionEntity.getAmount());
@@ -319,12 +330,11 @@ public class TransactionsWSTest {
      
     
     }
-    //se creeaza o tranzactie fara cont si trebuie sa arunce exceptia de la create  cu mesajul Every transaction should have a account 
     @Test
     public void createTransactionWithNonExistingAccount() throws JSONException{
     	System.out.println("Getting list of transactions:");
-        JSONArray transactions = wr.path("transactions/").accept("application/json").get(JSONArray.class);
-        System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
+    	List<Transaction> transactions = wr.path("transactions/").accept("application/json").get(new GenericType<List<Transaction>>(){});
+     	System.out.println(String.format("List of transactions found:\n%s", transactions.toString()));
         System.out.println("-----");
         
         Transaction created= new Transaction();
@@ -349,7 +359,20 @@ public class TransactionsWSTest {
         assertEquals(errorEntity.getMessage(), "Every transaction should have a account");
         assertEquals(errorEntity.getDeveloperMessage(), "Every transaction should have a account");
         Account acc = new Account();
-        acc.setId(null);
+        Date date=new Date();
+        acc.setAmount(2000.0);
+        acc.setIban("ro03bc1234");
+        acc.setCreationDate(date);
+        
+        
+        //creating a new currency to associate with the account
+        Currency currency=new Currency();
+        currency.setId(1L);
+        acc.setCurrency(currency);
+        
+        Customer customer=new Customer();
+        customer.setId(4L);
+        acc.setCustomer(customer);
         created.setAccount(acc);
         responseEntity = wr.path("transactions").type("application/json").put(ClientResponse.class, created);
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), responseEntity.getStatus());
@@ -357,9 +380,8 @@ public class TransactionsWSTest {
         assertNotNull(errorEntity);
         assertEquals(errorEntity.getCode(), String.valueOf(BaseException.TRANSACTION_CREATE_NULL_ACCOUNT_ID_CODE));
         assertEquals(errorEntity.getUrl(), "http://localhost:8080/bcibws/rest/transactions/");
-        assertEquals(errorEntity.getMessage(), "Account Id not found");
-        assertEquals(errorEntity.getDeveloperMessage(), "Account Id not found");
-        acc = new Account();
+        assertEquals(errorEntity.getMessage(), "Every transaction should have a account");
+        assertEquals(errorEntity.getDeveloperMessage(), "Every transaction should have a account");
         acc.setId(Long.MAX_VALUE);
         created.setAccount(acc);
         responseEntity = wr.path("transactions").type("application/json").put(ClientResponse.class, created);
@@ -368,8 +390,8 @@ public class TransactionsWSTest {
         assertNotNull(errorEntity);
         assertEquals(errorEntity.getCode(), String.valueOf(BaseException.TRANSACTION_CREATE_ACCOUNT_ID_NOT_FOUND_CODE));
         assertEquals(errorEntity.getUrl(), "http://localhost:8080/bcibws/rest/transactions/");
-        assertEquals(errorEntity.getMessage(), "Account Id not found");
-        assertEquals(errorEntity.getDeveloperMessage(), "Account Id not found");
+        assertEquals(errorEntity.getMessage(), "Every transaction should have a account");
+        assertEquals(errorEntity.getDeveloperMessage(), "Every transaction should have a account");
     	System.out.println("create transaction With Non Existing account test: finished");
    
         }
@@ -379,7 +401,23 @@ public class TransactionsWSTest {
     	System.out.println("-----");
     	
     	Transaction created= new Transaction();
-        Account acc = new Account();
+
+    	Account acc = new Account();
+        Date date=new Date();
+        acc.setAmount(2000.0);
+        acc.setIban("ro03bc1234");
+        acc.setCreationDate(date);
+        
+        
+        //creating a new currency to associate with the account
+        Currency currency=new Currency();
+        currency.setId(1L);
+        acc.setCurrency(currency);
+        
+        Customer customer=new Customer();
+        customer.setId(4L);
+        acc.setCustomer(customer);
+    	
         //acc.setId(7L);
         //created.setAccount(acc);
         //created.setId(9L);
@@ -394,14 +432,13 @@ public class TransactionsWSTest {
         created.setCreationDate(creation);
       //created.setVersion(0);
         ClientResponse responseEntity = wr.path("transactions/").type("application/json").post(ClientResponse.class, created);
-        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), responseEntity.getStatus());
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), responseEntity.getStatus());
     	ErrorInfo errorEntity=(ErrorInfo)responseEntity.getEntity(ErrorInfo.class);
-    	//System.
     	assertNotNull(errorEntity);
-    	assertEquals(errorEntity.getCode(), String.valueOf(BaseException.TRANSACTION_UPDATE_ACCOUNT_ID_NOT_FOUND_CODE));
+    	assertEquals(errorEntity.getCode(), String.valueOf(BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND));
     	assertEquals(errorEntity.getUrl(), "http://localhost:8080/bcibws/rest/transactions/");
-    	assertEquals(errorEntity.getMessage(), "Account Id not found");
-    	assertEquals(errorEntity.getDeveloperMessage(), "Account Id not found");
+    	assertEquals(errorEntity.getMessage(), "Every transaction should have a account");
+    	assertEquals(errorEntity.getDeveloperMessage(), "Every transaction should have a account");
     	System.out.println("update transaction with non existing account test: finished");
     
     }  
