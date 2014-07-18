@@ -18,6 +18,10 @@ public class CustomersDelegate extends BaseDelegate<Customer>{
 	public List<Customer> getCustomers() throws Exception{
 		return getList(baseUrl + Config.REST_SERVICE_CUSTOMERS_LIST);
 	}
+	
+	public void deleteCustomer(String id) throws Exception{
+		delete(baseUrl + Config.REST_SERVICE_CUSTOMERS_LIST+"/"+id);
+	}
 
 	@Override
 	public IMapper<Customer> getMapper() {

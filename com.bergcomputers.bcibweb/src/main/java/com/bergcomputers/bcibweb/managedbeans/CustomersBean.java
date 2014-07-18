@@ -25,5 +25,10 @@ public class CustomersBean extends BaseBean{
 	public List<Customer> getCustomers() throws Exception{
 		return new CustomersDelegate(Config.REST_SERVICE_BASE_URL).getCustomers();
 	}
+	
+	public String deleteCustomer(String id)throws Exception{
+		new CustomersDelegate(Config.REST_SERVICE_BASE_URL).deleteCustomer(id);
+		return "customers";
+	}
 
 }
