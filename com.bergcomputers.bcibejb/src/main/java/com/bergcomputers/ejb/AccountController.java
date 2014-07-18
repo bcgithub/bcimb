@@ -66,7 +66,7 @@ public class AccountController implements IAccountController {
 	   System.out.println("marco:"+currency.getId());
 	  }
 	  acc.setAmount(account.getAmount());
-	     acc.setCreationDate(account.getCreationDate());
+	     acc.setCreationDate(account.getCreationDate() == null ? new Date() : account.getCreationDate() );
 	     acc.setCurrency(currency);
 	     acc.setCustomer(customer);
 	     acc.setDeleted(account.getDeleted());
