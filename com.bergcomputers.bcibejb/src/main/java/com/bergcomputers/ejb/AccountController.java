@@ -91,6 +91,8 @@ public class AccountController implements IAccountController {
 	{
 		return this.em.createNamedQuery(Account.findAll).getResultList();
 	}
+	
+	
 
 
 	/* (non-Javadoc)

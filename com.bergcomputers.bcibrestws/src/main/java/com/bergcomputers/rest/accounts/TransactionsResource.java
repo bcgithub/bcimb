@@ -23,6 +23,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
 import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Customer;
 import com.bergcomputers.domain.Transaction;
 import com.bergcomputers.ejb.IAccountController;
 import com.bergcomputers.ejb.ITransactionController;
@@ -41,7 +42,7 @@ public class TransactionsResource {
 
 
 	@EJB
-	private IAccountController accountResource;
+	private IAccountController accountController;
 	
 	public TransactionsResource() {
 		// TODO Auto-generated constructor stub
@@ -61,6 +62,13 @@ public class TransactionsResource {
 		if (null == jsonTransaction.getAccount()){
     		throw new InvalidServiceArgumentException("Every transaction should have a account", BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND);
     	}
+		else if(null ==jsonTransaction.getAccount().getId()){
+        	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
+        			"("+jsonTransaction+") null Account Id", BaseException.TRANSACTION_UPDATE_NULL_ACCOUNT_ID_CODE);
+        }else if(null == accountController.findAccount(jsonTransaction.getAccount().getId())){
+        	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
+        			"("+jsonTransaction+") Account Id not found", BaseException.TRANSACTION_UPDATE_ACCOUNT_ID_NOT_FOUND_CODE);
+        }
     	Transaction transactionEntity = transactionController.save(jsonTransaction);
     	if (null == transactionEntity){
         	throw new ResourceNotFoundException(Transaction.class.getSimpleName()+
@@ -99,6 +107,7 @@ public class TransactionsResource {
 	public List<Transaction> getTransactions() {
 		return transactionController.getTransactions();
 	}
+	
 	@GET
     @Path("/detail/{transactionid}")
     @Produces("application/json")
@@ -125,7 +134,7 @@ public class TransactionsResource {
     	jsonTransaction.setCreationDate(null ==jsonTransaction.getCreationDate() ? new Date():jsonTransaction.getCreationDate());
     	Transaction transactionEntity = transactionController.create(jsonTransaction);
         return transactionEntity;
-     */   
+    } */
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
@@ -133,10 +142,7 @@ public class TransactionsResource {
     	if (null == jsonTransaction.getAccount()){
     		throw new InvalidServiceArgumentException("Every transaction should have a account", BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND);
     	}
-        Account account = accountResource.findAccount(jsonTransaction.getAccount().getId());
-        if (null == account.getId()){
-         throw new InvalidServiceArgumentException("Every transaction should have a account", BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND);
-        }
+       
     	jsonTransaction.setCreationDate(null ==jsonTransaction.getCreationDate() ? new Date():jsonTransaction.getCreationDate());
     	Transaction transactionEntity = transactionController.create(jsonTransaction);
         if (null == transactionEntity){

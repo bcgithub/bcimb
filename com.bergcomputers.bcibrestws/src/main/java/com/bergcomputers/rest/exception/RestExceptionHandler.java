@@ -52,11 +52,7 @@ public class RestExceptionHandler implements ExceptionMapper<BaseException> {
 				httpStatus = Response.Status.BAD_REQUEST;
 				break;
 			}
-			case BaseException.TRANSACTION_NOT_FOUND_CODE:{
-				url = "http://localhost:8080/bcibws/rest/transactions/{accountid}";
-				httpStatus = Response.Status.NOT_FOUND;
-				break;
-			}
+			
 			case BaseException.ACCOUNT_OF_TRANSACTION_NOT_FOUND: {
 				httpStatus = Response.Status.BAD_REQUEST;
 				break;
@@ -101,10 +97,23 @@ public class RestExceptionHandler implements ExceptionMapper<BaseException> {
 				httpStatus = Response.Status.NOT_FOUND;
 				break;
 			}
+			case BaseException.TRANSACTION_UPDATE_NULL_ACCOUNT_ID_CODE: {
+				httpStatus = Response.Status.BAD_REQUEST;
+				break;
+			}
+			case BaseException.TRANSACTION_UPDATE_ACCOUNT_ID_NOT_FOUND_CODE: {
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
+			}
+			case BaseException.TRANSACTION_NOT_FOUND_CODE: {
+				httpStatus = Response.Status.NOT_FOUND;
+				break;
+			}
 			case BaseException.CUSTOMER_UPDATE_ROLE_ID_NOT_FOUND_CODE: {
 				httpStatus = Response.Status.NOT_FOUND;
 				break;
 			}
+			
 			default: {
 				break;
 			}

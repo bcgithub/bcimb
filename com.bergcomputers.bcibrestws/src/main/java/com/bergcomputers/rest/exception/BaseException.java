@@ -21,7 +21,10 @@ public abstract class BaseException extends RuntimeException {
 	public static final int ACCOUNT_OF_TRANSACTION_NOT_FOUND = BASE_CODE + 16;
 	public static final int TRANSACTION_NOT_FOUND_CODE = BASE_CODE + 17;
 	public static final int TRANSACTION_ID_REQUIRED_CODE = BASE_CODE + 18;
-	public static final int TRANSACTION_CREATE_NULL_ACCOUNT_ID_CODE= BASE_CODE + 19;
+	public static final int TRANSACTION_CREATE_NULL_ACCOUNT_ID_CODE  = BASE_CODE + 19;
+	public static final int TRANSACTION_UPDATE_NULL_ACCOUNT_ID_CODE = BASE_CODE + 20;
+	public static final int TRANSACTION_UPDATE_ACCOUNT_ID_NOT_FOUND_CODE = BASE_CODE + 21;
+	public static final int TRANSACTION_CREATE_ACCOUNT_ID_NOT_FOUND_CODE = BASE_CODE + 22;
 
 	
 
